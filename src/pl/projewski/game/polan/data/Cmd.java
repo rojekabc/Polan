@@ -21,7 +21,8 @@ public enum Cmd {
     LISTUSERS(ListUsersResponse.class), CREATEWORLD(CommandResponse.class), CREATETOWN(CommandResponse.class),
     LISTWORLDS(ListResponse.class),
     LISTLOCATIONS(LocationsResponse.class), SAVE(CommandResponse.class), USEWORLD(CommandResponse.class),
-    LOOK(LookResponse.class), SELECT(CommandResponse.class);
+    LOOK(LookResponse.class), SELECT(CommandResponse.class),
+    GATHER(CommandResponse.class);
     private Class responseClass;
 
     Cmd(Class c) {

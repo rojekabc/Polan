@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import pl.projewski.game.polan.data.Cmd;
 import pl.projewski.game.polan.data.Creature;
+import pl.projewski.game.polan.data.CreatureType;
 import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.response.CommandResponseStatus;
 import pl.projewski.game.polan.data.NamedCommand;
@@ -97,7 +98,7 @@ public class CommandManager {
             }
         }
         // if user select creature he can do it's set of command
-        if (user.getSelectedCreature() != User.NO_CREATURE) {
+        if (user != null && user.getSelectedCreature() != User.NO_CREATURE) {
             String worldName = user.getWorldName();
             if (worldName == null) {
                 return result;
@@ -109,6 +110,11 @@ public class CommandManager {
             Creature creature = WorldManager.getCreature(world, user.getSelectedCreature());
             if (creature == null) {
                 return result;
+            }
+            CreatureType type = creature.getType();
+            List<Cmd> creatureCommands = CreatureType.getCreatureCommands(type);
+            if (creatureCommands != null) {
+                result.addAll(creatureCommands);
             }
         }
         return result;

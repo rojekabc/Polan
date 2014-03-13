@@ -4,6 +4,7 @@
  */
 package pl.projewski.game.polan.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +30,7 @@ public class Location {
     // user, to which belongs
     private String username;
     // elements on map
-    private Map<Product, Integer> elements;
+    private List<Product> elements;
 
     public boolean isKnownByUser() {
         return knownByUser;
@@ -90,36 +91,22 @@ public class Location {
 
     public void addElement(Product element) {
         if (elements == null) {
-            elements = new HashMap();
+            elements = new ArrayList();
         }
-        Integer get = elements.get(element);
-        if (get == null) {
-            elements.put(element, 1);
-        } else {
-            elements.put(element, ++get);
-        }
+        elements.add(element);
     }
 
     public void removeElement(Product element) {
         if (elements == null) {
             return;
         }
-        Integer get = elements.get(element);
-        if (get == null) {
-            return;
-        }
-        get--;
-        if (get == 0) {
-            elements.remove(element);
-        } else {
-            elements.put(element, get);
-        }
+        elements.remove(element);
         if (elements.isEmpty()) {
             elements = null;
         }
     }
 
-    public Map<Product, Integer> getElements() {
+    public List<Product> getElements() {
         return elements;
     }
 

@@ -10,10 +10,35 @@ package pl.projewski.game.polan.data;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public enum Product {
+public class Product {
 
-    MILK, GRASSFIELD, CLOVERFIELD, OAKTREE, PINETREE, BRICHTREE, STONEFIELD, SANDFIELD, WATERFIELD, MUDFIELD, GRANITEFIELD, ICEFIELD, SANDSTONE;
+    String name;
+    ProductType type;
+
     // let say that 1 it's equivalent of 100g
     private int unitCapacity;
-    private MatterState matterState;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ProductType getType() {
+        return type;
+    }
+
+    public void setType(ProductType type) {
+        this.type = type;
+    }
+
+    public int getUnitCapacity() {
+        return unitCapacity;
+    }
+
+    public void setUnitCapacity(int unitCapacity) {
+        this.unitCapacity = unitCapacity;
+    }
 }

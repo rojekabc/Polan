@@ -5,6 +5,7 @@
  */
 package pl.projewski.game.polan.client.cmd.presenter;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,13 +40,21 @@ class LookResponsePresenter extends ResponsePresenter {
                 sb.appendNewLine();
             }
         }
-        Map<Product, Integer> elements = location.getElements();
+        List<Product> elements = location.getElements();
         if (elements != null && !elements.isEmpty()) {
             sb.append(" * Elements").appendNewLine();
-            Set<Map.Entry<Product, Integer>> elementSet = elements.entrySet();
-            for (Map.Entry<Product, Integer> entry : elementSet) {
-                Product element = entry.getKey();
-                sb.append("    ").append(element.name()).append(" x").append(entry.getValue().intValue()).appendNewLine();
+            Map<String, Integer> productCounter = new HashMap();
+            for (Product product : elements) {
+                Integer cnt = productCounter.get(product.getName());
+                if (cnt == null) {
+                    productCounter.put(product.getName(), Integer.valueOf(1));
+                } else {
+                    productCounter.put(product.getName(), ++cnt);
+                }
+            }
+            Set<Map.Entry<String, Integer>> elementSet = productCounter.entrySet();
+            for (Map.Entry<String, Integer> entry : elementSet) {
+                sb.append("    ").append(entry.getKey()).append(" x").append(entry.getValue().intValue()).appendNewLine();
             }
         }
         System.out.println(sb.toString());

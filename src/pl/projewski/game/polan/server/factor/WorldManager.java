@@ -28,6 +28,7 @@ import pl.projewski.game.polan.data.LocationType;
 import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.Role;
 import pl.projewski.game.polan.data.User;
+import pl.projewski.game.polan.server.data.ProductName;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.util.RandomElement;
 
@@ -81,63 +82,77 @@ public class WorldManager {
         return null;
     }
 
+    public static Product generateProcudt(ProductName productName) {
+        final Product product = new Product();
+        product.setName(productName.getName());
+        return product;
+    }
+
+    // public Product
     public static void randomElements(final Location location, final Random random) {
+        // TODO: Firstly random Fields and as second - what can be on this field (Tree)
         int size = location.getSize();
-        RandomElement<Product> randomProducts = new RandomElement();
+        RandomElement<ProductName> randomProducts = new RandomElement();
         LocationType type = location.getType();
         switch (type) {
             case PLANES:
-                randomProducts.addRandomElement(Product.GRASSFIELD, 30);
-                randomProducts.addRandomElement(Product.CLOVERFIELD, 10);
-                randomProducts.addRandomElement(Product.WATERFIELD, 5);
+                randomProducts.addRandomElement(ProductName.GRASS_FIELD, 30);
+                randomProducts.addRandomElement(ProductName.CLOVER_FIELD, 10);
+                randomProducts.addRandomElement(ProductName.WATER_FIELD, 5);
+                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 10);
                 break;
             case FOREST:
-                randomProducts.addRandomElement(Product.OAKTREE, 30);
-                randomProducts.addRandomElement(Product.PINETREE, 30);
-                randomProducts.addRandomElement(Product.BRICHTREE, 30);
-                randomProducts.addRandomElement(Product.WATERFIELD, 5);
-                randomProducts.addRandomElement(Product.GRASSFIELD, 5);
+                randomProducts.addRandomElement(ProductName.OAK_TREE, 30);
+                randomProducts.addRandomElement(ProductName.PINE_TREE, 30);
+                randomProducts.addRandomElement(ProductName.BRICH_TREE, 30);
+                randomProducts.addRandomElement(ProductName.WATER_FIELD, 5);
+                randomProducts.addRandomElement(ProductName.GRASS_FIELD, 5);
+                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 30);
                 break;
             case TAIGA:
-                randomProducts.addRandomElement(Product.PINETREE, 30);
-                randomProducts.addRandomElement(Product.BRICHTREE, 10);
+                randomProducts.addRandomElement(ProductName.PINE_TREE, 30);
+                randomProducts.addRandomElement(ProductName.BRICH_TREE, 10);
+                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 40);
                 break;
             case TUNDRA:
-                randomProducts.addRandomElement(Product.BRICHTREE, 10);
-                randomProducts.addRandomElement(Product.PINETREE, 10);
-                randomProducts.addRandomElement(Product.ICEFIELD, 20);
+                randomProducts.addRandomElement(ProductName.BRICH_TREE, 10);
+                randomProducts.addRandomElement(ProductName.PINE_TREE, 10);
+                randomProducts.addRandomElement(ProductName.ICE_FIELD, 20);
+                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 30);
                 break;
             case DESERT:
-                randomProducts.addRandomElement(Product.SANDFIELD, 30);
-                randomProducts.addRandomElement(Product.SANDSTONE, 10);
+                randomProducts.addRandomElement(ProductName.SAND_FIELD, 30);
+                randomProducts.addRandomElement(ProductName.SAND_STONE_FIELD, 10);
                 break;
             case SWAMPS:
-                randomProducts.addRandomElement(Product.WATERFIELD, 10);
-                randomProducts.addRandomElement(Product.GRASSFIELD, 20);
-                randomProducts.addRandomElement(Product.MUDFIELD, 30);
+                randomProducts.addRandomElement(ProductName.WATER_FIELD, 10);
+                randomProducts.addRandomElement(ProductName.CALAMUS_PLANT, 20);
+                randomProducts.addRandomElement(ProductName.MUD_FIELD, 30);
+                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 5);
+                randomProducts.addRandomElement(ProductName.GRASS_FIELD, 5);
                 break;
             case MOUNTAINS:
-                randomProducts.addRandomElement(Product.BRICHTREE, 10);
-                randomProducts.addRandomElement(Product.STONEFIELD, 30);
+                randomProducts.addRandomElement(ProductName.BRICH_TREE, 10);
+                randomProducts.addRandomElement(ProductName.STONE_FIELD, 30);
+                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 5);
                 break;
             case HILLS:
-                randomProducts.addRandomElement(Product.STONEFIELD, 30);
-                randomProducts.addRandomElement(Product.GRANITEFIELD, 30);
-                randomProducts.addRandomElement(Product.BRICHTREE, 10);
+                randomProducts.addRandomElement(ProductName.STONE_FIELD, 30);
+                randomProducts.addRandomElement(ProductName.GRANITE_STONE_FIELD, 30);
+                randomProducts.addRandomElement(ProductName.BRICH_TREE, 10);
                 break;
             case OCEAN:
-                randomProducts.addRandomElement(Product.WATERFIELD, 30);
+                randomProducts.addRandomElement(ProductName.WATER_FIELD, 30);
                 break;
             case BEACH:
-                randomProducts.addRandomElement(Product.SANDFIELD, 30);
-                randomProducts.addRandomElement(Product.GRASSFIELD, 1);
-                randomProducts.addRandomElement(Product.PINETREE, 1);
+                randomProducts.addRandomElement(ProductName.SAND_FIELD, 30);
+                randomProducts.addRandomElement(ProductName.GRASS_FIELD, 1);
                 break;
             default:
                 throw new AssertionError(type.name());
         }
         while (size > 0) {
-            location.addElement(randomProducts.getRandomElement(random));
+            location.addElement(generateProcudt(randomProducts.getRandomElement(random)));
             size--;
         }
     }

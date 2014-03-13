@@ -12,5 +12,5 @@ package pl.projewski.game.polan.data;
  */
 public enum SlotType {
 
-    LEFT_HAND, RIGHT_HAND, HEAD, CORPUS, LEFT_LEG, RIGHT_LEG;
+    LEFT_HAND, RIGHT_HAND, HEAD, CORPUS, LEFT_LEG, RIGHT_LEG, BACK;
 }
