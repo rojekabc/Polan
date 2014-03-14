@@ -21,6 +21,8 @@ public enum CreatureType {
         List<Cmd> result = new ArrayList();
         switch (type) {
             case HUMAN:
+                result.add(Cmd.GATHER);
+                result.add(Cmd.WALK);
                 break;
             default:
                 break;

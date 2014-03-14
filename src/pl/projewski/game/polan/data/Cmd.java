@@ -10,6 +10,7 @@ import pl.projewski.game.polan.data.response.ListResponse;
 import pl.projewski.game.polan.data.response.HelpResponse;
 import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.response.LookResponse;
+import pl.projewski.game.polan.data.response.TimeResponse;
 
 /**
  *
@@ -22,7 +23,7 @@ public enum Cmd {
     LISTWORLDS(ListResponse.class),
     LISTLOCATIONS(LocationsResponse.class), SAVE(CommandResponse.class), USEWORLD(CommandResponse.class),
     LOOK(LookResponse.class), SELECT(CommandResponse.class),
-    GATHER(CommandResponse.class);
+    GATHER(TimeResponse.class), WALK(TimeResponse.class);
     private Class responseClass;
 
     Cmd(Class c) {

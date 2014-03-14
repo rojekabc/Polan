@@ -19,6 +19,7 @@ import pl.projewski.game.polan.server.factor.CommandManager;
  * @author Piotr Rojewski <piotr4rojewski@google.com>
  */
 public class HelpAction implements ICommandAction {
+    // TODO: More descriptive action on help for seperated command
 
     @Override
     public CommandResponse runCommand(final ClientContext ctx, final List<String> props) {

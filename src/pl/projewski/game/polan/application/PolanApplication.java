@@ -12,14 +12,12 @@ import pl.projewski.game.polan.server.PolanGameServer;
  *
  * @author piotrek
  */
-public class PolanApplication
-{
+public class PolanApplication {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         // start server
         PolanGameServer polanGameServer = new PolanGameServer();
         new Thread(polanGameServer).start();
