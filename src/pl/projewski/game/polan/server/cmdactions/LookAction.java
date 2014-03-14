@@ -6,6 +6,7 @@
 package pl.projewski.game.polan.server.cmdactions;
 
 import java.util.List;
+import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.response.CommandResponse;
@@ -25,10 +26,6 @@ public class LookAction implements ICommandAction {
 
     @Override
     public CommandResponse runCommand(final ClientContext ctx, final List<String> props) {
-        if (props == null || props.size() < 1) {
-            return new CommandResponse(CommandResponseStatus.ERROR_WRONG_ARGUMENTS);
-        }
-        int locationId = Integer.valueOf(props.get(0));
         final User user = ctx.getUser();
         if (user == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_USER);
@@ -38,7 +35,18 @@ public class LookAction implements ICommandAction {
         if (world == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_WORLD);
         }
-        Location location = WorldManager.getLocation(world, locationId);
+
+        int locationId = -1;
+        if (props == null || props.size() < 1) {
+            if (user.getSelectedCreature() == User.NO_CREATURE) {
+                return new CommandResponse(CommandResponseStatus.ERROR_WRONG_ARGUMENTS);
+            }
+            Creature creature = WorldManager.getCreature(world, user.getSelectedCreature());
+            locationId = creature.getLocationId();
+        } else if (props.size() == 1) {
+            locationId = Integer.valueOf(props.get(0));
+        }
+        final Location location = WorldManager.getLocation(world, locationId);
         if (!location.isKnownByUser() || !location.getUsername().equals(user.getName())) {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_RIGHTS);
         }
