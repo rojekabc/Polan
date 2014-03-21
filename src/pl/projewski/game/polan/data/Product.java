@@ -5,6 +5,10 @@
  */
 package pl.projewski.game.polan.data;
 
+import pl.projewski.game.polan.server.data.ProductType;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @version $Revision$
@@ -12,33 +16,28 @@ package pl.projewski.game.polan.data;
  */
 public class Product {
 
-    String name;
-    ProductType type;
+    Map<ProductProperty, String> properties = new HashMap();
 
     // let say that 1 it's equivalent of 100g
     private int unitCapacity;
 
     public String getName() {
-        return name;
+        return properties.get(ProductProperty.NAME);
     }
 
     public void setName(String name) {
-        this.name = name;
+        properties.put(ProductProperty.NAME, name);
     }
 
     public ProductType getType() {
-        return type;
+        return ProductType.valueOf(properties.get(ProductProperty.TYPE));
     }
 
     public void setType(ProductType type) {
-        this.type = type;
+        properties.put(ProductProperty.TYPE, type.name());
     }
 
-    public int getUnitCapacity() {
-        return unitCapacity;
-    }
-
-    public void setUnitCapacity(int unitCapacity) {
-        this.unitCapacity = unitCapacity;
+    public void addProperty(ProductProperty property, String value) {
+        properties.put(property, value);
     }
 }

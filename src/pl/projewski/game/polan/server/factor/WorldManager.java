@@ -26,6 +26,7 @@ import pl.projewski.game.polan.data.CreatureType;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.LocationType;
 import pl.projewski.game.polan.data.Product;
+import pl.projewski.game.polan.data.ProductProperty;
 import pl.projewski.game.polan.data.Role;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.server.data.ProductName;
@@ -85,6 +86,22 @@ public class WorldManager {
     public static Product generateProcudt(ProductName productName) {
         final Product product = new Product();
         product.setName(productName.getName());
+        product.setType(productName.getType());
+        // TODO: Some properties should be generated in dependence on for example biome
+        switch (productName.getType()) {
+            case TREE:
+                break;
+            case STONE:
+                break;
+            case FLUID:
+                break;
+            case FIELD:
+                break;
+            case PLANT:
+                break;
+            default:
+                throw new AssertionError(productName.getType().name());
+        }
         return product;
     }
 

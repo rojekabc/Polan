@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pl.projewski.game.polan.data;
+package pl.projewski.game.polan.server.data;
 
 /**
  *
@@ -12,5 +12,5 @@ package pl.projewski.game.polan.data;
  */
 public enum ProductType {
 
-    TREE, STONE, FLUID, FIELD;
+    TREE, STONE, FLUID, FIELD, PLANT;
 }
