@@ -12,5 +12,5 @@ package pl.projewski.game.polan.data;
  */
 public enum ProductProperty {
 
-    NAME, TYPE;
+    NAME, TYPE, GATHER;
 }

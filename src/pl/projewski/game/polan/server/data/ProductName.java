@@ -20,7 +20,9 @@ public enum ProductName {
     /* Trees */
     OAK_TREE(ProductType.TREE), PINE_TREE(ProductType.TREE), BRICH_TREE(ProductType.TREE),
     /* Plants */
-    CALAMUS_PLANT(ProductType.PLANT), GRASS_FIELD(ProductType.PLANT), CLOVER_FIELD(ProductType.PLANT);
+    CALAMUS_PLANT(ProductType.PLANT), GRASS_FIELD(ProductType.PLANT), CLOVER_FIELD(ProductType.PLANT),
+    /* Simple resource */
+    OAK_STICK(ProductType.RESOURCE), PINE_STICK(ProductType.RESOURCE), BRITCH_STICK(ProductType.RESOURCE);
 
     ProductType type;
 

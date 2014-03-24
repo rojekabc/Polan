@@ -12,5 +12,5 @@ package pl.projewski.game.polan.server.data;
  */
 public enum ProductType {
 
-    TREE, STONE, FLUID, FIELD, PLANT;
+    TREE, STONE, FLUID, FIELD, PLANT, RESOURCE;
 }
