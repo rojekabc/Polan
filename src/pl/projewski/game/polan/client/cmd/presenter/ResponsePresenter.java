@@ -13,6 +13,7 @@ import pl.projewski.game.polan.data.response.ListResponse;
 import pl.projewski.game.polan.data.response.ListUsersResponse;
 import pl.projewski.game.polan.data.response.LocationsResponse;
 import pl.projewski.game.polan.data.response.LookResponse;
+import pl.projewski.game.polan.data.response.TimeResponse;
 
 /**
  *
@@ -48,6 +49,7 @@ public abstract class ResponsePresenter {
             presenters.put(ListResponse.class, new ListResponsePresenter());
             presenters.put(LocationsResponse.class, new LocationsResponsePresenter());
             presenters.put(LookResponse.class, new LookResponsePresenter());
+            presenters.put(TimeResponse.class, new CommandResponsePresenter());
         }
         return presenters;
     }

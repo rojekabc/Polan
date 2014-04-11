@@ -3,14 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pl.projewski.game.polan.data;
+package pl.projewski.game.polan.server.work;
 
 /**
  *
  * @version $Revision$
  * @author rojewski.piotr
  */
-public enum ProductProperty {
+public class WorkRenewGather implements IWork {
 
-    NAME, GATHERTIMER;
+    @Override
+    public void finishWork() {
+        // TODO TODO TODO: Now is very mocked
+    }
+
 }

@@ -3,14 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pl.projewski.game.polan.data;
+package pl.projewski.game.polan.server.work;
 
 /**
  *
  * @version $Revision$
  * @author rojewski.piotr
  */
-public enum ProductProperty {
+public interface IWork {
 
-    NAME, GATHERTIMER;
+    /**
+     * called when planned work is finished
+     */
+    public void finishWork();
 }

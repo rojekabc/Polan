@@ -57,6 +57,23 @@ class LookResponsePresenter extends ResponsePresenter {
                 sb.append("    ").append(entry.getKey()).append(" x").append(entry.getValue().intValue()).appendNewLine();
             }
         }
+        List<Product> resources = location.getResources();
+        if (resources != null && !resources.isEmpty()) {
+            sb.append(" * Resources").appendNewLine();
+            Map<String, Integer> productCounter = new HashMap();
+            for (Product resource : resources) {
+                Integer cnt = productCounter.get(resource.getName());
+                if (cnt == null) {
+                    productCounter.put(resource.getName(), Integer.valueOf(1));
+                } else {
+                    productCounter.put(resource.getName(), ++cnt);
+                }
+            }
+            Set<Map.Entry<String, Integer>> elementSet = productCounter.entrySet();
+            for (Map.Entry<String, Integer> entry : elementSet) {
+                sb.append("    ").append(entry.getKey()).append(" x").append(entry.getValue().intValue()).appendNewLine();
+            }
+        }
         System.out.println(sb.toString());
     }
 

@@ -20,6 +20,7 @@ public class World {
     private List<Creature> humans;
     private int locationId;
     private int humanId;
+    private long worldTime;
 
     public World() {
     }
@@ -66,6 +67,18 @@ public class World {
 
     public List<Creature> getHumans() {
         return humans;
+    }
+
+    public long getWorldTime() {
+        return worldTime;
+    }
+
+    public void setWorldTime(long worldTime) {
+        this.worldTime = worldTime;
+    }
+
+    public void nextWorldTime() {
+        this.worldTime++;
     }
 
 }

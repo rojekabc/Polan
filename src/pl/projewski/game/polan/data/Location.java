@@ -31,6 +31,8 @@ public class Location {
     private String username;
     // elements on map
     private List<Product> elements;
+    // generaed resources
+    private List<Product> resources;
 
     public boolean isKnownByUser() {
         return knownByUser;
@@ -108,6 +110,17 @@ public class Location {
 
     public List<Product> getElements() {
         return elements;
+    }
+
+    public void addResource(Product resource) {
+        if (resources == null) {
+            resources = new ArrayList();
+        }
+        resources.add(resource);
+    }
+
+    public List<Product> getResources() {
+        return resources;
     }
 
 }

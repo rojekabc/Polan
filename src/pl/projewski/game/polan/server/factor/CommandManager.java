@@ -31,6 +31,7 @@ import pl.projewski.game.polan.server.cmdactions.LoginAction;
 import pl.projewski.game.polan.server.cmdactions.LookAction;
 import pl.projewski.game.polan.server.cmdactions.QuitAction;
 import pl.projewski.game.polan.server.cmdactions.SelectAction;
+import pl.projewski.game.polan.server.cmdactions.TickAction;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.World;
 
@@ -68,8 +69,9 @@ public class CommandManager {
         commandList.put(Cmd.SAVE, new Command(new SaveAction(), UserPrivilages.USER));
         commandList.put(Cmd.LOOK, new Command(new LookAction(), UserPrivilages.USER));
         commandList.put(Cmd.SELECT, new Command(new SelectAction(), UserPrivilages.USER));
-        commandList.put(Cmd.WALK, new Command(new WalkAction(), UserPrivilages.USER));
-        commandList.put(Cmd.GATHER, new Command(new GatherAction(), UserPrivilages.USER));
+        // commandList.put(Cmd.WALK, new Command(new WalkAction(), UserPrivilages.USER));
+        // commandList.put(Cmd.GATHER, new Command(new GatherAction(), UserPrivilages.USER));
+        commandList.put(Cmd.TICK, new Command(new TickAction(), UserPrivilages.USER));
     }
 
     public CommandResponse runCommand(NamedCommand command, ClientContext ctx) {

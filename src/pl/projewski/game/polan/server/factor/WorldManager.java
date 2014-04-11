@@ -16,8 +16,10 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
@@ -29,9 +31,10 @@ import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.ProductProperty;
 import pl.projewski.game.polan.data.Role;
 import pl.projewski.game.polan.data.User;
-import pl.projewski.game.polan.server.data.ProductName;
+import pl.projewski.game.polan.server.data.ProductDefinition;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.util.RandomElement;
+import pl.projewski.game.polan.server.work.IWork;
 
 /**
  *
@@ -83,10 +86,9 @@ public class WorldManager {
         return null;
     }
 
-    public static Product generateProcudt(ProductName productName) {
+    public static Product generateProcudt(ProductDefinition productName) {
         final Product product = new Product();
         product.setName(productName.getName());
-        product.setType(productName.getType());
         return product;
     }
 
@@ -94,61 +96,61 @@ public class WorldManager {
     public static void randomElements(final Location location, final Random random) {
         // TODO: Firstly random Fields and as second - what can be on this field (Tree)
         int size = location.getSize();
-        RandomElement<ProductName> randomProducts = new RandomElement();
+        RandomElement<ProductDefinition> randomProducts = new RandomElement();
         LocationType type = location.getType();
         switch (type) {
             case PLANES:
-                randomProducts.addRandomElement(ProductName.GRASS_FIELD, 30);
-                randomProducts.addRandomElement(ProductName.CLOVER_FIELD, 10);
-                randomProducts.addRandomElement(ProductName.WATER_FIELD, 5);
-                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 10);
+                randomProducts.addRandomElement(ProductDefinition.GRASS_FIELD, 30);
+                randomProducts.addRandomElement(ProductDefinition.CLOVER_FIELD, 10);
+                randomProducts.addRandomElement(ProductDefinition.WATER_FIELD, 5);
+                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 10);
                 break;
             case FOREST:
-                randomProducts.addRandomElement(ProductName.OAK_TREE, 30);
-                randomProducts.addRandomElement(ProductName.PINE_TREE, 30);
-                randomProducts.addRandomElement(ProductName.BRICH_TREE, 30);
-                randomProducts.addRandomElement(ProductName.WATER_FIELD, 5);
-                randomProducts.addRandomElement(ProductName.GRASS_FIELD, 5);
-                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 30);
+                randomProducts.addRandomElement(ProductDefinition.OAK_TREE, 30);
+                randomProducts.addRandomElement(ProductDefinition.PINE_TREE, 30);
+                randomProducts.addRandomElement(ProductDefinition.BRICH_TREE, 30);
+                randomProducts.addRandomElement(ProductDefinition.WATER_FIELD, 5);
+                randomProducts.addRandomElement(ProductDefinition.GRASS_FIELD, 5);
+                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 30);
                 break;
             case TAIGA:
-                randomProducts.addRandomElement(ProductName.PINE_TREE, 30);
-                randomProducts.addRandomElement(ProductName.BRICH_TREE, 10);
-                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 40);
+                randomProducts.addRandomElement(ProductDefinition.PINE_TREE, 30);
+                randomProducts.addRandomElement(ProductDefinition.BRICH_TREE, 10);
+                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 40);
                 break;
             case TUNDRA:
-                randomProducts.addRandomElement(ProductName.BRICH_TREE, 10);
-                randomProducts.addRandomElement(ProductName.PINE_TREE, 10);
-                randomProducts.addRandomElement(ProductName.ICE_FIELD, 20);
-                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 30);
+                randomProducts.addRandomElement(ProductDefinition.BRICH_TREE, 10);
+                randomProducts.addRandomElement(ProductDefinition.PINE_TREE, 10);
+                randomProducts.addRandomElement(ProductDefinition.ICE_FIELD, 20);
+                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 30);
                 break;
             case DESERT:
-                randomProducts.addRandomElement(ProductName.SAND_FIELD, 30);
-                randomProducts.addRandomElement(ProductName.SAND_STONE_FIELD, 10);
+                randomProducts.addRandomElement(ProductDefinition.SAND_FIELD, 30);
+                randomProducts.addRandomElement(ProductDefinition.SAND_STONE_FIELD, 10);
                 break;
             case SWAMPS:
-                randomProducts.addRandomElement(ProductName.WATER_FIELD, 10);
-                randomProducts.addRandomElement(ProductName.CALAMUS_PLANT, 20);
-                randomProducts.addRandomElement(ProductName.MUD_FIELD, 30);
-                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 5);
-                randomProducts.addRandomElement(ProductName.GRASS_FIELD, 5);
+                randomProducts.addRandomElement(ProductDefinition.WATER_FIELD, 10);
+                randomProducts.addRandomElement(ProductDefinition.CALAMUS_PLANT, 20);
+                randomProducts.addRandomElement(ProductDefinition.MUD_FIELD, 30);
+                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 5);
+                randomProducts.addRandomElement(ProductDefinition.GRASS_FIELD, 5);
                 break;
             case MOUNTAINS:
-                randomProducts.addRandomElement(ProductName.BRICH_TREE, 10);
-                randomProducts.addRandomElement(ProductName.STONE_FIELD, 30);
-                randomProducts.addRandomElement(ProductName.GROUND_FIELD, 5);
+                randomProducts.addRandomElement(ProductDefinition.BRICH_TREE, 10);
+                randomProducts.addRandomElement(ProductDefinition.STONE_FIELD, 30);
+                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 5);
                 break;
             case HILLS:
-                randomProducts.addRandomElement(ProductName.STONE_FIELD, 30);
-                randomProducts.addRandomElement(ProductName.GRANITE_STONE_FIELD, 30);
-                randomProducts.addRandomElement(ProductName.BRICH_TREE, 10);
+                randomProducts.addRandomElement(ProductDefinition.STONE_FIELD, 30);
+                randomProducts.addRandomElement(ProductDefinition.GRANITE_STONE_FIELD, 30);
+                randomProducts.addRandomElement(ProductDefinition.BRICH_TREE, 10);
                 break;
             case OCEAN:
-                randomProducts.addRandomElement(ProductName.WATER_FIELD, 30);
+                randomProducts.addRandomElement(ProductDefinition.WATER_FIELD, 30);
                 break;
             case BEACH:
-                randomProducts.addRandomElement(ProductName.SAND_FIELD, 30);
-                randomProducts.addRandomElement(ProductName.GRASS_FIELD, 1);
+                randomProducts.addRandomElement(ProductDefinition.SAND_FIELD, 30);
+                randomProducts.addRandomElement(ProductDefinition.GRASS_FIELD, 1);
                 break;
             default:
                 throw new AssertionError(type.name());
@@ -280,6 +282,25 @@ public class WorldManager {
             }
         }
         return null;
+    }
+
+    private static Map<String, WorldWorkQueue> worldQueues = new HashMap();
+
+    public static void addWork(World world, IWork work) {
+        WorldWorkQueue queue = worldQueues.get(world.getName());
+        if (queue == null) {
+            queue = new WorldWorkQueue();
+            worldQueues.put(world.getName(), queue);
+        }
+        queue.addWork(work);
+    }
+
+    public static void nextTick(World world) {
+        world.nextWorldTime();
+        WorldWorkQueue queue = worldQueues.get(world.getName());
+        if (queue != null) {
+            queue.doPlanedWorks();
+        }
     }
 
 }

@@ -29,15 +29,16 @@ public class Product {
         properties.put(ProductProperty.NAME, name);
     }
 
-    public ProductType getType() {
-        return ProductType.valueOf(properties.get(ProductProperty.TYPE));
-    }
-
-    public void setType(ProductType type) {
-        properties.put(ProductProperty.TYPE, type.name());
-    }
-
     public void addProperty(ProductProperty property, String value) {
         properties.put(property, value);
     }
+
+    public String getGatherTimer() {
+        return properties.get(ProductProperty.GATHERTIMER);
+    }
+
+    public String setGatherTimer(int value) {
+        return properties.put(ProductProperty.GATHERTIMER, Integer.toString(value));
+    }
+
 }
