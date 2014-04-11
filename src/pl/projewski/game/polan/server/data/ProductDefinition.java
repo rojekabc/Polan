@@ -26,20 +26,14 @@ public enum ProductDefinition {
     CLOVER(ProductType.RESOURCE);
 
     ProductType type;
-    boolean gatherable = false;
-    ProductDefinition[] gatherElements = null;
+    GatherDefinition gather = null;
 
     static {
-        OAK_TREE.gatherable = true;
-        OAK_TREE.gatherElements = new ProductDefinition[]{OAK_STICK};
-        PINE_TREE.gatherable = true;
-        PINE_TREE.gatherElements = new ProductDefinition[]{PINE_STICK};
-        BRICH_TREE.gatherable = true;
-        BRICH_TREE.gatherElements = new ProductDefinition[]{BRITCH_STICK};
-        GRASS_FIELD.gatherable = true;
-        GRASS_FIELD.gatherElements = new ProductDefinition[]{GRASS};
-        CLOVER_FIELD.gatherable = true;
-        CLOVER_FIELD.gatherElements = new ProductDefinition[]{CLOVER};
+        OAK_TREE.gather = new GatherDefinition(22, 70, OAK_STICK);
+        PINE_TREE.gather = new GatherDefinition(20, 65, PINE_STICK);
+        BRICH_TREE.gather = new GatherDefinition(18, 60, BRITCH_STICK);
+        GRASS_FIELD.gather = new GatherDefinition(8, 20, GRASS);
+        CLOVER_FIELD.gather = new GatherDefinition(10, 30, CLOVER);
     }
 
     ProductDefinition(ProductType productType) {
@@ -59,10 +53,27 @@ public enum ProductDefinition {
     }
 
     public boolean isGatherable() {
-        return gatherable;
+        return gather != null;
     }
 
-    public ProductDefinition[] getGatherElements() {
-        return gatherElements;
+    public ProductDefinition[] getGatherResources() {
+        if (gather == null) {
+            return null;
+        }
+        return gather.getGatherResources();
+    }
+
+    public int getGatherTime() {
+        if (gather == null) {
+            return -1;
+        }
+        return gather.getGatherTime();
+    }
+
+    public int getGatherRenewTime() {
+        if (gather == null) {
+            return -1;
+        }
+        return gather.getGatherRenewTime();
     }
 }

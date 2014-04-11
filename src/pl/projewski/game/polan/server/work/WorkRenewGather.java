@@ -10,7 +10,11 @@ package pl.projewski.game.polan.server.work;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class WorkRenewGather implements IWork {
+public class WorkRenewGather extends AWork {
+
+    public WorkRenewGather(int ticks) {
+        super(ticks);
+    }
 
     @Override
     public void finishWork() {

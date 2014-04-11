@@ -299,7 +299,7 @@ public class WorldManager {
         world.addWorldTime(numOfTicks);
         WorldWorkQueue queue = worldQueues.get(world.getName());
         if (queue != null) {
-            queue.doPlanedWorks();
+            queue.doPlanedWorks(numOfTicks);
         }
     }
 

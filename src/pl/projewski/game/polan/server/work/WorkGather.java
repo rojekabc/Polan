@@ -17,13 +17,14 @@ import pl.projewski.game.polan.server.factor.WorldManager;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class WorkGather implements IWork {
+public class WorkGather extends AWork {
 
     World world; // TODO : in some super class as context
     Creature worker;
     Product gatherOnProduct;
 
-    public WorkGather(World world, Creature worker, Product gatherOnProduct) {
+    public WorkGather(int ticks, World world, Creature worker, Product gatherOnProduct) {
+        super(ticks);
         this.world = world;
         this.worker = worker;
         this.gatherOnProduct = gatherOnProduct;
@@ -36,12 +37,13 @@ public class WorkGather implements IWork {
         Location location = WorldManager.getLocation(world, locationId);
         // append gathered resource to location
         ProductDefinition productDef = ProductDefinition.getFromName(gatherOnProduct.getName());
-        ProductDefinition[] gatherResources = productDef.getGatherElements();
+        ProductDefinition[] gatherResources = productDef.getGatherResources();
         for (ProductDefinition gatherResouurce : gatherResources) {
             location.addResource(WorldManager.generateProcudt(gatherResouurce));
         }
         // start renew process
-        WorldManager.addWork(world, new WorkRenewGather());
+        // TODO: Set up renew process number of ticks
+        WorldManager.addWork(world, new WorkRenewGather(20));
     }
 
 }

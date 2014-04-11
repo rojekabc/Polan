@@ -62,9 +62,10 @@ public class GatherAction implements ICommandAction {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
         }
         Product productToGather = null;
+        ProductDefinition productDefinition = null;
         List<Product> elements = location.getElements();
         for (Product product : elements) {
-            ProductDefinition productDefinition = ProductDefinition.getFromName(product.getName());
+            productDefinition = ProductDefinition.getFromName(product.getName());
             if (productDefinition.isGatherable()) {
                 // TODO: Check gather timer, that product is possible to gather.
                 // FIXME: Currently just gather and select as gathered
@@ -85,7 +86,7 @@ public class GatherAction implements ICommandAction {
         //  - after gathering action worker should put element in some container
         // Currently only lock, that it was gathered
         productToGather.setGatherTimer(1);
-        WorldManager.addWork(world, new WorkGather(world, creature, productToGather));
+        WorldManager.addWork(world, new WorkGather(productDefinition.getGatherTime(), world, creature, productToGather));
         return new TimeResponse(0);
     }
 

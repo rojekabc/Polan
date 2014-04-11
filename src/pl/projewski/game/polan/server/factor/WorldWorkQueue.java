@@ -16,18 +16,25 @@ import pl.projewski.game.polan.server.work.IWork;
  */
 public class WorldWorkQueue {
 
-    // TODO: Use Queue element, not a list
+    // As an array list - this allow to keep order of incoming works to do
     private List<IWork> works = new ArrayList();
 
     void addWork(IWork work) {
         works.add(work);
     }
 
-    // TODO: It's generally nothing now
-    // - only do first work from a list
-    public void doPlanedWorks() {
+    /**
+     * Do planned works, which are in range of selected number of ticks.
+     *
+     * @param numberOfTicks
+     */
+    public void doPlanedWorks(int numberOfTicks) {
         if (works.isEmpty()) {
             return;
+        }
+        List<IWork> todo = new ArrayList();
+        for (IWork work : works) {
+
         }
         IWork work = works.get(0);
         work.finishWork();

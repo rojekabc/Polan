@@ -16,4 +16,12 @@ public interface IWork {
      * called when planned work is finished
      */
     public void finishWork();
+
+    /**
+     * decrease a number of ticks for work and return true if after decrease we get a value 0 or less.
+     *
+     * @param ticks number of ticks to decrease
+     * @return true if 0 or less after decrease
+     */
+    public boolean decreaseNumberOfTick(int ticks);
 }
