@@ -81,4 +81,8 @@ public class World {
         this.worldTime++;
     }
 
+    public void addWorldTime(int toAdd) {
+        this.worldTime += toAdd;
+    }
+
 }

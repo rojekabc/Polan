@@ -295,8 +295,8 @@ public class WorldManager {
         queue.addWork(work);
     }
 
-    public static void nextTick(World world) {
-        world.nextWorldTime();
+    public static void nextTicks(World world, int numOfTicks) {
+        world.addWorldTime(numOfTicks);
         WorldWorkQueue queue = worldQueues.get(world.getName());
         if (queue != null) {
             queue.doPlanedWorks();

@@ -23,6 +23,10 @@ public class TickAction implements ICommandAction {
 
     @Override
     public CommandResponse runCommand(ClientContext ctx, List<String> props) {
+        /*
+         * Tick without arguments - one tick
+         * Tick with number - number of ticks to do
+         */
         final User user = ctx.getUser();
         if (user == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_USER);
@@ -32,7 +36,14 @@ public class TickAction implements ICommandAction {
         if (world == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_WORLD);
         }
-        WorldManager.nextTick(world);
+        int numOfTicks = 1;
+        if (props != null && !props.isEmpty()) {
+            numOfTicks = Integer.getInteger(props.get(0));
+            if (numOfTicks <= 0) {
+                numOfTicks = 1;
+            }
+        }
+        WorldManager.nextTicks(world, numOfTicks);
         return new CommandResponse(CommandResponseStatus.OK);
     }
 
