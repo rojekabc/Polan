@@ -6,6 +6,7 @@
 package pl.projewski.game.polan.data.response;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import pl.projewski.game.polan.data.Creature;
@@ -55,6 +56,9 @@ public class LookResponse extends CommandResponse {
     }
 
     public void addProduct(final Product product) {
+        if (this.product == null) {
+            this.product = new HashMap();
+        }
         this.product.put(product.getId(), product);
     }
 
