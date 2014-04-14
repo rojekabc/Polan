@@ -6,6 +6,7 @@
 package pl.projewski.game.polan.server.cmdactions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import pl.projewski.game.polan.data.response.CommandResponse;
@@ -34,7 +35,7 @@ public class ListLocationsAction implements ICommandAction {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_WORLD);
         }
         LocationsResponse response = new LocationsResponse();
-        List<Location> locations = world.getLocations();
+        Collection<Location> locations = world.getLocations();
         if (locations == null) {
             return response;
         }
@@ -57,7 +58,7 @@ public class ListLocationsAction implements ICommandAction {
                 if (listType != ListType.OWNED) {
                     Set<Integer> connection = location.getConnection();
                     for (Integer locationId : connection) {
-                        final Location connectedLocation = WorldManager.getLocation(world, locationId);
+                        final Location connectedLocation = world.getLocation(locationId);
                         if (connectedLocation == null) {
                             System.err.println("NOT FIND LOCATION WITH LOCATIONID=" + locationId);
                             continue;

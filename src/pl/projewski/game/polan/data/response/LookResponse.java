@@ -7,8 +7,10 @@ package pl.projewski.game.polan.data.response;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
+import pl.projewski.game.polan.data.Product;
 
 /**
  *
@@ -19,6 +21,7 @@ public class LookResponse extends CommandResponse {
 
     private Location location;
     private List<Creature> human;
+    private Map<Long, Product> product;
 
     public LookResponse() {
         super(CommandResponseStatus.OK);
@@ -45,6 +48,14 @@ public class LookResponse extends CommandResponse {
             this.human = new ArrayList();
         }
         this.human.add(human);
+    }
+
+    public Product getProduct(final Long id) {
+        return product.get(id);
+    }
+
+    public void addProduct(final Product product) {
+        this.product.put(product.getId(), product);
     }
 
 }

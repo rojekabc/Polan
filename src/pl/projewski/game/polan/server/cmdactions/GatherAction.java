@@ -49,7 +49,7 @@ public class GatherAction implements ICommandAction {
         if (user.getSelectedCreature() == User.NO_CREATURE) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_CREATURE);
         }
-        Creature creature = WorldManager.getCreature(world, user.getSelectedCreature());
+        Creature creature = world.getCreature(user.getSelectedCreature());
         if (creature == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_CREATURE);
         }
@@ -57,14 +57,15 @@ public class GatherAction implements ICommandAction {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_RIGHTS);
         }
         int locationId = creature.getLocationId();
-        Location location = WorldManager.getLocation(world, locationId);
+        Location location = world.getLocation(locationId);
         if (location == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
         }
         Product productToGather = null;
         ProductDefinition productDefinition = null;
-        List<Product> elements = location.getElements();
-        for (Product product : elements) {
+        List<Long> elements = location.getElements();
+        for (Long productId : elements) {
+            Product product = world.getProduct(productId);
             productDefinition = ProductDefinition.getFromName(product.getName());
             if (productDefinition.isGatherable()) {
                 if (product.isGatherLock()) {

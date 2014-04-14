@@ -39,7 +39,7 @@ public class WalkAction implements ICommandAction {
         if (user.getSelectedCreature() == User.NO_CREATURE) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_CREATURE);
         }
-        Creature creature = WorldManager.getCreature(world, user.getSelectedCreature());
+        Creature creature = world.getCreature(user.getSelectedCreature());
         if (creature == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_CREATURE);
         }

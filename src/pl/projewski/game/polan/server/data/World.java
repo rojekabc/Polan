@@ -5,9 +5,13 @@
 package pl.projewski.game.polan.server.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
+import pl.projewski.game.polan.data.Product;
 
 /**
  *
@@ -18,9 +22,11 @@ public class World {
     // world name
     private String name;
     // world locations
-    private List<Location> locations;
+    private Map<Integer, Location> locations;
     // world creatures
-    private List<Creature> creatures;
+    private Map<Integer, Creature> creatures;
+    // world products
+    private Map<Long, Product> products;
     // world id's counters
     private int locationId;
     private int humanId;
@@ -39,9 +45,9 @@ public class World {
 
     public void addLocation(Location location) {
         if (locations == null) {
-            locations = new ArrayList();
+            locations = new HashMap();
         }
-        locations.add(location);
+        locations.put(location.getId(), location);
     }
 
     public String getName() {
@@ -64,19 +70,36 @@ public class World {
         return productId++;
     }
 
-    public List<Location> getLocations() {
-        return locations;
-    }
-
-    public void addCreature(Creature human) {
-        if (creatures == null) {
-            creatures = new ArrayList();
+    public Location getLocation(Integer id) {
+        if (locations == null) {
+            return null;
         }
-        creatures.add(human);
+        return locations.get(id);
     }
 
-    public List<Creature> getCreatures() {
-        return creatures;
+    public void addCreature(Creature creature) {
+        if (creatures == null) {
+            creatures = new HashMap();
+        }
+        creatures.put(creature.getId(), creature);
+    }
+
+    public Creature getCreature(Integer id) {
+        if (creatures == null) {
+            return null;
+        }
+        return creatures.get(id);
+    }
+
+    public void addProduct(Product product) {
+        if (products == null) {
+            products = new HashMap();
+        }
+        products.put(product.getId(), product);
+    }
+
+    public Product getProduct(Long id) {
+        return products.get(id);
     }
 
     public long getWorldTime() {
@@ -93,6 +116,14 @@ public class World {
 
     public void addWorldTime(int toAdd) {
         this.worldTime += toAdd;
+    }
+
+    public Collection<Creature> getCreatures() {
+        return this.creatures.values();
+    }
+
+    public Collection<Location> getLocations() {
+        return locations.values();
     }
 
 }

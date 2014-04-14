@@ -113,7 +113,7 @@ public class CommandManager {
             if (world == null) {
                 return result;
             }
-            Creature creature = WorldManager.getCreature(world, user.getSelectedCreature());
+            Creature creature = world.getCreature(user.getSelectedCreature());
             if (creature == null) {
                 return result;
             }

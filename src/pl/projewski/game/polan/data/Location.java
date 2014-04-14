@@ -30,9 +30,9 @@ public class Location {
     // user, to which belongs
     private String username;
     // elements on map
-    private List<Product> elements;
+    private List<Long> elements;
     // generaed resources
-    private List<Product> resources;
+    private List<Long> resources;
 
     public boolean isKnownByUser() {
         return knownByUser;
@@ -95,7 +95,7 @@ public class Location {
         if (elements == null) {
             elements = new ArrayList();
         }
-        elements.add(element);
+        elements.add(Long.valueOf(element.getId()));
     }
 
     public void removeElement(Product element) {
@@ -108,7 +108,7 @@ public class Location {
         }
     }
 
-    public List<Product> getElements() {
+    public List<Long> getElements() {
         return elements;
     }
 
@@ -116,10 +116,10 @@ public class Location {
         if (resources == null) {
             resources = new ArrayList();
         }
-        resources.add(resource);
+        resources.add(Long.valueOf(resource.getId()));
     }
 
-    public List<Product> getResources() {
+    public List<Long> getResources() {
         return resources;
     }
 

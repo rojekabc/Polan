@@ -41,18 +41,26 @@ public class LookAction implements ICommandAction {
             if (user.getSelectedCreature() == User.NO_CREATURE) {
                 return new CommandResponse(CommandResponseStatus.ERROR_WRONG_ARGUMENTS);
             }
-            Creature creature = WorldManager.getCreature(world, user.getSelectedCreature());
+            Creature creature = world.getCreature(user.getSelectedCreature());
             locationId = creature.getLocationId();
         } else if (props.size() == 1) {
             locationId = Integer.valueOf(props.get(0));
         }
-        final Location location = WorldManager.getLocation(world, locationId);
+        final Location location = world.getLocation(locationId);
         if (!location.isKnownByUser() || !location.getUsername().equals(user.getName())) {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_RIGHTS);
         }
         final LookResponse lookResponse = new LookResponse();
         lookResponse.setLocation(location);
         lookResponse.setHuman(WorldManager.findHumans(world, locationId));
+        final List<Long> elements = location.getElements();
+        for (Long id : elements) {
+            lookResponse.addProduct(world.getProduct(id));
+        }
+        final List<Long> resources = location.getResources();
+        for (Long id : resources) {
+            lookResponse.addProduct(world.getProduct(id));
+        }
         return lookResponse;
     }
 

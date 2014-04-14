@@ -37,7 +37,7 @@ public class SelectAction implements ICommandAction {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_WORLD);
         }
         int humanId = Integer.valueOf(props.get(0));
-        Creature human = WorldManager.getCreature(world, humanId);
+        Creature human = world.getCreature(humanId);
         if (human == null || !human.getUserName().equals(user.getName())) {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_RIGHTS);
         }

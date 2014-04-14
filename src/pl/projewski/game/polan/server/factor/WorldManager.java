@@ -240,16 +240,6 @@ public class WorldManager {
         return startLocation;
     }
 
-    public static Location getLocation(World world, Integer locationId) {
-        List<Location> locations = world.getLocations();
-        for (Location location : locations) {
-            if (location.getId() == locationId.intValue()) {
-                return location;
-            }
-        }
-        return null;
-    }
-
     public static void addWorlds(Collection<World> worlds) {
         if (worlds == null) {
             return;
@@ -262,26 +252,13 @@ public class WorldManager {
             return null;
         }
         final List<Creature> result = new ArrayList();
-        final List<Creature> humans = world.getCreatures();
+        final Collection<Creature> humans = world.getCreatures();
         for (final Creature human : humans) {
             if (human.getLocationId() == locationId) {
                 result.add(human);
             }
         }
         return result;
-    }
-
-    public static Creature getCreature(World world, int humanId) {
-        if (world == null) {
-            return null;
-        }
-        List<Creature> humans = world.getCreatures();
-        for (Creature human : humans) {
-            if (human.getId() == humanId) {
-                return human;
-            }
-        }
-        return null;
     }
 
     private static Map<String, WorldWorkQueue> worldQueues = new HashMap();

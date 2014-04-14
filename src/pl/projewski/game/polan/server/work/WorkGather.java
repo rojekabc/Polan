@@ -34,7 +34,7 @@ public class WorkGather extends AWork {
     public void finishWork() {
         // get location
         int locationId = worker.getLocationId();
-        Location location = WorldManager.getLocation(world, locationId);
+        Location location = world.getLocation(locationId);
         // append gathered resource to location
         ProductDefinition productDef = ProductDefinition.getFromName(gatherOnProduct.getName());
         ProductDefinition[] gatherResources = productDef.getGatherResources();

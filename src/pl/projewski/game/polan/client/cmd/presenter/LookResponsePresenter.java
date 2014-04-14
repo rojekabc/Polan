@@ -40,11 +40,12 @@ class LookResponsePresenter extends ResponsePresenter {
                 sb.appendNewLine();
             }
         }
-        List<Product> elements = location.getElements();
+        List<Long> elements = location.getElements();
         if (elements != null && !elements.isEmpty()) {
             sb.append(" * Elements").appendNewLine();
             Map<String, Integer> productCounter = new HashMap();
-            for (Product product : elements) {
+            for (Long productId : elements) {
+                Product product = lookResponse.getProduct(productId);
                 Integer cnt = productCounter.get(product.getName());
                 if (cnt == null) {
                     productCounter.put(product.getName(), Integer.valueOf(1));
@@ -57,11 +58,12 @@ class LookResponsePresenter extends ResponsePresenter {
                 sb.append("    ").append(entry.getKey()).append(" x").append(entry.getValue().intValue()).appendNewLine();
             }
         }
-        List<Product> resources = location.getResources();
+        List<Long> resources = location.getResources();
         if (resources != null && !resources.isEmpty()) {
             sb.append(" * Resources").appendNewLine();
             Map<String, Integer> productCounter = new HashMap();
-            for (Product resource : resources) {
+            for (Long resourceId : resources) {
+                Product resource = lookResponse.getProduct(resourceId);
                 Integer cnt = productCounter.get(resource.getName());
                 if (cnt == null) {
                     productCounter.put(resource.getName(), Integer.valueOf(1));
