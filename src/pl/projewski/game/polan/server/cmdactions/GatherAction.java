@@ -67,27 +67,24 @@ public class GatherAction implements ICommandAction {
         for (Product product : elements) {
             productDefinition = ProductDefinition.getFromName(product.getName());
             if (productDefinition.isGatherable()) {
-                // TODO: Check gather timer, that product is possible to gather.
-                // FIXME: Currently just gather and select as gathered
-                String gatherTimer = product.getGatherTimer();
-                if (gatherTimer == null) {
-                    productToGather = product;
-                    break;
+                if (product.isGatherLock()) {
+                    continue;
                 }
+                productToGather = product;
+                break;
             }
         }
         if (productToGather == null) {
-            // TODO: if worker has still work to do than set up a little wait time to next try of gather
-            return new TimeResponse(0);
+            return new CommandResponse(CommandResponseStatus.ERROR_NO_WORK_POSSIBLE);
         }
         // TODO:
         //  - worker - set action and timer for gathering
         //  - product - set gather timer, which should say when it'll renew
         //  - after gathering action worker should put element in some container
         // Currently only lock, that it was gathered
-        productToGather.setGatherTimer(1);
+        productToGather.setGatherLock(true);
         WorldManager.addWork(world, new WorkGather(productDefinition.getGatherTime(), world, creature, productToGather));
-        return new TimeResponse(0);
+        return new TimeResponse(productDefinition.getGatherTime());
     }
 
 }

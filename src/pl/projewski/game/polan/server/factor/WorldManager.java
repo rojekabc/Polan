@@ -86,14 +86,14 @@ public class WorldManager {
         return null;
     }
 
-    public static Product generateProcudt(ProductDefinition productName) {
-        final Product product = new Product();
+    public static Product generateProcudt(final World world, ProductDefinition productName) {
+        final Product product = new Product(world.generateProductId());
         product.setName(productName.getName());
         return product;
     }
 
     // public Product
-    public static void randomElements(final Location location, final Random random) {
+    public static void randomElements(final World world, final Location location, final Random random) {
         // TODO: Firstly random Fields and as second - what can be on this field (Tree)
         int size = location.getSize();
         RandomElement<ProductDefinition> randomProducts = new RandomElement();
@@ -156,7 +156,7 @@ public class WorldManager {
                 throw new AssertionError(type.name());
         }
         while (size > 0) {
-            location.addElement(generateProcudt(randomProducts.getRandomElement(random)));
+            location.addElement(generateProcudt(world, randomProducts.getRandomElement(random)));
             size--;
         }
     }
@@ -185,7 +185,7 @@ public class WorldManager {
         final int size = 10 + random.nextInt(20);
         // TODO: now let say it's between 10 and 29. It should be depend on type, start and maybe other things (and maybe little more)
         location.setSize(size);
-        randomElements(location, random);
+        randomElements(world, location, random);
         // generate new locations for new known loaction (and start is always known)
         // TODO: it should be seperate method
         // if there are connections - not generate to much more
@@ -236,7 +236,7 @@ public class WorldManager {
         human.setLocationId(startLocation.getId());
         human.setActualRole(Role.KING);
         human.setId(world.generateNewHumanId());
-        world.addHuman(human);
+        world.addCreature(human);
         return startLocation;
     }
 
@@ -262,7 +262,7 @@ public class WorldManager {
             return null;
         }
         final List<Creature> result = new ArrayList();
-        final List<Creature> humans = world.getHumans();
+        final List<Creature> humans = world.getCreatures();
         for (final Creature human : humans) {
             if (human.getLocationId() == locationId) {
                 result.add(human);
@@ -275,7 +275,7 @@ public class WorldManager {
         if (world == null) {
             return null;
         }
-        List<Creature> humans = world.getHumans();
+        List<Creature> humans = world.getCreatures();
         for (Creature human : humans) {
             if (human.getId() == humanId) {
                 return human;

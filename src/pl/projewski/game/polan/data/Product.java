@@ -17,6 +17,11 @@ import java.util.Map;
 public class Product {
 
     Map<ProductProperty, String> properties = new HashMap();
+    private long id;
+
+    public Product(long id) {
+        this.id = id;
+    }
 
     // let say that 1 it's equivalent of 100g
     private int unitCapacity;
@@ -33,12 +38,16 @@ public class Product {
         properties.put(property, value);
     }
 
-    public String getGatherTimer() {
-        return properties.get(ProductProperty.GATHERTIMER);
+    public boolean isGatherLock() {
+        String value = properties.get(ProductProperty.GATHERLOCK);
+        return value != null && Boolean.parseBoolean(value);
     }
 
-    public String setGatherTimer(int value) {
-        return properties.put(ProductProperty.GATHERTIMER, Integer.toString(value));
+    public String setGatherLock(boolean value) {
+        return properties.put(ProductProperty.GATHERLOCK, Boolean.toString(value));
     }
 
+    public long getId() {
+        return id;
+    }
 }

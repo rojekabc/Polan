@@ -39,11 +39,10 @@ public class WorkGather extends AWork {
         ProductDefinition productDef = ProductDefinition.getFromName(gatherOnProduct.getName());
         ProductDefinition[] gatherResources = productDef.getGatherResources();
         for (ProductDefinition gatherResouurce : gatherResources) {
-            location.addResource(WorldManager.generateProcudt(gatherResouurce));
+            location.addResource(WorldManager.generateProcudt(world, gatherResouurce));
         }
         // start renew process
-        // TODO: Set up renew process number of ticks
-        WorldManager.addWork(world, new WorkRenewGather(20));
+        WorldManager.addWork(world, new WorkRenewGather(productDef.getGatherRenewTime()));
     }
 
 }

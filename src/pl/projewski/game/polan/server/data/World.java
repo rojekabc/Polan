@@ -15,11 +15,17 @@ import pl.projewski.game.polan.data.Location;
  */
 public class World {
 
+    // world name
     private String name;
+    // world locations
     private List<Location> locations;
-    private List<Creature> humans;
+    // world creatures
+    private List<Creature> creatures;
+    // world id's counters
     private int locationId;
     private int humanId;
+    private long productId;
+    // world time counter
     private long worldTime;
 
     public World() {
@@ -54,19 +60,23 @@ public class World {
         return humanId++;
     }
 
+    public long generateProductId() {
+        return productId++;
+    }
+
     public List<Location> getLocations() {
         return locations;
     }
 
-    public void addHuman(Creature human) {
-        if (humans == null) {
-            humans = new ArrayList();
+    public void addCreature(Creature human) {
+        if (creatures == null) {
+            creatures = new ArrayList();
         }
-        humans.add(human);
+        creatures.add(human);
     }
 
-    public List<Creature> getHumans() {
-        return humans;
+    public List<Creature> getCreatures() {
+        return creatures;
     }
 
     public long getWorldTime() {
