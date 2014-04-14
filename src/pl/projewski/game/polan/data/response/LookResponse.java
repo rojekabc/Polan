@@ -56,6 +56,9 @@ public class LookResponse extends CommandResponse {
     }
 
     public void addProduct(final Product product) {
+        if (product == null) {
+            return;
+        }
         if (this.product == null) {
             this.product = new HashMap();
         }

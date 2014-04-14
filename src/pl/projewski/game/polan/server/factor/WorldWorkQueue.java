@@ -34,11 +34,14 @@ public class WorldWorkQueue {
         }
         List<IWork> todo = new ArrayList();
         for (IWork work : works) {
-
+            if (work.decreaseNumberOfTick(numberOfTicks)) {
+                todo.add(work);
+            }
         }
-        IWork work = works.get(0);
-        work.finishWork();
-        works.remove(0);
+        for (IWork work : todo) {
+            work.finishWork();
+            works.remove(0);
+        }
     }
 
 }

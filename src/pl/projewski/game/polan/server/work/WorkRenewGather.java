@@ -5,6 +5,8 @@
  */
 package pl.projewski.game.polan.server.work;
 
+import pl.projewski.game.polan.data.Product;
+
 /**
  *
  * @version $Revision$
@@ -12,13 +14,16 @@ package pl.projewski.game.polan.server.work;
  */
 public class WorkRenewGather extends AWork {
 
-    public WorkRenewGather(int ticks) {
+    Product productToRenewGather;
+
+    public WorkRenewGather(int ticks, Product productToRenewGather) {
         super(ticks);
+        this.productToRenewGather = productToRenewGather;
     }
 
     @Override
     public void finishWork() {
-        // TODO TODO TODO: Now is very mocked
+        productToRenewGather.setGatherLock(false);
     }
 
 }

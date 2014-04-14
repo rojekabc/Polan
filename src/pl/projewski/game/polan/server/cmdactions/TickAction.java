@@ -38,7 +38,7 @@ public class TickAction implements ICommandAction {
         }
         int numOfTicks = 1;
         if (props != null && !props.isEmpty()) {
-            numOfTicks = Integer.getInteger(props.get(0));
+            numOfTicks = Integer.valueOf(props.get(0));
             if (numOfTicks <= 0) {
                 numOfTicks = 1;
             }

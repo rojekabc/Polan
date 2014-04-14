@@ -54,12 +54,16 @@ public class LookAction implements ICommandAction {
         lookResponse.setLocation(location);
         lookResponse.setHuman(WorldManager.findHumans(world, locationId));
         final List<Long> elements = location.getElements();
-        for (Long id : elements) {
-            lookResponse.addProduct(world.getProduct(id));
+        if (elements != null) {
+            for (Long id : elements) {
+                lookResponse.addProduct(world.getProduct(id));
+            }
         }
         final List<Long> resources = location.getResources();
-        for (Long id : resources) {
-            lookResponse.addProduct(world.getProduct(id));
+        if (resources != null) {
+            for (Long id : resources) {
+                lookResponse.addProduct(world.getProduct(id));
+            }
         }
         return lookResponse;
     }

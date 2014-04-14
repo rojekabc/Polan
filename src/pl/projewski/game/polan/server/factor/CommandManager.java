@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 import pl.projewski.game.polan.data.Cmd;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.CreatureType;
@@ -21,6 +23,7 @@ import pl.projewski.game.polan.data.NamedCommand;
 import pl.projewski.game.polan.server.Command;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.UserPrivilages;
+import pl.projewski.game.polan.server.ICommandAction;
 import pl.projewski.game.polan.server.cmdactions.CreateTownAction;
 import pl.projewski.game.polan.server.cmdactions.CreateWorldAction;
 import pl.projewski.game.polan.server.cmdactions.HelpAction;
@@ -42,11 +45,6 @@ import pl.projewski.game.polan.server.data.World;
 public class CommandManager {
 
     private static CommandManager instance;
-    private Map<Cmd, Command> commandList;
-
-    private CommandManager() {
-        registerCommands();
-    }
 
     public synchronized static CommandManager getInstance() {
         if (instance == null) {
@@ -55,41 +53,74 @@ public class CommandManager {
         return instance;
     }
 
-    private void registerCommands() {
-        commandList = new HashMap();
-        commandList.put(Cmd.LOGIN, new Command(new LoginAction(), UserPrivilages.EVERYONE));
-        commandList.put(Cmd.QUIT, new Command(new QuitAction(), UserPrivilages.EVERYONE));
-        commandList.put(Cmd.HELP, new Command(new HelpAction(), UserPrivilages.EVERYONE));
-        commandList.put(Cmd.LISTUSERS, new Command(new ListUsersAction(), UserPrivilages.ADMINISTRATOR));
-        commandList.put(Cmd.CREATEWORLD, new Command(new CreateWorldAction(), UserPrivilages.ADMINISTRATOR));
-        commandList.put(Cmd.CREATETOWN, new Command(new CreateTownAction(), UserPrivilages.ADMINISTRATOR));
-        commandList.put(Cmd.LISTWORLDS, new Command(new ListWorldsAction(), UserPrivilages.USER));
-        commandList.put(Cmd.USEWORLD, new Command(new UseWorldAction(), UserPrivilages.USER));
-        commandList.put(Cmd.LISTLOCATIONS, new Command(new ListLocationsAction(), UserPrivilages.USER));
-        commandList.put(Cmd.SAVE, new Command(new SaveAction(), UserPrivilages.USER));
-        commandList.put(Cmd.LOOK, new Command(new LookAction(), UserPrivilages.USER));
-        commandList.put(Cmd.SELECT, new Command(new SelectAction(), UserPrivilages.USER));
-        // commandList.put(Cmd.WALK, new Command(new WalkAction(), UserPrivilages.USER));
-        // commandList.put(Cmd.GATHER, new Command(new GatherAction(), UserPrivilages.USER));
-        commandList.put(Cmd.TICK, new Command(new TickAction(), UserPrivilages.USER));
+    private static Map<Cmd, ICommandAction> getCommands(User user) {
+        Map<Cmd, ICommandAction> result = new HashMap();
+        UserPrivilages priv = UserPrivilages.EVERYONE;
+        if (user != null) {
+            priv = user.getPrivilages();
+        }
+        if (priv.ordinal() >= UserPrivilages.EVERYONE.ordinal()) {
+            result.put(Cmd.LOGIN, new LoginAction());
+            result.put(Cmd.QUIT, new QuitAction());
+            result.put(Cmd.HELP, new HelpAction());
+        }
+        if (priv.ordinal() >= UserPrivilages.USER.ordinal()) {
+            result.put(Cmd.LISTWORLDS, new ListWorldsAction());
+            result.put(Cmd.USEWORLD, new UseWorldAction());
+            result.put(Cmd.LISTLOCATIONS, new ListLocationsAction());
+            result.put(Cmd.SAVE, new SaveAction());
+            result.put(Cmd.LOOK, new LookAction());
+            result.put(Cmd.SELECT, new SelectAction());
+            result.put(Cmd.TICK, new TickAction());
+        }
+        if (priv.ordinal() >= UserPrivilages.ADMINISTRATOR.ordinal()) {
+            result.put(Cmd.LISTUSERS, new ListUsersAction());
+            result.put(Cmd.CREATEWORLD, new CreateWorldAction());
+            result.put(Cmd.CREATETOWN, new CreateTownAction());
+        }
+        // if user select creature he can do it's set of command
+        if (user != null && user.getSelectedCreature() != User.NO_CREATURE) {
+            String worldName = user.getWorldName();
+            if (worldName == null) {
+                return result;
+            }
+            World world = WorldManager.getWorld(worldName);
+            if (world == null) {
+                return result;
+            }
+            Creature creature = world.getCreature(user.getSelectedCreature());
+            if (creature == null) {
+                return result;
+            }
+            CreatureType type = creature.getType();
+            List<Cmd> creatureCommands = CreatureType.getCreatureCommands(type);
+            for (Cmd creatureCmd : creatureCommands) {
+                switch (creatureCmd) {
+                    case GATHER:
+                        result.put(Cmd.GATHER, new GatherAction());
+                        break;
+                    case WALK:
+                        result.put(Cmd.WALK, new WalkAction());
+                        break;
+                }
+            }
+        }
+
+        return result;
     }
 
     public CommandResponse runCommand(NamedCommand command, ClientContext ctx) {
+        Map<Cmd, ICommandAction> commandList = getCommands(ctx.getUser());
         if (commandList == null) {
+            Logger.getLogger(CommandManager.class.getSimpleName()).warning("No command list");
             return new CommandResponse(CommandResponseStatus.ERROR);
         }
-        Command cmd = commandList.get(command.getCmd());
-        if (cmd == null) {
-            return new CommandResponse(CommandResponseStatus.ERROR);
-        }
-        if (ctx.getUser() == null) {
-            if (cmd.getPrivilages() != UserPrivilages.EVERYONE) {
-                return new CommandResponse(CommandResponseStatus.ERROR_NO_RIGHTS);
-            }
-        } else if (cmd.getPrivilages().ordinal() > ctx.getUser().getPrivilages().ordinal()) {
+        ICommandAction cmdAction = commandList.get(command.getCmd());
+        if (cmdAction == null) {
+            Logger.getLogger(CommandManager.class.getSimpleName()).warning("Command not found on list");
             return new CommandResponse(CommandResponseStatus.ERROR_NO_RIGHTS);
         }
-        return cmd.getAction().runCommand(ctx, command.getParameters());
+        return cmdAction.runCommand(ctx, command.getParameters());
     }
 
     public List<Cmd> listCommandsForUser(User user) {
@@ -98,10 +129,8 @@ public class CommandManager {
             priv = user.getPrivilages();
         }
         List<Cmd> result = new ArrayList();
-        for (Map.Entry<Cmd, Command> entry : commandList.entrySet()) {
-            if (entry.getValue().getPrivilages().ordinal() <= priv.ordinal()) {
-                result.add(entry.getKey());
-            }
+        for (Cmd entry : getCommands(user).keySet()) {
+            result.add(entry);
         }
         // if user select creature he can do it's set of command
         if (user != null && user.getSelectedCreature() != User.NO_CREATURE) {

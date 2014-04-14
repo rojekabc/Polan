@@ -42,7 +42,7 @@ public class WorkGather extends AWork {
             location.addResource(WorldManager.generateProcudt(world, gatherResouurce));
         }
         // start renew process
-        WorldManager.addWork(world, new WorkRenewGather(productDef.getGatherRenewTime()));
+        WorldManager.addWork(world, new WorkRenewGather(productDef.getGatherRenewTime(), gatherOnProduct));
     }
 
 }
