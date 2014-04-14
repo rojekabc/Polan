@@ -119,10 +119,16 @@ public class World {
     }
 
     public Collection<Creature> getCreatures() {
+        if (this.creatures == null) {
+            return null;
+        }
         return this.creatures.values();
     }
 
     public Collection<Location> getLocations() {
+        if (locations == null) {
+            return null;
+        }
         return locations.values();
     }
 
