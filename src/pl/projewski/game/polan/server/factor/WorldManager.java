@@ -89,6 +89,7 @@ public class WorldManager {
     public static Product generateProcudt(final World world, ProductDefinition productName) {
         final Product product = new Product(world.generateProductId());
         product.setName(productName.getName());
+        world.addProduct(product);
         return product;
     }
 

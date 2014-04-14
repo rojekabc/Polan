@@ -99,6 +99,9 @@ public class World {
     }
 
     public Product getProduct(Long id) {
+        if (products == null) {
+            return null;
+        }
         return products.get(id);
     }
 
