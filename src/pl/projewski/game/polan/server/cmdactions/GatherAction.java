@@ -61,20 +61,7 @@ public class GatherAction implements ICommandAction {
         if (location == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
         }
-        Product productToGather = null;
-        ProductDefinition productDefinition = null;
-        List<Long> elements = location.getElements();
-        for (Long productId : elements) {
-            Product product = world.getProduct(productId);
-            productDefinition = ProductDefinition.getFromName(product.getName());
-            if (productDefinition.isGatherable()) {
-                if (product.isGatherLock()) {
-                    continue;
-                }
-                productToGather = product;
-                break;
-            }
-        }
+        Product productToGather = findProductToGatherOn(world, location);
         if (productToGather == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_WORK_POSSIBLE);
         }
@@ -84,8 +71,26 @@ public class GatherAction implements ICommandAction {
         //  - after gathering action worker should put element in some container
         // Currently only lock, that it was gathered
         productToGather.setGatherLock(true);
+        final ProductDefinition productDefinition = ProductDefinition.getFromName(productToGather.getName());
         WorldManager.addWork(world, new WorkGather(productDefinition.getGatherTime(), world, creature, productToGather));
         return new TimeResponse(productDefinition.getGatherTime());
+    }
+
+    public static Product findProductToGatherOn(final World world, final Location location) {
+        Product result = null;
+        List<Long> elements = location.getElements();
+        for (Long productId : elements) {
+            Product product = world.getProduct(productId);
+            final ProductDefinition productDefinition = ProductDefinition.getFromName(product.getName());
+            if (productDefinition.isGatherable()) {
+                if (product.isGatherLock()) {
+                    continue;
+                }
+                result = product;
+                break;
+            }
+        }
+        return result;
     }
 
 }
