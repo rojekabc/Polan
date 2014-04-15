@@ -13,15 +13,16 @@ package pl.projewski.game.polan.server.work;
 public interface IWork {
 
     /**
-     * called when planned work is finished
+     * Called when planned work is to do.
+     *
+     * @return true if work has nothing more to do. If there's something more return false - it'll be still at call.
      */
-    public void finishWork();
+    public boolean doPlannedWork();
 
     /**
-     * decrease a number of ticks for work and return true if after decrease we get a value 0 or less.
+     * decrease a one tick down.
      *
-     * @param ticks number of ticks to decrease
-     * @return true if 0 or less after decrease
+     * @return true if there's something to do
      */
-    public boolean decreaseNumberOfTick(int ticks);
+    public boolean decreaseTick();
 }

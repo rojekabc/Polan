@@ -5,6 +5,7 @@
  */
 package pl.projewski.game.polan.server.factor;
 
+import com.sun.istack.internal.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import pl.projewski.game.polan.server.work.IWork;
@@ -24,23 +25,24 @@ public class WorldWorkQueue {
     }
 
     /**
-     * Do planned works, which are in range of selected number of ticks.
+     * Do planned works, next tick is done.
      *
      * @param numberOfTicks
      */
-    public void doPlanedWorks(int numberOfTicks) {
+    public void doPlanedWorks() {
         if (works.isEmpty()) {
             return;
         }
         List<IWork> todo = new ArrayList();
         for (IWork work : works) {
-            if (work.decreaseNumberOfTick(numberOfTicks)) {
+            if (work.decreaseTick()) {
                 todo.add(work);
             }
         }
         for (IWork work : todo) {
-            work.finishWork();
-            works.remove(0);
+            if (work.doPlannedWork()) {
+                works.remove(work);
+            }
         }
     }
 

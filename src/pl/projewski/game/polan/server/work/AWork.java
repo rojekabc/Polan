@@ -12,21 +12,16 @@ package pl.projewski.game.polan.server.work;
  */
 public abstract class AWork implements IWork {
 
-    private int ticks;
+    protected int ticks;
 
     protected AWork(int numOfTicks) {
         this.ticks = numOfTicks;
     }
 
     @Override
-    public boolean decreaseNumberOfTick(int decTicks) {
-        if (decTicks >= ticks) {
-            ticks = 0;
-            return true;
-        } else {
-            ticks -= decTicks;
-            return false;
-        }
+    public boolean decreaseTick() {
+        ticks--;
+        return ticks <= 0;
     }
 
 }

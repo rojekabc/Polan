@@ -117,10 +117,6 @@ public class World {
         this.worldTime++;
     }
 
-    public void addWorldTime(int toAdd) {
-        this.worldTime += toAdd;
-    }
-
     public Collection<Creature> getCreatures() {
         if (this.creatures == null) {
             return null;

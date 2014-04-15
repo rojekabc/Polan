@@ -273,11 +273,11 @@ public class WorldManager {
         queue.addWork(work);
     }
 
-    public static void nextTicks(World world, int numOfTicks) {
-        world.addWorldTime(numOfTicks);
+    public static void nextTick(World world) {
+        world.nextWorldTime();
         WorldWorkQueue queue = worldQueues.get(world.getName());
         if (queue != null) {
-            queue.doPlanedWorks(numOfTicks);
+            queue.doPlanedWorks();
         }
     }
 

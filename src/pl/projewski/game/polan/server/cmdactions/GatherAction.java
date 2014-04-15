@@ -65,6 +65,17 @@ public class GatherAction implements ICommandAction {
         if (productToGather == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_WORK_POSSIBLE);
         }
+        int howManyTimes = 1;
+        if (!props.isEmpty()) {
+            String arg = props.get(0);
+            try {
+                howManyTimes = Integer.parseInt(arg);
+                if (howManyTimes <= 0) {
+                    howManyTimes = 1;
+                }
+            } catch (NumberFormatException e) {
+            }
+        }
         // TODO:
         //  - worker - set action and timer for gathering
         //  - product - set gather timer, which should say when it'll renew
@@ -72,7 +83,7 @@ public class GatherAction implements ICommandAction {
         // Currently only lock, that it was gathered
         productToGather.setGatherLock(true);
         final ProductDefinition productDefinition = ProductDefinition.getFromName(productToGather.getName());
-        WorldManager.addWork(world, new WorkGather(productDefinition.getGatherTime(), world, creature, productToGather));
+        WorldManager.addWork(world, new WorkGather(productDefinition.getGatherTime(), world, creature, productToGather, howManyTimes));
         return new TimeResponse(productDefinition.getGatherTime());
     }
 

@@ -43,7 +43,10 @@ public class TickAction implements ICommandAction {
                 numOfTicks = 1;
             }
         }
-        WorldManager.nextTicks(world, numOfTicks);
+        while (numOfTicks > 0) {
+            WorldManager.nextTick(world);
+            numOfTicks--;
+        }
         return new CommandResponse(CommandResponseStatus.OK);
     }
 
