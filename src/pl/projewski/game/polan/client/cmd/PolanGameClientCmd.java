@@ -29,16 +29,37 @@ import pl.projewski.game.polan.data.NamedCommand;
 public class PolanGameClientCmd {
 
     Log log = LogFactory.getLog(PolanGameClientCmd.class);
+    Gson gson;
+    OutputStream outputStream;
+    BufferedReader streamReader;
+
+    public PolanGameClientCmd() {
+        gson = new Gson();
+    }
+
+    private synchronized CommandResponse sendCommand(NamedCommand namedCommand) throws IOException {
+        String line = gson.toJson(namedCommand);
+        log.trace("Send command: " + line);
+        // TODO:
+        outputStream.write((line + "\r").getBytes());
+        outputStream.flush();
+        // Read response
+        String responseString = streamReader.readLine();
+        log.trace("Read response: " + responseString);
+        return (CommandResponse) gson.fromJson(
+                responseString, namedCommand.getCmd().getResponseClass());
+
+    }
 
     public void start() {
         try {
             Socket socket = new Socket("localhost", 8686);
-            OutputStream outputStream = socket.getOutputStream();
+            outputStream = socket.getOutputStream();
             InputStream inputStream = socket.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            BufferedReader streamReader = new BufferedReader(new InputStreamReader(inputStream));
+            streamReader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
-            Gson gson = new Gson();
+
             log.info("Started command line client");
             System.out.print("> ");
             while ((line = reader.readLine()) != null) {
@@ -57,17 +78,7 @@ public class PolanGameClientCmd {
                 for (int i = 1; i < split.length; i++) {
                     namedCommand.addParameter(split[i]);
                 }
-                line = gson.toJson(namedCommand);
-                log.trace("Send command: " + line);
-                // TODO:
-                outputStream.write((line + "\r").getBytes());
-                outputStream.flush();
-                // Read response
-                String responseString = streamReader.readLine();
-                log.trace("Read response: " + responseString);
-                CommandResponse response = (CommandResponse) gson.fromJson(
-                        responseString, cmd.getResponseClass());
-                ResponsePresenter.presentResponse(response);
+                ResponsePresenter.presentResponse(sendCommand(namedCommand));
                 // TODO:
                 if (namedCommand.getCmd() == Cmd.QUIT) {
                     break;
