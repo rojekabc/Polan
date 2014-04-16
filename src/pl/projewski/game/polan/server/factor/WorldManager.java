@@ -274,6 +274,7 @@ public class WorldManager {
             worldQueues.put(world.getName(), queue);
         }
         queue.addWork(work);
+        work.initWork();
     }
 
     public static void nextTick(World world) {

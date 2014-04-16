@@ -25,6 +25,7 @@ public class Creature {
     private Role actualRole;
     private CreatureType type;
     private Map<SlotType, Product> slots;
+    private String workName;
 
     public Creature(final String name, final String username, final CreatureType type) {
         this.name = name;
@@ -133,4 +134,11 @@ public class Creature {
         return slots.get(slot);
     }
 
+    public void setWorkName(String workName) {
+        this.workName = workName;
+    }
+
+    public String getWorkName() {
+        return workName;
+    }
 }

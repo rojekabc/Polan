@@ -11,6 +11,7 @@ import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.server.cmdactions.GatherAction;
 import pl.projewski.game.polan.server.data.ProductDefinition;
+import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.factor.WorldManager;
 
@@ -23,6 +24,9 @@ public class WorkGather extends AWork {
 
     Creature worker;
     Product gatherOnProduct;
+    // counter > 0 - planned number of things to gather
+    // counter == 0 - no more things to gather
+    // counter < 0 - neverending work (until break by another work)
     int counter;
 
     public WorkGather(Creature worker, Product gatherOnProduct, int numberToGather) {
@@ -35,6 +39,7 @@ public class WorkGather extends AWork {
     @Override
     public void initWork() {
         gatherOnProduct.setGatherLock(true);
+        worker.setWorkName(WorkNames.GATHERING);
     }
 
     @Override
@@ -53,10 +58,12 @@ public class WorkGather extends AWork {
             // start renew process
             WorldManager.addWork(world, new WorkRenewGather(gatherOnProduct));
             Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Gather");
-            counter--;
+            if (counter > 0) {
+                counter--;
+            }
         }
 
-        if (counter > 0) {
+        if (counter != 0) {
             // try find something to do
             gatherOnProduct = GatherAction.findProductToGatherOn(world, location);
             if (gatherOnProduct != null) {
@@ -72,6 +79,7 @@ public class WorkGather extends AWork {
             return false;
         } else {
             // there's nothing more to do
+            worker.setWorkName(WorkNames.NONE);
             return true;
         }
     }

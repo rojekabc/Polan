@@ -36,7 +36,7 @@ public class LookResponse extends CommandResponse {
         this.location = location;
     }
 
-    public List<Creature> getHuman() {
+    public List<Creature> getCreatures() {
         return human;
     }
 

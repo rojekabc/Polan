@@ -29,14 +29,15 @@ public class DataStringBuilder {
         return this;
     }
 
-    public DataStringBuilder append(final Creature human) {
-        return this.append(human, false);
+    public DataStringBuilder append(final Creature creature) {
+        return this.append(creature, false);
     }
 
-    public DataStringBuilder append(final Creature human, boolean longInfo) {
-        sb.append('[').append(human.getId()).append("] ");
-        sb.append(human.getName()).append(" (").append(human.getActualRole().name().toLowerCase()).append(")");
-        sb.append(" - ").append(human.getUserName());
+    public DataStringBuilder append(final Creature creature, boolean longInfo) {
+        sb.append('[').append(creature.getId()).append("] ");
+        sb.append(creature.getName()).append(" (").append(creature.getActualRole().name().toLowerCase()).append(")");
+        sb.append(" - ").append(creature.getUserName());
+        sb.append(" {").append(creature.getWorkName()).append('}');
         if (longInfo) {
             // TODO: Add information about known roles
         }

@@ -31,12 +31,12 @@ class LookResponsePresenter extends ResponsePresenter {
         sb.append(location);
         sb.appendNewLine();
         // location.get
-        final List<Creature> humans = lookResponse.getHuman();
-        if (humans != null && !humans.isEmpty()) {
+        final List<Creature> creatures = lookResponse.getCreatures();
+        if (creatures != null && !creatures.isEmpty()) {
             sb.append(" * Creatures").appendNewLine();
-            for (Creature human : humans) {
+            for (Creature creature : creatures) {
                 sb.append("    "); // tab
-                sb.append(human, true);
+                sb.append(creature, true);
                 sb.appendNewLine();
             }
         }

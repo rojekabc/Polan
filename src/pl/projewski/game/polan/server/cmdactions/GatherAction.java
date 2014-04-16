@@ -29,14 +29,6 @@ public class GatherAction implements ICommandAction {
 
     @Override
     public CommandResponse runCommand(ClientContext ctx, List<String> props) {
-        // TODO: Gather with seperated options (select elements which we want gather) (select how many times we want do gather)
-        // FIXME: Currently just only gather first of element, which find
-        // No argument - just gather random element one time
-        // argument one as number - gather random element one time
-        // argument one as string - gather selected element one time
-        // argument as string:number - gather selected element x numbers
-        // if selected element cannot be gathered it's omited
-        // if as argument is * than creature will collect without end (* or string:*)
         final User user = ctx.getUser();
         if (user == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_USER);
@@ -66,7 +58,7 @@ public class GatherAction implements ICommandAction {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_WORK_POSSIBLE);
         }
         int howManyTimes = 1;
-        if (!props.isEmpty()) {
+        if (props != null && !props.isEmpty()) {
             String arg = props.get(0);
             try {
                 howManyTimes = Integer.parseInt(arg);
@@ -74,13 +66,12 @@ public class GatherAction implements ICommandAction {
                     howManyTimes = 1;
                 }
             } catch (NumberFormatException e) {
+                if (arg.equals("*")) {
+                    // do neverending work of gathering all you can find
+                    howManyTimes = -1;
+                }
             }
         }
-        // TODO:
-        //  - worker - set action and timer for gathering
-        //  - product - set gather timer, which should say when it'll renew
-        //  - after gathering action worker should put element in some container
-        // Currently only lock, that it was gathered
         final ProductDefinition productDefinition = ProductDefinition.getFromName(productToGather.getName());
         WorldManager.addWork(world, new WorkGather(creature, productToGather, howManyTimes));
         return new TimeResponse(productDefinition.getGatherTime());
