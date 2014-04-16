@@ -81,9 +81,8 @@ public class GatherAction implements ICommandAction {
         //  - product - set gather timer, which should say when it'll renew
         //  - after gathering action worker should put element in some container
         // Currently only lock, that it was gathered
-        productToGather.setGatherLock(true);
         final ProductDefinition productDefinition = ProductDefinition.getFromName(productToGather.getName());
-        WorldManager.addWork(world, new WorkGather(productDefinition.getGatherTime(), world, creature, productToGather, howManyTimes));
+        WorldManager.addWork(world, new WorkGather(creature, productToGather, howManyTimes));
         return new TimeResponse(productDefinition.getGatherTime());
     }
 

@@ -8,6 +8,7 @@ package pl.projewski.game.polan.server.factor;
 import com.sun.istack.internal.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
+import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.work.IWork;
 
 /**
@@ -29,7 +30,7 @@ public class WorldWorkQueue {
      *
      * @param numberOfTicks
      */
-    public void doPlanedWorks() {
+    public void doPlanedWorks(World world) {
         if (works.isEmpty()) {
             return;
         }
@@ -40,7 +41,7 @@ public class WorldWorkQueue {
             }
         }
         for (IWork work : todo) {
-            if (work.doPlannedWork()) {
+            if (work.doPlannedWork(world)) {
                 works.remove(work);
             }
         }

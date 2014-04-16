@@ -5,6 +5,8 @@
  */
 package pl.projewski.game.polan.server.work;
 
+import pl.projewski.game.polan.server.data.World;
+
 /**
  *
  * @version $Revision$
@@ -17,7 +19,7 @@ public interface IWork {
      *
      * @return true if work has nothing more to do. If there's something more return false - it'll be still at call.
      */
-    public boolean doPlannedWork();
+    public boolean doPlannedWork(World world);
 
     /**
      * decrease a one tick down.
@@ -25,4 +27,10 @@ public interface IWork {
      * @return true if there's something to do
      */
     public boolean decreaseTick();
+
+    /**
+     * Initialize settings for a work to do. It it's called when work is added to pool. It doesn't do any work. In mostly cases it should be used to reserve
+     * resources need to do planned work.
+     */
+    public void initWork();
 }

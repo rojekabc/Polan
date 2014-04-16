@@ -21,21 +21,24 @@ import pl.projewski.game.polan.server.factor.WorldManager;
  */
 public class WorkGather extends AWork {
 
-    World world; // TODO : in some super class as context
     Creature worker;
     Product gatherOnProduct;
     int counter;
 
-    public WorkGather(int ticks, World world, Creature worker, Product gatherOnProduct, int numberToGather) {
-        super(ticks);
-        this.world = world;
+    public WorkGather(Creature worker, Product gatherOnProduct, int numberToGather) {
+        super(ProductDefinition.getFromName(gatherOnProduct.getName()).getGatherTime());
         this.worker = worker;
         this.gatherOnProduct = gatherOnProduct;
         this.counter = numberToGather;
     }
 
     @Override
-    public boolean doPlannedWork() {
+    public void initWork() {
+        gatherOnProduct.setGatherLock(true);
+    }
+
+    @Override
+    public boolean doPlannedWork(World world) {
         // get location
         int locationId = worker.getLocationId();
         Location location = world.getLocation(locationId);
@@ -48,7 +51,7 @@ public class WorkGather extends AWork {
                 location.addResource(WorldManager.generateProcudt(world, gatherResouurce));
             }
             // start renew process
-            WorldManager.addWork(world, new WorkRenewGather(productDef.getGatherRenewTime(), world, gatherOnProduct));
+            WorldManager.addWork(world, new WorkRenewGather(gatherOnProduct));
             Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Gather");
             counter--;
         }
@@ -59,7 +62,7 @@ public class WorkGather extends AWork {
             if (gatherOnProduct != null) {
                 // find something new - let's work
                 ProductDefinition productDef = ProductDefinition.getFromName(gatherOnProduct.getName());
-                gatherOnProduct.setGatherLock(true);
+                initWork();
                 this.ticks = productDef.getGatherTime();
             } else {
                 // try to find on next tick

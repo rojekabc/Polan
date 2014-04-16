@@ -7,6 +7,7 @@ package pl.projewski.game.polan.server.work;
 
 import com.sun.istack.internal.logging.Logger;
 import pl.projewski.game.polan.data.Product;
+import pl.projewski.game.polan.server.data.ProductDefinition;
 import pl.projewski.game.polan.server.data.World;
 
 /**
@@ -17,16 +18,18 @@ import pl.projewski.game.polan.server.data.World;
 public class WorkRenewGather extends AWork {
 
     Product productToRenewGather;
-    World world;
 
-    public WorkRenewGather(int ticks, World world, Product productToRenewGather) {
-        super(ticks);
+    public WorkRenewGather(Product productToRenewGather) {
+        super(ProductDefinition.getFromName(productToRenewGather.getName()).getGatherRenewTime());
         this.productToRenewGather = productToRenewGather;
-        this.world = world;
     }
 
     @Override
-    public boolean doPlannedWork() {
+    public void initWork() {
+    }
+
+    @Override
+    public boolean doPlannedWork(World world) {
         productToRenewGather.setGatherLock(false);
         Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Renew gather");
         return true;

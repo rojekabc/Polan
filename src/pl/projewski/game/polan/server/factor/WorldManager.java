@@ -262,6 +262,9 @@ public class WorldManager {
         return result;
     }
 
+    // TODO: This queue should be stored in World and with works possible to write into gson store save file
+    // TODO: Currently it's not done and works are not saved
+    // TODO: It need to a refactor to construct way of write work with id to elements, not with objects
     private static Map<String, WorldWorkQueue> worldQueues = new HashMap();
 
     public static void addWork(World world, IWork work) {
@@ -277,7 +280,7 @@ public class WorldManager {
         world.nextWorldTime();
         WorldWorkQueue queue = worldQueues.get(world.getName());
         if (queue != null) {
-            queue.doPlanedWorks();
+            queue.doPlanedWorks(world);
         }
     }
 
