@@ -6,7 +6,9 @@
 package pl.projewski.game.polan.server.cmdactions;
 
 import java.util.List;
+import java.util.Set;
 import pl.projewski.game.polan.data.Creature;
+import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.response.CommandResponseStatus;
@@ -14,6 +16,7 @@ import pl.projewski.game.polan.server.ICommandAction;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.factor.WorldManager;
+import pl.projewski.game.polan.server.work.WalkWork;
 
 /**
  *
@@ -46,9 +49,39 @@ public class WalkAction implements ICommandAction {
         if (!creature.getUserName().equals(user.getName())) {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_RIGHTS);
         }
-        // TODO: Use pathFinding
-        // TODO: Count time need to travel by selected ceature to selected position (update after each partial time position of creature)
-        // TODO: If it's exploring do exploring mission on selected territory (and update after that time)
+        int locationId = creature.getLocationId();
+        Location location = world.getLocation(locationId);
+        if (location == null) {
+            return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
+        }
+        String arg = props.get(0);
+        int destinationLocationId;
+        try {
+            destinationLocationId = Integer.parseInt(arg);
+        } catch (NumberFormatException e) {
+            return new CommandResponse(CommandResponseStatus.ERROR_WRONG_ARGUMENTS);
+        }
+        boolean hasConnection = false;
+        Set<Integer> connections = location.getConnection();
+        if (connections != null) {
+            for (Integer connectionId : connections) {
+                if (connectionId == destinationLocationId) {
+                    hasConnection = true;
+                    break;
+                }
+            }
+        } else {
+            return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
+        }
+
+        if (!hasConnection) {
+            return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
+        }
+        Location destinationLocation = world.getLocation(destinationLocationId);
+        if (destinationLocation == null) {
+            return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
+        }
+        WorldManager.addWork(world, new WalkWork(creature, destinationLocation));
         return new CommandResponse(CommandResponseStatus.OK);
     }
 

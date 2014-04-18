@@ -14,5 +14,7 @@ public class WorkNames {
 
     public static final String NONE = "none";
     public static final String GATHERING = "gathering";
+    public static final String WALK = "walking";
+    public static final String EXPLORE = "exploring";
 
 }

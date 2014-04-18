@@ -182,7 +182,9 @@ public class WorldManager {
         location.setType(randomStartLocationType.getRandomElement(random));
         location.setKnownByUser(true);
         location.setUsername(user.getName());
-        location.setId(world.generateNewLocationId());
+        if (isStart) {
+            location.setId(world.generateNewLocationId());
+        }
         final int size = 10 + random.nextInt(20);
         // TODO: now let say it's between 10 and 29. It should be depend on type, start and maybe other things (and maybe little more)
         location.setSize(size);

@@ -47,6 +47,9 @@ public class LookAction implements ICommandAction {
             locationId = Integer.valueOf(props.get(0));
         }
         final Location location = world.getLocation(locationId);
+        if (location == null) {
+            return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
+        }
         if (!location.isKnownByUser() || !location.getUsername().equals(user.getName())) {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_RIGHTS);
         }
