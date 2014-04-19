@@ -81,7 +81,7 @@ public class WalkAction implements ICommandAction {
         if (destinationLocation == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
         }
-        WorldManager.addWork(world, new WalkWork(creature, destinationLocation));
+        WorldManager.addWork(world, new WalkWork(ctx, creature, destinationLocation));
         return new CommandResponse(CommandResponseStatus.OK);
     }
 

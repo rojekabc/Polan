@@ -9,6 +9,8 @@ import com.sun.istack.internal.logging.Logger;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.User;
+import pl.projewski.game.polan.data.response.ServerLog;
+import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.factor.UserManagerFactory;
@@ -25,9 +27,9 @@ public class WalkWork extends AWork {
     private Location destination;
     private Creature creature;
 
-    public WalkWork(Creature creature, Location destinationLocation) {
+    public WalkWork(ClientContext context, Creature creature, Location destinationLocation) {
         // TODO: More depened and planned walk / explore time
-        super(destinationLocation.isKnownByUser() ? 20 : 40);
+        super(context, destinationLocation.isKnownByUser() ? 20 : 40);
         this.creature = creature;
         this.destination = destinationLocation;
     }
@@ -36,10 +38,12 @@ public class WalkWork extends AWork {
     public boolean doPlannedWork(World world) {
         User user = UserManagerFactory.getUserManager().getUser(creature.getUserName());
         if (!destination.isKnownByUser()) {
-            Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Explore new location " + destination.getId());
+            context.sendToClient(ServerLog.info(world.getWorldTime(), "Explore new location " + destination.getId()));
+            // Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Explore new location " + destination.getId());
             WorldManager.exploreNewLocation(world, destination, false, user);
         }
-        Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Move creature to new location " + destination.getId());
+        context.sendToClient(ServerLog.info(world.getWorldTime(), "Move creature to new location " + destination.getId()));
+        // Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Move creature to new location " + destination.getId());
         creature.setLocationId(destination.getId());
         creature.setWorkName(WorkNames.NONE);
         return true;

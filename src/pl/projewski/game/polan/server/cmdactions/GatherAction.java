@@ -73,7 +73,7 @@ public class GatherAction implements ICommandAction {
             }
         }
         final ProductDefinition productDefinition = ProductDefinition.getFromName(productToGather.getName());
-        WorldManager.addWork(world, new WorkGather(creature, productToGather, howManyTimes));
+        WorldManager.addWork(world, new WorkGather(ctx, creature, productToGather, howManyTimes));
         return new TimeResponse(productDefinition.getGatherTime());
     }
 

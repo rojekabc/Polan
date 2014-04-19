@@ -9,7 +9,9 @@ import com.sun.istack.internal.logging.Logger;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
+import pl.projewski.game.polan.data.response.ServerLog;
 import pl.projewski.game.polan.server.cmdactions.GatherAction;
+import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.ProductDefinition;
 import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
@@ -29,8 +31,8 @@ public class WorkGather extends AWork {
     // counter < 0 - neverending work (until break by another work)
     int counter;
 
-    public WorkGather(Creature worker, Product gatherOnProduct, int numberToGather) {
-        super(ProductDefinition.getFromName(gatherOnProduct.getName()).getGatherTime());
+    public WorkGather(ClientContext ctx, Creature worker, Product gatherOnProduct, int numberToGather) {
+        super(ctx, ProductDefinition.getFromName(gatherOnProduct.getName()).getGatherTime());
         this.worker = worker;
         this.gatherOnProduct = gatherOnProduct;
         this.counter = numberToGather;
@@ -56,8 +58,12 @@ public class WorkGather extends AWork {
                 location.addResource(WorldManager.generateProcudt(world, gatherResouurce));
             }
             // start renew process
-            WorldManager.addWork(world, new WorkRenewGather(gatherOnProduct));
-            Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Gather");
+            WorldManager.addWork(world, new WorkRenewGather(context, gatherOnProduct));
+            if ( context == null ) {
+                System.out.println("CONTEXT IS NULL");
+            }
+            context.sendToClient(ServerLog.info(world.getWorldTime(), "Gather on " + gatherOnProduct.getName()));
+            // Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Gather");
             if (counter > 0) {
                 counter--;
             }

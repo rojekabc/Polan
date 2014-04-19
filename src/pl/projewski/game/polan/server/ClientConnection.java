@@ -4,7 +4,6 @@
  */
 package pl.projewski.game.polan.server;
 
-import pl.projewski.game.polan.data.User;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,28 +45,27 @@ public class ClientConnection implements Runnable {
         try {
             inputStream = clientSocket.getInputStream();
             outputStream = clientSocket.getOutputStream();
+            this.ctx.setOutputStream(outputStream);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String cmd;
             Gson gson = new Gson();
             log.debug("Start");
             while ((cmd = bufferedReader.readLine()) != null) {
                 log.trace("Read line: " + cmd);
-                String responseString = null;
+                CommandResponse response;
+                String responseString;
                 final NamedCommand namedCommand = gson.fromJson(cmd, NamedCommand.class);
                 try {
-                    final CommandResponse response = CommandManager.getInstance().runCommand(namedCommand, ctx);
-                    responseString = gson.toJson(response);
+                    response = CommandManager.getInstance().runCommand(namedCommand, ctx);
                 } catch (Throwable t) {
                     // log failure
                     log.error("Unhandled exception in execution of command !", t);
                     // return error result
-                    responseString = gson.toJson(new CommandResponse(CommandResponseStatus.ERROR));
+                    response = new CommandResponse(CommandResponseStatus.ERROR);
                 }
 
-                log.trace("Send response: " + responseString);
                 // TODO
-                outputStream.write((responseString + "\r").getBytes());
-                outputStream.flush();
+                this.ctx.sendToClient(response);
                 if (namedCommand.getCmd() == Cmd.QUIT) {
                     break;
                 }

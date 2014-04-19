@@ -22,6 +22,7 @@ public class LoginAction implements ICommandAction {
     public CommandResponse runCommand(final ClientContext ctx, final List<String> props) {
         // TODO: check user login / password
         // TODO: set corresponding user privilages
+        // TODO: Check that user is not logged in
         if (props == null || props.isEmpty()) {
             return new CommandResponse(CommandResponseStatus.ERROR_WRONG_ARGUMENTS);
         }

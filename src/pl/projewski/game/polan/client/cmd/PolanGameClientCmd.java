@@ -11,16 +11,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import pl.projewski.game.polan.client.cmd.presenter.ResponsePresenter;
 import pl.projewski.game.polan.data.Cmd;
 import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.NamedCommand;
+import pl.projewski.game.polan.data.response.ServerData;
+import pl.projewski.game.polan.data.response.ServerDataType;
+import pl.projewski.game.polan.data.response.ServerLog;
 
 /**
  *
@@ -32,22 +33,26 @@ public class PolanGameClientCmd {
     Gson gson;
     OutputStream outputStream;
     BufferedReader streamReader;
+    NamedCommand waitForResponse = null;
+    Thread serverReaderThread;
 
     public PolanGameClientCmd() {
         gson = new Gson();
     }
 
-    private synchronized CommandResponse sendCommand(NamedCommand namedCommand) throws IOException {
+    private synchronized void sendCommand(NamedCommand namedCommand) throws IOException {
         String line = gson.toJson(namedCommand);
         log.trace("Send command: " + line);
-        // TODO:
+        // set command waiting for response
+        waitForResponse = namedCommand;
+        // send data to server
         outputStream.write((line + "\r").getBytes());
         outputStream.flush();
         // Read response
-        String responseString = streamReader.readLine();
-        log.trace("Read response: " + responseString);
-        return (CommandResponse) gson.fromJson(
-                responseString, namedCommand.getCmd().getResponseClass());
+        // String responseString = streamReader.readLine();
+        
+        //return (CommandResponse) gson.fromJson(
+        //        responseString, namedCommand.getCmd().getResponseClass());
 
     }
 
@@ -59,11 +64,61 @@ public class PolanGameClientCmd {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             streamReader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
+            
+            Runnable readFromServer = new Runnable() {
+
+                @Override
+                public void run()
+                {
+                    try {
+                        log.info("Started client reader");
+                        String serverline;
+                        while ( (serverline = streamReader.readLine()) != null ) {
+                            log.trace("Read from server: " + serverline);
+                            ServerData serverData = gson.fromJson(serverline, ServerData.class);
+                            if ( serverData.getDataType() == ServerDataType.COMMAND_RESPONSE ) {
+                                // TODO: synchronized
+                                if ( waitForResponse != null ) {
+                                    ResponsePresenter.presentResponse((CommandResponse) gson.fromJson(
+                                        serverline, waitForResponse.getCmd().getResponseClass()));
+                                    waitForResponse = null;
+                                    System.out.print("> ");
+                                } else {
+                                    Logger.getLogger(PolanGameClientCmd.class.getName()).log(Level.WARNING,
+                                            "Cannot find correct command for response");
+                                }
+                            } else if ( serverData.getDataType() == ServerDataType.SERVER_LOG ) {
+                                ServerLog serverLog = (ServerLog)gson.fromJson(serverline, ServerLog.class);
+                                StringBuilder sb = new StringBuilder();
+                                if ( waitForResponse == null ) {
+                                    sb.append('\r');
+                                }
+                                sb.append('[').append(serverLog.getLevel()).append(':').
+                                        append(serverLog.getWorldTime()).append("] ");
+                                sb.append(serverLog.getInformation());
+                                if ( waitForResponse == null ) {
+                                    sb.append("\r> ");
+                                }
+                                System.out.print(sb.toString());
+                            }
+                        }
+                        log.info("Stop client reader");                        
+                    } catch (IOException ex) {
+                        Logger.getLogger(PolanGameClientCmd.class.getName()).log(Level.SEVERE, null, ex);                        
+                    }
+                }
+            };
+            serverReaderThread = new Thread(readFromServer);
+            serverReaderThread.start();
 
             log.info("Started command line client");
             System.out.print("> ");
             while ((line = reader.readLine()) != null) {
                 if (line.isEmpty()) {
+                    continue;
+                }
+                // Don't allow to do command - working on another task
+                if ( waitForResponse != null ) {
                     continue;
                 }
                 String[] split = line.split(" ");
@@ -78,16 +133,17 @@ public class PolanGameClientCmd {
                 for (int i = 1; i < split.length; i++) {
                     namedCommand.addParameter(split[i]);
                 }
-                ResponsePresenter.presentResponse(sendCommand(namedCommand));
-                // TODO:
+                sendCommand(namedCommand);
+                // TODO: let's think it's ok
                 if (namedCommand.getCmd() == Cmd.QUIT) {
                     break;
                 }
-                System.out.print("> ");
             }
             log.info("Stop command line client.");
         } catch (IOException ex) {
             Logger.getLogger(PolanGameClientCmd.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            serverReaderThread.interrupt();
         }
     }
 

@@ -15,6 +15,8 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.SocketFactory;
@@ -37,7 +39,7 @@ public class PolanGameServer implements Runnable {
 
     private ServerSocket serverSocket;
     private boolean isWork;
-    private Log log = LogFactory.getLog(PolanGameServer.class);
+    private final Log log = LogFactory.getLog(PolanGameServer.class);
 
     public PolanGameServer() throws IOException {
         this.serverSocket = new ServerSocket(8686);

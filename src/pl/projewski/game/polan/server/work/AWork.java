@@ -5,6 +5,8 @@
  */
 package pl.projewski.game.polan.server.work;
 
+import pl.projewski.game.polan.server.data.ClientContext;
+
 /**
  *
  * @version $Revision$
@@ -13,9 +15,11 @@ package pl.projewski.game.polan.server.work;
 public abstract class AWork implements IWork {
 
     protected int ticks;
+    protected ClientContext context;
 
-    protected AWork(int numOfTicks) {
+    protected AWork(ClientContext ctx, int numOfTicks) {
         this.ticks = numOfTicks;
+        this.context = ctx;
     }
 
     @Override
