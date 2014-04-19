@@ -48,12 +48,6 @@ public class PolanGameClientCmd {
         // send data to server
         outputStream.write((line + "\r").getBytes());
         outputStream.flush();
-        // Read response
-        // String responseString = streamReader.readLine();
-        
-        //return (CommandResponse) gson.fromJson(
-        //        responseString, namedCommand.getCmd().getResponseClass());
-
     }
 
     public void start() {
@@ -77,6 +71,7 @@ public class PolanGameClientCmd {
                             log.trace("Read from server: " + serverline);
                             ServerData serverData = gson.fromJson(serverline, ServerData.class);
                             if ( serverData.getDataType() == ServerDataType.COMMAND_RESPONSE ) {
+                                // get command response
                                 // TODO: synchronized
                                 if ( waitForResponse != null ) {
                                     ResponsePresenter.presentResponse((CommandResponse) gson.fromJson(
@@ -88,6 +83,7 @@ public class PolanGameClientCmd {
                                             "Cannot find correct command for response");
                                 }
                             } else if ( serverData.getDataType() == ServerDataType.SERVER_LOG ) {
+                                // get some log data from server
                                 ServerLog serverLog = (ServerLog)gson.fromJson(serverline, ServerLog.class);
                                 StringBuilder sb = new StringBuilder();
                                 if ( waitForResponse == null ) {

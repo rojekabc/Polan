@@ -17,6 +17,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.SocketFactory;
@@ -81,6 +84,23 @@ public class PolanGameServer implements Runnable {
         } catch (FileNotFoundException ex) {
             log.warn("Problem while loading saved data", ex);
         }
+        TimerTask worldTickerTask = new TimerTask() {
+            @Override
+            public void run()
+            {
+                Set<World> listWorlds = WorldManager.listWorlds();
+                for (World world : listWorlds) {
+                    WorldManager.nextTick(world);
+                }
+            }
+        };
+        // send auto-tick 5 sec after start and send it on each 1 sec more
+        // TODO: It should be configurable:
+        // TODO:   - when starts after server started
+        // TODO:   - how often sends tick
+        // TODO:   - how many ticks sends on one call
+        Timer timer = new Timer();
+        timer.schedule(worldTickerTask, 5000, 1000);
         System.out.println("Server started.");
         while (isWork) {
             Socket clientSocket = null;
@@ -100,6 +120,7 @@ public class PolanGameServer implements Runnable {
             }
         }
         System.out.println("Server stoping ...");
+        timer.cancel();
         System.out.println("Server stopped.");
     }
 

@@ -20,6 +20,7 @@ import pl.projewski.game.polan.server.factor.WorldManager;
  * @author rojewski.piotr
  */
 public class TickAction implements ICommandAction {
+    final static boolean blocked = true;
 
     @Override
     public CommandResponse runCommand(ClientContext ctx, List<String> props) {
@@ -27,6 +28,8 @@ public class TickAction implements ICommandAction {
          * Tick without arguments - one tick
          * Tick with number - number of ticks to do
          */
+        if ( blocked )
+            return new CommandResponse(CommandResponseStatus.ERROR_COMMAND_BLOCKED);
         final User user = ctx.getUser();
         if (user == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_USER);
