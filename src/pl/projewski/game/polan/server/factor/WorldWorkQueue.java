@@ -5,7 +5,6 @@
  */
 package pl.projewski.game.polan.server.factor;
 
-import com.sun.istack.internal.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import pl.projewski.game.polan.server.data.World;

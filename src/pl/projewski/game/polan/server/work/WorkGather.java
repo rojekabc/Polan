@@ -5,7 +5,6 @@
  */
 package pl.projewski.game.polan.server.work;
 
-import com.sun.istack.internal.logging.Logger;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
@@ -59,7 +58,7 @@ public class WorkGather extends AWork {
             }
             // start renew process
             WorldManager.addWork(world, new WorkRenewGather(context, gatherOnProduct));
-            if ( context == null ) {
+            if (context == null) {
                 System.out.println("CONTEXT IS NULL");
             }
             context.sendToClient(ServerLog.info(world.getWorldTime(), "Gather on " + gatherOnProduct.getName()));
