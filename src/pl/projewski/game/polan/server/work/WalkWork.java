@@ -5,7 +5,6 @@
  */
 package pl.projewski.game.polan.server.work;
 
-import com.sun.istack.internal.logging.Logger;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.User;
