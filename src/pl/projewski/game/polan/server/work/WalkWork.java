@@ -21,21 +21,19 @@ import pl.projewski.game.polan.server.work.IWork;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class WalkWork extends AWork {
+public class WalkWork extends AWorkerWork {
 
     private Location destination;
-    private Creature creature;
 
     public WalkWork(ClientContext context, Creature creature, Location destinationLocation) {
         // TODO: More depened and planned walk / explore time
-        super(context, destinationLocation.isKnownByUser() ? 20 : 40);
-        this.creature = creature;
+        super(context, destinationLocation.isKnownByUser() ? 20 : 40, creature);
         this.destination = destinationLocation;
     }
 
     @Override
     public boolean doPlannedWork(World world) {
-        User user = UserManagerFactory.getUserManager().getUser(creature.getUserName());
+        User user = UserManagerFactory.getUserManager().getUser(getWorker().getUserName());
         if (!destination.isKnownByUser()) {
             context.sendToClient(ServerLog.info(world.getWorldTime(), "Explore new location " + destination.getId()));
             // Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Explore new location " + destination.getId());
@@ -43,17 +41,17 @@ public class WalkWork extends AWork {
         }
         context.sendToClient(ServerLog.info(world.getWorldTime(), "Move creature to new location " + destination.getId()));
         // Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Move creature to new location " + destination.getId());
-        creature.setLocationId(destination.getId());
-        creature.setWorkName(WorkNames.NONE);
+        getWorker().setLocationId(destination.getId());
+        getWorker().setWorkName(WorkNames.NONE);
         return true;
     }
 
     @Override
     public void initWork() {
         if (destination.isKnownByUser()) {
-            creature.setWorkName(WorkNames.WALK);
+            getWorker().setWorkName(WorkNames.WALK);
         } else {
-            creature.setWorkName(WorkNames.EXPLORE);
+            getWorker().setWorkName(WorkNames.EXPLORE);
         }
 
     }

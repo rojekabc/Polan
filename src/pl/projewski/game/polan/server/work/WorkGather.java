@@ -5,6 +5,7 @@
  */
 package pl.projewski.game.polan.server.work;
 
+import com.sun.istack.internal.logging.Logger;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
@@ -21,9 +22,8 @@ import pl.projewski.game.polan.server.factor.WorldManager;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class WorkGather extends AWork {
+public class WorkGather extends AWorkerWork {
 
-    Creature worker;
     Product gatherOnProduct;
     // counter > 0 - planned number of things to gather
     // counter == 0 - no more things to gather
@@ -31,8 +31,7 @@ public class WorkGather extends AWork {
     int counter;
 
     public WorkGather(ClientContext ctx, Creature worker, Product gatherOnProduct, int numberToGather) {
-        super(ctx, ProductDefinition.getFromName(gatherOnProduct.getName()).getGatherTime());
-        this.worker = worker;
+        super(ctx, ProductDefinition.getFromName(gatherOnProduct.getName()).getGatherTime(), worker);
         this.gatherOnProduct = gatherOnProduct;
         this.counter = numberToGather;
     }
@@ -40,13 +39,13 @@ public class WorkGather extends AWork {
     @Override
     public void initWork() {
         gatherOnProduct.setGatherLock(true);
-        worker.setWorkName(WorkNames.GATHERING);
+        getWorker().setWorkName(WorkNames.GATHERING);
     }
 
     @Override
     public boolean doPlannedWork(World world) {
         // get location
-        int locationId = worker.getLocationId();
+        int locationId = getWorker().getLocationId();
         Location location = world.getLocation(locationId);
 
         if (gatherOnProduct != null) {
@@ -59,10 +58,10 @@ public class WorkGather extends AWork {
             // start renew process
             WorldManager.addWork(world, new WorkRenewGather(context, gatherOnProduct));
             if (context == null) {
-                System.out.println("CONTEXT IS NULL");
+                Logger.getLogger(this.getClass()).warning("Context is null");
+                return false;
             }
             context.sendToClient(ServerLog.info(world.getWorldTime(), "Gather on " + gatherOnProduct.getName() + " [" + gatherOnProduct.getId() + "]"));
-            // Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Gather");
             if (counter > 0) {
                 counter--;
             }
@@ -84,7 +83,7 @@ public class WorkGather extends AWork {
             return false;
         } else {
             // there's nothing more to do
-            worker.setWorkName(WorkNames.NONE);
+            getWorker().setWorkName(WorkNames.NONE);
             return true;
         }
     }
