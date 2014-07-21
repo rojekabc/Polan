@@ -61,7 +61,7 @@ public class WorkGather extends AWork {
             if (context == null) {
                 System.out.println("CONTEXT IS NULL");
             }
-            context.sendToClient(ServerLog.info(world.getWorldTime(), "Gather on " + gatherOnProduct.getName()));
+            context.sendToClient(ServerLog.info(world.getWorldTime(), "Gather on " + gatherOnProduct.getName() + " [" + gatherOnProduct.getId() + "]"));
             // Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Gather");
             if (counter > 0) {
                 counter--;
@@ -70,7 +70,7 @@ public class WorkGather extends AWork {
 
         if (counter != 0) {
             // try find something to do
-            gatherOnProduct = GatherAction.findProductToGatherOn(world, location);
+            gatherOnProduct = GatherAction.findProductToGatherOn(world, location, gatherOnProduct);
             if (gatherOnProduct != null) {
                 // find something new - let's work
                 ProductDefinition productDef = ProductDefinition.getFromName(gatherOnProduct.getName());

@@ -53,7 +53,7 @@ public class GatherAction implements ICommandAction {
         if (location == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
         }
-        Product productToGather = findProductToGatherOn(world, location);
+        Product productToGather = findProductToGatherOn(world, location, null);
         if (productToGather == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_WORK_POSSIBLE);
         }
@@ -77,10 +77,17 @@ public class GatherAction implements ICommandAction {
         return new TimeResponse(productDefinition.getGatherTime());
     }
 
-    public static Product findProductToGatherOn(final World world, final Location location) {
+    public static Product findProductToGatherOn(final World world, final Location location, Product lastGatheredProduct) {
         Product result = null;
         List<Long> elements = location.getElements();
+
         for (Long productId : elements) {
+            if (lastGatheredProduct != null) {
+                if (lastGatheredProduct.getId() == productId) {
+                    lastGatheredProduct = null;
+                }
+                continue;
+            }
             Product product = world.getProduct(productId);
             final ProductDefinition productDefinition = ProductDefinition.getFromName(product.getName());
             if (productDefinition.isGatherable()) {

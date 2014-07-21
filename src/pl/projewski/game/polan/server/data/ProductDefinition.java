@@ -19,7 +19,11 @@ public enum ProductDefinition {
     MUD_FIELD(ProductType.FIELD), STONE_FIELD(ProductType.FIELD), GRANITE_STONE_FIELD(ProductType.FIELD), GROUND_FIELD(ProductType.FIELD),
     /* Trees */
     OAK_TREE(ProductType.TREE), PINE_TREE(ProductType.TREE), BRICH_TREE(ProductType.TREE),
-    /* Plants */
+    /*
+     Plants
+     Calamus - Tatarak
+     Clover - Koniczyna
+     */
     CALAMUS_PLANT(ProductType.PLANT), GRASS_FIELD(ProductType.PLANT), CLOVER_FIELD(ProductType.PLANT),
     /* Simple resource */
     OAK_STICK(ProductType.RESOURCE), PINE_STICK(ProductType.RESOURCE), BRITCH_STICK(ProductType.RESOURCE), GRASS(ProductType.RESOURCE),
