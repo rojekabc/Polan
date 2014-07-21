@@ -43,7 +43,7 @@ public class CreateTownAction implements ICommandAction {
         if (town != null) {
             return new CommandResponse(CommandResponseStatus.OK);
         } else {
-            return new CommandResponse(CommandResponseStatus.ERROR_WRONG_ARGUMENTS);
+            return new CommandResponse(CommandResponseStatus.ERROR);
         }
     }
 
