@@ -7,7 +7,9 @@ package pl.projewski.game.polan.server.factor;
 
 import java.util.ArrayList;
 import java.util.List;
+import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.server.data.World;
+import pl.projewski.game.polan.server.work.AWorkerWork;
 import pl.projewski.game.polan.server.work.IWork;
 
 /**
@@ -44,6 +46,30 @@ public class WorldWorkQueue {
                 works.remove(work);
             }
         }
+    }
+
+    /**
+     * Find work of creature.
+     *
+     * @param creature
+     * @return null if nothing found
+     */
+    IWork findWorkOfCreature(final Creature creature) {
+        for (IWork work : works) {
+            if (work instanceof AWorkerWork) {
+                if (((AWorkerWork) work).getWorker() == creature) {
+                    return work;
+                }
+            }
+        }
+        return null;
+    }
+
+    void removeWork(IWork work) {
+        if (works.isEmpty()) {
+            return;
+        }
+        works.remove(work);
     }
 
 }

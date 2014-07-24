@@ -33,4 +33,9 @@ public interface IWork {
      * resources need to do planned work.
      */
     public void initWork();
+
+    /**
+     * Break work before finish.
+     */
+    public void breakWork();
 }

@@ -28,4 +28,8 @@ public abstract class AWork implements IWork {
         return ticks <= 0;
     }
 
+    @Override
+    public void breakWork() {
+    }
+
 }

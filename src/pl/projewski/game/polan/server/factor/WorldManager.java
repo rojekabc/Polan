@@ -34,6 +34,7 @@ import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.server.data.ProductDefinition;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.util.RandomElement;
+import pl.projewski.game.polan.server.work.AWorkerWork;
 import pl.projewski.game.polan.server.work.IWork;
 
 /**
@@ -269,14 +270,34 @@ public class WorldManager {
     // TODO: It need to a refactor to construct way of write work with id to elements, not with objects
     private static Map<String, WorldWorkQueue> worldQueues = new HashMap();
 
-    public static void addWork(World world, IWork work) {
+    /**
+     * Add new work to queue for world. If work want use some creature it's checked, that creature is free. If it's working on another work - he'll be free and
+     * assign to new work.
+     *
+     * @param world
+     * @param work
+     */
+    public static void addWork(final World world, final IWork work) {
         WorldWorkQueue queue = worldQueues.get(world.getName());
         if (queue == null) {
             queue = new WorldWorkQueue();
             worldQueues.put(world.getName(), queue);
         }
+        // check if worker is taking care about another job
+        if (work instanceof AWorkerWork) {
+            IWork currentWork = queue.findWorkOfCreature(((AWorkerWork) work).getWorker());
+            if (currentWork != null) {
+                breakWork(queue, currentWork);
+            }
+        }
+        // append new work to queue
         queue.addWork(work);
         work.initWork();
+    }
+
+    private static void breakWork(final WorldWorkQueue queue, final IWork work) {
+        work.breakWork();
+        queue.removeWork(work);
     }
 
     public static void nextTick(World world) {
