@@ -29,6 +29,7 @@ import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.UserPrivilages;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.data.util.GSonUtil;
+import pl.projewski.game.polan.server.data.PolanServerConfiguration;
 import pl.projewski.game.polan.server.data.SaveData;
 import pl.projewski.game.polan.server.factor.CommandManager;
 import pl.projewski.game.polan.server.factor.UserManagerFactory;
@@ -45,7 +46,7 @@ public class PolanGameServer implements Runnable {
     private final Log log = LogFactory.getLog(PolanGameServer.class);
 
     public PolanGameServer() throws IOException {
-        this.serverSocket = new ServerSocket(8686);
+        this.serverSocket = new ServerSocket(PolanServerConfiguration.SERVER_SOCKET_PORT);
         this.isWork = true;
     }
 
@@ -57,7 +58,7 @@ public class PolanGameServer implements Runnable {
         GSonUtil.registerNewCommonClass(World.class);
         Gson gson = GSonUtil.getGSon();
         try {
-            final File saveFile = new File("polan.data");
+            final File saveFile = new File(PolanServerConfiguration.DATA_STORE_FILE);
             if (saveFile.exists()) {
                 final SaveData saveData = gson.fromJson(new InputStreamReader(new FileInputStream(saveFile)), SaveData.class);
                 UserManagerFactory.getUserManager().addUsers(saveData.getUsers());
@@ -86,21 +87,16 @@ public class PolanGameServer implements Runnable {
         }
         TimerTask worldTickerTask = new TimerTask() {
             @Override
-            public void run()
-            {
+            public void run() {
                 Set<World> listWorlds = WorldManager.listWorlds();
                 for (World world : listWorlds) {
                     WorldManager.nextTick(world);
                 }
             }
         };
-        // send auto-tick 5 sec after start and send it on each 1 sec more
-        // TODO: It should be configurable:
-        // TODO:   - when starts after server started
-        // TODO:   - how often sends tick
-        // TODO:   - how many ticks sends on one call
+        // sending auto-tick
         Timer timer = new Timer();
-        timer.schedule(worldTickerTask, 5000, 1000);
+        timer.schedule(worldTickerTask, PolanServerConfiguration.FIRST_TICK_AFTER_MILISECONDS, PolanServerConfiguration.TICK_DELAY_MILISECONDS);
         System.out.println("Server started.");
         while (isWork) {
             Socket clientSocket = null;
