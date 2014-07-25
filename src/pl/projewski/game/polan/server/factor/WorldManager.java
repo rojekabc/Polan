@@ -31,6 +31,7 @@ import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.ProductProperty;
 import pl.projewski.game.polan.data.Role;
 import pl.projewski.game.polan.data.User;
+import pl.projewski.game.polan.server.data.PolanServerConfiguration;
 import pl.projewski.game.polan.server.data.ProductDefinition;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.util.RandomElement;
@@ -98,65 +99,8 @@ public class WorldManager {
     public static void randomElements(final World world, final Location location, final Random random) {
         // TODO: Firstly random Fields and as second - what can be on this field (Tree)
         int size = location.getSize();
-        RandomElement<ProductDefinition> randomProducts = new RandomElement();
         LocationType type = location.getType();
-        switch (type) {
-            case PLANES:
-                randomProducts.addRandomElement(ProductDefinition.GRASS_FIELD, 30);
-                randomProducts.addRandomElement(ProductDefinition.CLOVER_FIELD, 10);
-                randomProducts.addRandomElement(ProductDefinition.WATER_FIELD, 5);
-                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 10);
-                break;
-            case FOREST:
-                randomProducts.addRandomElement(ProductDefinition.OAK_TREE, 30);
-                randomProducts.addRandomElement(ProductDefinition.PINE_TREE, 30);
-                randomProducts.addRandomElement(ProductDefinition.BRICH_TREE, 30);
-                randomProducts.addRandomElement(ProductDefinition.WATER_FIELD, 5);
-                randomProducts.addRandomElement(ProductDefinition.GRASS_FIELD, 5);
-                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 30);
-                break;
-            case TAIGA:
-                randomProducts.addRandomElement(ProductDefinition.PINE_TREE, 30);
-                randomProducts.addRandomElement(ProductDefinition.BRICH_TREE, 10);
-                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 40);
-                break;
-            case TUNDRA:
-                randomProducts.addRandomElement(ProductDefinition.BRICH_TREE, 10);
-                randomProducts.addRandomElement(ProductDefinition.PINE_TREE, 10);
-                randomProducts.addRandomElement(ProductDefinition.ICE_FIELD, 20);
-                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 30);
-                break;
-            case DESERT:
-                randomProducts.addRandomElement(ProductDefinition.SAND_FIELD, 30);
-                randomProducts.addRandomElement(ProductDefinition.SAND_STONE_FIELD, 10);
-                break;
-            case SWAMPS:
-                randomProducts.addRandomElement(ProductDefinition.WATER_FIELD, 10);
-                randomProducts.addRandomElement(ProductDefinition.CALAMUS_PLANT, 20);
-                randomProducts.addRandomElement(ProductDefinition.MUD_FIELD, 30);
-                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 5);
-                randomProducts.addRandomElement(ProductDefinition.GRASS_FIELD, 5);
-                break;
-            case MOUNTAINS:
-                randomProducts.addRandomElement(ProductDefinition.BRICH_TREE, 10);
-                randomProducts.addRandomElement(ProductDefinition.STONE_FIELD, 30);
-                randomProducts.addRandomElement(ProductDefinition.GROUND_FIELD, 5);
-                break;
-            case HILLS:
-                randomProducts.addRandomElement(ProductDefinition.STONE_FIELD, 30);
-                randomProducts.addRandomElement(ProductDefinition.GRANITE_STONE_FIELD, 30);
-                randomProducts.addRandomElement(ProductDefinition.BRICH_TREE, 10);
-                break;
-            case OCEAN:
-                randomProducts.addRandomElement(ProductDefinition.WATER_FIELD, 30);
-                break;
-            case BEACH:
-                randomProducts.addRandomElement(ProductDefinition.SAND_FIELD, 30);
-                randomProducts.addRandomElement(ProductDefinition.GRASS_FIELD, 1);
-                break;
-            default:
-                throw new AssertionError(type.name());
-        }
+        RandomElement<ProductDefinition> randomProducts = PolanServerConfiguration.getBiomeElements(type);
         while (size > 0) {
             location.addElement(generateProcudt(world, randomProducts.getRandomElement(random)));
             size--;
@@ -170,24 +114,14 @@ public class WorldManager {
         // count global number (it's let say a weight of possibility of exists each type as startup)
         // TODO: it should be inside some configuration
         // TODO: if it comes from another location it should be depend what type can be / cannot be generated next
-        RandomElement<LocationType> randomStartLocationType = new RandomElement();
-        randomStartLocationType.addRandomElement(LocationType.PLANES, 30);
-        randomStartLocationType.addRandomElement(LocationType.FOREST, 20);
-        randomStartLocationType.addRandomElement(LocationType.TAIGA, 5);
-        randomStartLocationType.addRandomElement(LocationType.TUNDRA, 2);
-        randomStartLocationType.addRandomElement(LocationType.DESERT, 5);
-        randomStartLocationType.addRandomElement(LocationType.SWAMPS, 5);
-        randomStartLocationType.addRandomElement(LocationType.MOUNTAINS, 2);
-        randomStartLocationType.addRandomElement(LocationType.HILLS, 1);
-        randomStartLocationType.addRandomElement(LocationType.BEACH, 1);
-        location.setType(randomStartLocationType.getRandomElement(random));
+        location.setType(PolanServerConfiguration.getBiomes().getRandomElement(random));
         location.setKnownByUser(true);
         location.setUsername(user.getName());
         if (isStart) {
             location.setId(world.generateNewLocationId());
         }
-        final int size = 10 + random.nextInt(20);
-        // TODO: now let say it's between 10 and 29. It should be depend on type, start and maybe other things (and maybe little more)
+        final int size = PolanServerConfiguration.BIOME_SIZE_MINIMUM
+                + random.nextInt(PolanServerConfiguration.BIOME_SIZE_MAXIMUM - PolanServerConfiguration.BIOME_SIZE_MINIMUM);
         location.setSize(size);
         randomElements(world, location, random);
         // generate new locations for new known loaction (and start is always known)

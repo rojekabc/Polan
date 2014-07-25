@@ -33,11 +33,7 @@ public enum ProductDefinition {
     GatherDefinition gather = null;
 
     static {
-        OAK_TREE.gather = new GatherDefinition(22, 70, OAK_STICK);
-        PINE_TREE.gather = new GatherDefinition(20, 65, PINE_STICK);
-        BRICH_TREE.gather = new GatherDefinition(18, 60, BRITCH_STICK);
-        GRASS_FIELD.gather = new GatherDefinition(8, 20, GRASS);
-        CLOVER_FIELD.gather = new GatherDefinition(10, 30, CLOVER);
+        PolanServerConfiguration.defineProducts();
     }
 
     ProductDefinition(ProductType productType) {
