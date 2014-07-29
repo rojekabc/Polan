@@ -13,6 +13,7 @@ import pl.projewski.game.polan.data.response.ServerLog;
 import pl.projewski.game.polan.server.cmdactions.GatherAction;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.ProductDefinition;
+import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.factor.WorldManager;
@@ -31,7 +32,7 @@ public class WorkGather extends AWorkerWork {
     int counter;
 
     public WorkGather(ClientContext ctx, Creature worker, Product gatherOnProduct, int numberToGather) {
-        super(ctx, ProductDefinition.getFromName(gatherOnProduct.getName()).getGatherTime(), worker);
+        super(ctx, ServerData.getInstance().getProductDefinition(gatherOnProduct.getName()).getGatherTime(), worker);
         this.gatherOnProduct = gatherOnProduct;
         this.counter = numberToGather;
     }
@@ -50,7 +51,7 @@ public class WorkGather extends AWorkerWork {
 
         if (gatherOnProduct != null) {
             // append gathered resource to location
-            ProductDefinition productDef = ProductDefinition.getFromName(gatherOnProduct.getName());
+            ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());
             ProductDefinition[] gatherResources = productDef.getGatherResources();
             for (ProductDefinition gatherResouurce : gatherResources) {
                 location.addResource(WorldManager.generateProcudt(world, gatherResouurce));
@@ -72,7 +73,7 @@ public class WorkGather extends AWorkerWork {
             gatherOnProduct = GatherAction.findProductToGatherOn(world, location, gatherOnProduct);
             if (gatherOnProduct != null) {
                 // find something new - let's work
-                ProductDefinition productDef = ProductDefinition.getFromName(gatherOnProduct.getName());
+                ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());
                 initWork();
                 this.ticks = productDef.getGatherTime();
             } else {

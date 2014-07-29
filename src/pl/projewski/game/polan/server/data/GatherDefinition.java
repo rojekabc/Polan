@@ -10,20 +10,24 @@ package pl.projewski.game.polan.server.data;
  * @version $Revision$
  * @author rojewski.piotr
  */
-class GatherDefinition {
+public class GatherDefinition {
 
-    ProductDefinition[] gatherResources = null;
+    String[] gatherResources = null;
     int gatherTime = 1;
     int gatherRenewTime = 1;
 
-    GatherDefinition(int gatherTime, int gatherRenewTime, ProductDefinition... gatherResources) {
+    public GatherDefinition(int gatherTime, int gatherRenewTime, String... gatherResources) {
         this.gatherTime = gatherTime;
         this.gatherRenewTime = gatherRenewTime;
         this.gatherResources = gatherResources;
     }
 
     public ProductDefinition[] getGatherResources() {
-        return gatherResources;
+        ProductDefinition[] result = new ProductDefinition[gatherResources.length];
+        for (int i = 0; i < gatherResources.length; i++) {
+            result[i] = ServerData.getInstance().getProductDefinition(gatherResources[i]);
+        }
+        return result;
     }
 
     public int getGatherTime() {

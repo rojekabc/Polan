@@ -8,7 +8,7 @@ package pl.projewski.game.polan.server.work;
 import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.response.ServerLog;
 import pl.projewski.game.polan.server.data.ClientContext;
-import pl.projewski.game.polan.server.data.ProductDefinition;
+import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.World;
 
 /**
@@ -21,7 +21,7 @@ public class WorkRenewGather extends AWork {
     Product productToRenewGather;
 
     public WorkRenewGather(ClientContext ctx, Product productToRenewGather) {
-        super(ctx, ProductDefinition.getFromName(productToRenewGather.getName()).getGatherRenewTime());
+        super(ctx, ServerData.getInstance().getProductDefinition(productToRenewGather.getName()).getGatherRenewTime());
         this.productToRenewGather = productToRenewGather;
     }
 

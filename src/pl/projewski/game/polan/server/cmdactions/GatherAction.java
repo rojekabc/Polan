@@ -6,6 +6,8 @@
 package pl.projewski.game.polan.server.cmdactions;
 
 import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
@@ -14,8 +16,10 @@ import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.response.CommandResponseStatus;
 import pl.projewski.game.polan.data.response.TimeResponse;
 import pl.projewski.game.polan.server.ICommandAction;
+import pl.projewski.game.polan.server.PolanGameServer;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.ProductDefinition;
+import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.factor.WorldManager;
 import pl.projewski.game.polan.server.work.WorkGather;
@@ -26,6 +30,8 @@ import pl.projewski.game.polan.server.work.WorkGather;
  * @author rojewski.piotr
  */
 public class GatherAction implements ICommandAction {
+
+    private static final Log log = LogFactory.getLog(GatherAction.class);
 
     @Override
     public CommandResponse runCommand(ClientContext ctx, List<String> props) {
@@ -72,7 +78,7 @@ public class GatherAction implements ICommandAction {
                 }
             }
         }
-        final ProductDefinition productDefinition = ProductDefinition.getFromName(productToGather.getName());
+        final ProductDefinition productDefinition = ServerData.getInstance().getProductDefinition(productToGather.getName());
         WorldManager.addWork(world, new WorkGather(ctx, creature, productToGather, howManyTimes));
         return new TimeResponse(productDefinition.getGatherTime());
     }
@@ -89,7 +95,11 @@ public class GatherAction implements ICommandAction {
                 continue;
             }
             Product product = world.getProduct(productId);
-            final ProductDefinition productDefinition = ProductDefinition.getFromName(product.getName());
+            final ProductDefinition productDefinition = ServerData.getInstance().getProductDefinition(product.getName());
+            if (productDefinition == null) {
+                log.warn("Cannot find product definition [" + product.getName() + "]");
+                break;
+            }
             if (productDefinition.isGatherable()) {
                 if (product.isGatherLock()) {
                     continue;

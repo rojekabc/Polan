@@ -31,6 +31,7 @@ import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.data.util.GSonUtil;
 import pl.projewski.game.polan.server.data.PolanServerConfiguration;
 import pl.projewski.game.polan.server.data.SaveData;
+import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.factor.CommandManager;
 import pl.projewski.game.polan.server.factor.UserManagerFactory;
 import pl.projewski.game.polan.server.factor.WorldManager;
@@ -43,7 +44,7 @@ public class PolanGameServer implements Runnable {
 
     private ServerSocket serverSocket;
     private boolean isWork;
-    private final Log log = LogFactory.getLog(PolanGameServer.class);
+    private static final Log log = LogFactory.getLog(PolanGameServer.class);
 
     public PolanGameServer() throws IOException {
         this.serverSocket = new ServerSocket(PolanServerConfiguration.SERVER_SOCKET_PORT);
@@ -52,12 +53,15 @@ public class PolanGameServer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Server starting ...");
+        log.info("Server starting ...");
         CommandManager.getInstance();
         // load Data
         GSonUtil.registerNewCommonClass(World.class);
         Gson gson = GSonUtil.getGSon();
         try {
+            log.info("Loading products ...");
+            ServerData.getInstance().loadProductDefinitionsFromGsonFile(PolanServerConfiguration.PRODUCT_STORE_FILE);
+            log.info("Loading products ... finished");
             final File saveFile = new File(PolanServerConfiguration.DATA_STORE_FILE);
             if (saveFile.exists()) {
                 final SaveData saveData = gson.fromJson(new InputStreamReader(new FileInputStream(saveFile)), SaveData.class);
@@ -97,7 +101,7 @@ public class PolanGameServer implements Runnable {
         // sending auto-tick
         Timer timer = new Timer();
         timer.schedule(worldTickerTask, PolanServerConfiguration.FIRST_TICK_AFTER_MILISECONDS, PolanServerConfiguration.TICK_DELAY_MILISECONDS);
-        System.out.println("Server started.");
+        log.info("Server started.");
         while (isWork) {
             Socket clientSocket = null;
             try {
