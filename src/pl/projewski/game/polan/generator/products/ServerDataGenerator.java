@@ -212,7 +212,7 @@ public class ServerDataGenerator {
                     new BiomeElementDefinition(ProductNames.WATER_FIELD, 30)
             );
             gson.toJson(bd, writer);
-            bd = new BiomeDefinition(BiomeNames.BEACH, 0,
+            bd = new BiomeDefinition(BiomeNames.BEACH, 1,
                     new BiomeElementDefinition(ProductNames.SAND_FIELD, 30),
                     new BiomeElementDefinition(ProductNames.GRASS_FIELD, 30)
             );

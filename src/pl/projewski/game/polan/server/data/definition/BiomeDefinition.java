@@ -35,4 +35,12 @@ public class BiomeDefinition {
         return name;
     }
 
+    public int getWeight() {
+        return this.randomWeight;
+    }
+
+    public List<BiomeElementDefinition> getBiomeElements() {
+        return this.biomeElementRandomWeight;
+    }
+
 }

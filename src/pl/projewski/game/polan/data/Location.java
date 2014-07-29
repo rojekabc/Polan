@@ -24,7 +24,7 @@ public class Location {
     // connection to next location with distance
     private Set<Integer> connection;
     // type of location
-    private LocationType type;
+    private String type;
     // global area size (units of location)
     private int size;
     // user, to which belongs
@@ -59,11 +59,11 @@ public class Location {
         this.connection.add(location.getId());
     }
 
-    public LocationType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(LocationType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

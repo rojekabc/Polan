@@ -23,6 +23,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import pl.projewski.game.polan.data.util.GSonUtil;
 import pl.projewski.game.polan.server.data.definition.BiomeDefinition;
+import pl.projewski.game.polan.server.data.definition.BiomeElementDefinition;
+import pl.projewski.game.polan.server.util.RandomElement;
 
 /**
  *
@@ -31,7 +33,7 @@ import pl.projewski.game.polan.server.data.definition.BiomeDefinition;
  */
 public class ServerData {
 
-    private final Log log = LogFactory.getLog(ServerData.class);
+    private final static Log log = LogFactory.getLog(ServerData.class);
     private static ServerData instance = null;
 
     private Map<String, ProductDefinition> productDefinition = null;
@@ -94,6 +96,39 @@ public class ServerData {
         } finally {
             IOUtils.closeQuietly(reader);
         }
+    }
+
+    public RandomElement<BiomeDefinition> getBiomes() {
+        RandomElement<BiomeDefinition> randomStartLocationType = new RandomElement();
+        for (BiomeDefinition biome : biomeDefinition) {
+            randomStartLocationType.addRandomElement(biome, biome.getWeight());
+
+        }
+        return randomStartLocationType;
+    }
+
+    public RandomElement<ProductDefinition> getBiomeElements(String biomeName) {
+        for (BiomeDefinition biome : biomeDefinition) {
+            if (biome.getName().equals(biomeName)) {
+                return getBiomeElements(biome);
+            }
+        }
+        return null;
+    }
+
+    public RandomElement<ProductDefinition> getBiomeElements(BiomeDefinition biome) {
+        RandomElement<ProductDefinition> randomProducts = new RandomElement();
+        List<BiomeElementDefinition> biomeElements = biome.getBiomeElements();
+        for (BiomeElementDefinition biomeElementDefinition : biomeElements) {
+            ProductDefinition pd = getProductDefinition(biomeElementDefinition.getName());
+            if (pd == null) {
+                log.warn("Cannot find product [" + biomeElementDefinition.getName() + "]");
+                continue;
+            }
+            randomProducts.addRandomElement(pd, biomeElementDefinition.getWeight());
+        }
+
+        return randomProducts;
     }
 
 }

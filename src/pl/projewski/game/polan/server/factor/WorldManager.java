@@ -26,12 +26,11 @@ import org.apache.commons.io.IOUtils;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.CreatureType;
 import pl.projewski.game.polan.data.Location;
-import pl.projewski.game.polan.data.LocationType;
 import pl.projewski.game.polan.data.Product;
-import pl.projewski.game.polan.data.ProductProperty;
 import pl.projewski.game.polan.data.Role;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.server.data.PolanServerConfiguration;
+import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.util.RandomElement;
@@ -99,8 +98,8 @@ public class WorldManager {
     public static void randomElements(final World world, final Location location, final Random random) {
         // TODO: Firstly random Fields and as second - what can be on this field (Tree)
         int size = location.getSize();
-        LocationType type = location.getType();
-        RandomElement<ProductDefinition> randomProducts = PolanServerConfiguration.getBiomeElements(type);
+        String type = location.getType();
+        RandomElement<ProductDefinition> randomProducts = ServerData.getInstance().getBiomeElements(type);
         while (size > 0) {
             location.addElement(generateProcudt(world, randomProducts.getRandomElement(random)));
             size--;
@@ -110,11 +109,10 @@ public class WorldManager {
     public static void exploreNewLocation(World world, Location location, boolean isStart, User user) {
         // TODO: Random engine should be stable by random seed for whole world
         Random random = new Random();
-        LocationType[] locationTypes = LocationType.values();
         // count global number (it's let say a weight of possibility of exists each type as startup)
         // TODO: it should be inside some configuration
         // TODO: if it comes from another location it should be depend what type can be / cannot be generated next
-        location.setType(PolanServerConfiguration.getBiomes().getRandomElement(random));
+        location.setType(ServerData.getInstance().getBiomes().getRandomElement(random).getName());
         location.setKnownByUser(true);
         location.setUsername(user.getName());
         if (isStart) {
