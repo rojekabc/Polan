@@ -5,13 +5,16 @@
  */
 package pl.projewski.game.polan.server.data;
 
+import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import com.google.gson.Gson;
 import com.google.gson.JsonStreamParser;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import pl.projewski.game.polan.data.util.GSonUtil;
+import pl.projewski.game.polan.server.data.definition.BiomeDefinition;
 
 /**
  *
@@ -31,6 +35,7 @@ public class ServerData {
     private static ServerData instance = null;
 
     private Map<String, ProductDefinition> productDefinition = null;
+    private List<BiomeDefinition> biomeDefinition = null;
 
     public static ServerData getInstance() {
         if (instance == null) {
@@ -67,6 +72,28 @@ public class ServerData {
             return null;
         }
         return productDefinition.get(name);
+    }
+
+    public void loadBiomeDefinitionsFromGsonFile(String filename) {
+        biomeDefinition = new ArrayList();
+        Gson gson = GSonUtil.getGSon();
+        InputStreamReader reader = null;
+        try {
+            final File file = new File(filename);
+            if (file.exists()) {
+                reader = new InputStreamReader(new FileInputStream(file));
+                JsonStreamParser parser = new JsonStreamParser(reader);
+                while (parser.hasNext()) {
+                    BiomeDefinition bd = gson.fromJson(parser.next(), BiomeDefinition.class);
+                    biomeDefinition.add(bd);
+                    log.debug("Loaded biome " + bd.getName());
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ServerData.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            IOUtils.closeQuietly(reader);
+        }
     }
 
 }

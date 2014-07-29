@@ -62,6 +62,9 @@ public class PolanGameServer implements Runnable {
             log.info("Loading products ...");
             ServerData.getInstance().loadProductDefinitionsFromGsonFile(PolanServerConfiguration.PRODUCT_STORE_FILE);
             log.info("Loading products ... finished");
+            log.info("Loading biomes ...");
+            ServerData.getInstance().loadBiomeDefinitionsFromGsonFile(PolanServerConfiguration.BIOME_STORE_FILE);
+            log.info("Loading biomes ... finished");
             final File saveFile = new File(PolanServerConfiguration.DATA_STORE_FILE);
             if (saveFile.exists()) {
                 final SaveData saveData = gson.fromJson(new InputStreamReader(new FileInputStream(saveFile)), SaveData.class);

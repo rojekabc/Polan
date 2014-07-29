@@ -32,7 +32,7 @@ import pl.projewski.game.polan.data.ProductProperty;
 import pl.projewski.game.polan.data.Role;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.server.data.PolanServerConfiguration;
-import pl.projewski.game.polan.server.data.ProductDefinition;
+import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.util.RandomElement;
 import pl.projewski.game.polan.server.work.AWorkerWork;

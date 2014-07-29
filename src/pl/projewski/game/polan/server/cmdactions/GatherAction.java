@@ -18,7 +18,7 @@ import pl.projewski.game.polan.data.response.TimeResponse;
 import pl.projewski.game.polan.server.ICommandAction;
 import pl.projewski.game.polan.server.PolanGameServer;
 import pl.projewski.game.polan.server.data.ClientContext;
-import pl.projewski.game.polan.server.data.ProductDefinition;
+import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.factor.WorldManager;

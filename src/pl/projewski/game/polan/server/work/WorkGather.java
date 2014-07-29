@@ -12,7 +12,7 @@ import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.response.ServerLog;
 import pl.projewski.game.polan.server.cmdactions.GatherAction;
 import pl.projewski.game.polan.server.data.ClientContext;
-import pl.projewski.game.polan.server.data.ProductDefinition;
+import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
