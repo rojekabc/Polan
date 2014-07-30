@@ -53,7 +53,7 @@ public class WorkPick extends AWorkerWork {
             for (ProductDefinition resource : resources) {
                 location.addResource(WorldManager.generateProcudt(world, resource));
             }
-
+            pickOnProduct.setLocked(false);
             if (context == null) {
                 Logger.getLogger(this.getClass()).warning("Context is null");
                 return false;

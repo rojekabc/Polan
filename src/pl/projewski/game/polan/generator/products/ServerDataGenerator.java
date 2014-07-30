@@ -49,7 +49,7 @@ public class ServerDataGenerator {
                     new ActionDefinition(ActionNames.PICK, 80, ProductNames.SANDSTONE));
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.MUD_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 30, ProductNames.CLAY));
+                    new ActionDefinition(ActionNames.PICK, 30, ProductNames.MUD));
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.STONE_FIELD, ProductType.FIELD,
                     new ActionDefinition(ActionNames.PICK, 150, ProductNames.STONE));
@@ -99,53 +99,41 @@ public class ServerDataGenerator {
             /*
              Some resources
              */
-            pd = new ProductDefinition(ProductNames.OAK_STICK, ProductType.RESOURCE
-            );
+            pd = new ProductDefinition(ProductNames.OAK_STICK, ProductType.RESOURCE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.PINE_STICK, ProductType.RESOURCE
-            );
+            pd = new ProductDefinition(ProductNames.PINE_STICK, ProductType.RESOURCE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.BIRCH_STICK, ProductType.RESOURCE
-            );
+            pd = new ProductDefinition(ProductNames.BIRCH_STICK, ProductType.RESOURCE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.GRASS, ProductType.RESOURCE
-            );
+            pd = new ProductDefinition(ProductNames.GRASS, ProductType.RESOURCE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.CLOVER, ProductType.RESOURCE
-            );
+            pd = new ProductDefinition(ProductNames.CLOVER, ProductType.RESOURCE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.CALAMUS, ProductType.RESOURCE
-            );
+            pd = new ProductDefinition(ProductNames.CALAMUS, ProductType.RESOURCE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.CLAY, ProductType.RESOURCE
-            );
+            pd = new ProductDefinition(ProductNames.CLAY, ProductType.RESOURCE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.GRAVEL, ProductType.RESOURCE
-            );
+            pd = new ProductDefinition(ProductNames.GRAVEL, ProductType.RESOURCE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.FLINT, ProductType.RESOURCE
-            );
+            pd = new ProductDefinition(ProductNames.FLINT, ProductType.RESOURCE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.SAND, ProductType.RESOURCE
-            );
+            pd = new ProductDefinition(ProductNames.SAND, ProductType.RESOURCE);
+            gson.toJson(pd, writer);
+            pd = new ProductDefinition(ProductNames.MUD, ProductType.RESOURCE);
             gson.toJson(pd, writer);
             /*
              Some stones
              */
-            pd = new ProductDefinition(ProductNames.GRANIT, ProductType.STONE
-            );
+            pd = new ProductDefinition(ProductNames.GRANIT, ProductType.STONE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.STONE, ProductType.STONE
-            );
+            pd = new ProductDefinition(ProductNames.STONE, ProductType.STONE);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.SANDSTONE, ProductType.STONE
-            );
+            pd = new ProductDefinition(ProductNames.SANDSTONE, ProductType.STONE);
             gson.toJson(pd, writer);
             /*
              Some fluids
              */
-            pd = new ProductDefinition(ProductNames.WATER, ProductType.FLUID
-            );
+            pd = new ProductDefinition(ProductNames.WATER, ProductType.FLUID);
             gson.toJson(pd, writer);
             writer.flush();
         } catch (IOException ex) {
