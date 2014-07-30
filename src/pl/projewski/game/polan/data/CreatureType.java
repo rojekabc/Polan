@@ -23,6 +23,7 @@ public enum CreatureType {
             case HUMAN:
                 result.add(Cmd.GATHER);
                 result.add(Cmd.WALK);
+                result.add(Cmd.PICK);
                 break;
             default:
                 break;

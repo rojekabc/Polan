@@ -22,7 +22,7 @@ public class WorkRenewGather extends AWork {
     Product productToRenewGather;
 
     public WorkRenewGather(ClientContext ctx, Product productToRenewGather) {
-        super(ctx, ServerData.getInstance().getProductDefinition(productToRenewGather.getName()).getAction(ActionNames.GATHER).getTime());
+        super(ctx, ServerData.getInstance().getProductDefinition(productToRenewGather.getName()).getAction(ActionNames.RENEW).getTime());
         this.productToRenewGather = productToRenewGather;
     }
 
@@ -34,7 +34,6 @@ public class WorkRenewGather extends AWork {
     public boolean doPlannedWork(World world) {
         productToRenewGather.setLocked(false);
         context.sendToClient(ServerLog.info(world.getWorldTime(), "Renew gather on " + productToRenewGather.getName()));
-        // Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Renew gather");
         return true;
     }
 

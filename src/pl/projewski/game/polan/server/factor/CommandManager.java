@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 import pl.projewski.game.polan.data.Cmd;
 import pl.projewski.game.polan.data.Creature;
@@ -20,7 +19,6 @@ import pl.projewski.game.polan.data.CreatureType;
 import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.response.CommandResponseStatus;
 import pl.projewski.game.polan.data.NamedCommand;
-import pl.projewski.game.polan.server.Command;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.UserPrivilages;
 import pl.projewski.game.polan.server.ICommandAction;
@@ -32,6 +30,7 @@ import pl.projewski.game.polan.server.cmdactions.ListUsersAction;
 import pl.projewski.game.polan.server.cmdactions.ListWorldsAction;
 import pl.projewski.game.polan.server.cmdactions.LoginAction;
 import pl.projewski.game.polan.server.cmdactions.LookAction;
+import pl.projewski.game.polan.server.cmdactions.PickAction;
 import pl.projewski.game.polan.server.cmdactions.QuitAction;
 import pl.projewski.game.polan.server.cmdactions.SelectAction;
 import pl.projewski.game.polan.server.cmdactions.TickAction;
@@ -101,6 +100,9 @@ public class CommandManager {
                         break;
                     case WALK:
                         result.put(Cmd.WALK, new WalkAction());
+                        break;
+                    case PICK:
+                        result.put(Cmd.PICK, new PickAction());
                         break;
                 }
             }

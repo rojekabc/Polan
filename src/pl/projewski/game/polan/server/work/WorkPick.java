@@ -12,12 +12,11 @@ import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.response.ServerLog;
 import pl.projewski.game.polan.generator.products.ActionNames;
 import pl.projewski.game.polan.server.cmdactions.ACreatureProductAction;
-import pl.projewski.game.polan.server.cmdactions.GatherAction;
 import pl.projewski.game.polan.server.data.ClientContext;
-import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
+import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.factor.WorldManager;
 
 /**
@@ -25,26 +24,20 @@ import pl.projewski.game.polan.server.factor.WorldManager;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class WorkGather extends AWorkerWork {
+public class WorkPick extends AWorkerWork {
 
-    Product gatherOnProduct;
+    Product pickOnProduct;
     // counter > 0 - planned number of things to gather
     // counter == 0 - no more things to gather
     // counter < 0 - neverending work (until break by another work)
     int counter;
     String filter;
 
-    public WorkGather(ClientContext ctx, Creature worker, Product gatherOnProduct, int numberToGather, String filter) {
-        super(ctx, ServerData.getInstance().getProductDefinition(gatherOnProduct.getName()).getAction(ActionNames.GATHER).getTime(), worker);
-        this.gatherOnProduct = gatherOnProduct;
+    public WorkPick(ClientContext ctx, Creature worker, Product gatherOnProduct, int numberToGather, String filter) {
+        super(ctx, ServerData.getInstance().getProductDefinition(gatherOnProduct.getName()).getAction(ActionNames.PICK).getTime(), worker);
+        this.pickOnProduct = gatherOnProduct;
         this.counter = numberToGather;
         this.filter = filter;
-    }
-
-    @Override
-    public void initWork() {
-        gatherOnProduct.setLocked(true);
-        getWorker().setWorkName(WorkNames.GATHERING);
     }
 
     @Override
@@ -53,22 +46,19 @@ public class WorkGather extends AWorkerWork {
         int locationId = getWorker().getLocationId();
         Location location = world.getLocation(locationId);
 
-        if (gatherOnProduct != null) {
+        if (pickOnProduct != null) {
             // append gathered resource to location
-            ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());
-            ProductDefinition[] gatherResources = productDef.getAction(ActionNames.GATHER).getProduceResources();
-            for (ProductDefinition gatherResouurce : gatherResources) {
-                location.addResource(WorldManager.generateProcudt(world, gatherResouurce));
+            ProductDefinition productDef = ServerData.getInstance().getProductDefinition(pickOnProduct.getName());
+            ProductDefinition[] resources = productDef.getAction(ActionNames.PICK).getProduceResources();
+            for (ProductDefinition resource : resources) {
+                location.addResource(WorldManager.generateProcudt(world, resource));
             }
-            // start renew process
-            if (productDef.isActionAble(ActionNames.RENEW)) {
-                WorldManager.addWork(world, new WorkRenewGather(context, gatherOnProduct));
-            }
+
             if (context == null) {
                 Logger.getLogger(this.getClass()).warning("Context is null");
                 return false;
             }
-            context.sendToClient(ServerLog.info(world.getWorldTime(), "Gather on " + gatherOnProduct.getName() + " [" + gatherOnProduct.getId() + "]"));
+            context.sendToClient(ServerLog.info(world.getWorldTime(), "Pick on " + pickOnProduct.getName() + " [" + pickOnProduct.getId() + "]"));
             if (counter > 0) {
                 counter--;
             }
@@ -76,12 +66,12 @@ public class WorkGather extends AWorkerWork {
 
         if (counter != 0) {
             // try find something to do
-            gatherOnProduct = ACreatureProductAction.findProductToActOn(ActionNames.GATHER, world, location, gatherOnProduct, filter);
-            if (gatherOnProduct != null) {
+            pickOnProduct = ACreatureProductAction.findProductToActOn(ActionNames.PICK, world, location, pickOnProduct, filter);
+            if (pickOnProduct != null) {
                 // find something new - let's work
-                ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());
+                ProductDefinition productDef = ServerData.getInstance().getProductDefinition(pickOnProduct.getName());
                 initWork();
-                this.ticks = productDef.getAction(ActionNames.GATHER).getTime();
+                this.ticks = productDef.getAction(ActionNames.PICK).getTime();
             } else {
                 // try to find on next tick
                 this.ticks = 1;
@@ -93,6 +83,12 @@ public class WorkGather extends AWorkerWork {
             getWorker().setWorkName(WorkNames.NONE);
             return true;
         }
+    }
+
+    @Override
+    public void initWork() {
+        pickOnProduct.setLocked(true);
+        getWorker().setWorkName(WorkNames.PICKING);
     }
 
 }

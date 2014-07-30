@@ -45,19 +45,25 @@ public class ServerDataGenerator {
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.SAND_FIELD, ProductType.FIELD);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.SANDSTONE_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.SANDSTONE_FIELD, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.PICK, 80, ProductNames.SANDSTONE));
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.MUD_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.MUD_FIELD, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.PICK, 30, ProductNames.CLAY));
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.STONE_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.STONE_FIELD, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.PICK, 150, ProductNames.STONE));
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.GRANIT_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.GRANIT_FIELD, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.PICK, 250, ProductNames.SANDSTONE));
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.GROUND_FIELD, ProductType.FIELD);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.GRAVEL_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.GRAVEL_FIELD, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.PICK, 40, ProductNames.GRAVEL));
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.CLAY_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.CLAY_FIELD, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.PICK, 40, ProductNames.CLAY));
             gson.toJson(pd, writer);
             /* Trees */
             pd = new ProductDefinition(ProductNames.OAK_TREE, ProductType.FIELD,

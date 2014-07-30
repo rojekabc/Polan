@@ -14,6 +14,7 @@ import pl.projewski.game.polan.generator.products.ActionNames;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.work.IWork;
+import pl.projewski.game.polan.server.work.WorkPick;
 
 /**
  *
@@ -30,6 +31,6 @@ public class PickAction extends ACreatureProductAction {
 
     @Override
     public IWork createWork(ClientContext ctx, Creature creature, Product productToActOn, int howManyTimes, String productFilter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new WorkPick(ctx, creature, productToActOn, howManyTimes, productFilter);
     }
 }
