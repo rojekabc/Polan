@@ -38,13 +38,13 @@ public class Product {
         properties.put(property, value);
     }
 
-    public boolean isGatherLock() {
-        String value = properties.get(ProductProperty.GATHERLOCK);
+    public boolean isLocked() {
+        String value = properties.get(ProductProperty.LOCK);
         return value != null && Boolean.parseBoolean(value);
     }
 
-    public String setGatherLock(boolean value) {
-        return properties.put(ProductProperty.GATHERLOCK, Boolean.toString(value));
+    public String setLocked(boolean value) {
+        return properties.put(ProductProperty.LOCK, Boolean.toString(value));
     }
 
     public long getId() {

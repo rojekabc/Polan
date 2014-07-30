@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pl.projewski.game.polan.data;
+package pl.projewski.game.polan.generator.products;
 
 /**
  *
  * @version $Revision$
  * @author rojewski.piotr
  */
-public enum ProductProperty {
+public interface ActionNames {
 
-    NAME, LOCK;
+    public static final String GATHER = "gather";
+    public static final String PICK = "pick";
+    public static final String RENEW = "renew";
 }

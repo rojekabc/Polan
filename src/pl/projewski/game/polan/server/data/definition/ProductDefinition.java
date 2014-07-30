@@ -5,6 +5,8 @@
  */
 package pl.projewski.game.polan.server.data.definition;
 
+import java.util.ArrayList;
+import java.util.List;
 import pl.projewski.game.polan.server.data.ProductType;
 
 /**
@@ -16,16 +18,17 @@ import pl.projewski.game.polan.server.data.ProductType;
  */
 public class ProductDefinition {
 
-    ProductType type;
-    String name;
-    GatherDefinition gather = null;
+    ProductType type = null;
+    String name = null;
+    List<ActionDefinition> actionList = null;
 
-//    static {
-//        PolanServerConfiguration.defineProducts();
-//    }
-    public ProductDefinition(String name, ProductType productType) {
+    public ProductDefinition(String name, ProductType productType, ActionDefinition... possibleActionList) {
         this.type = productType;
         this.name = name;
+        actionList = new ArrayList();
+        for (ActionDefinition actionDefinition : possibleActionList) {
+            actionList.add(actionDefinition);
+        }
     }
 
     public ProductType getType() {
@@ -34,38 +37,23 @@ public class ProductDefinition {
 
     public String getName() {
         return name;
-        // return this.name().toLowerCase().replace('_', ' ');
     }
 
-//    public static ProductDefinition getFromName(String name) {
-//        return ProductDefinition.valueOf(name.toUpperCase().replace(' ', '_'));
-//    }
-    public boolean isGatherable() {
-        return gather != null;
-    }
-
-    public ProductDefinition[] getGatherResources() {
-        if (gather == null) {
-            return null;
+    public boolean isActionAble(String actionName) {
+        for (ActionDefinition actionDefinition : actionList) {
+            if (actionDefinition.getName().equals(actionName)) {
+                return true;
+            }
         }
-        return gather.getGatherResources();
+        return false;
     }
 
-    public int getGatherTime() {
-        if (gather == null) {
-            return -1;
+    public ActionDefinition getAction(String actionName) {
+        for (ActionDefinition actionDefinition : actionList) {
+            if (actionDefinition.getName().equals(actionName)) {
+                return actionDefinition;
+            }
         }
-        return gather.getGatherTime();
-    }
-
-    public int getGatherRenewTime() {
-        if (gather == null) {
-            return -1;
-        }
-        return gather.getGatherRenewTime();
-    }
-
-    public void setGather(GatherDefinition gather) {
-        this.gather = gather;
+        return null;
     }
 }

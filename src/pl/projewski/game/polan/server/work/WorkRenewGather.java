@@ -7,6 +7,7 @@ package pl.projewski.game.polan.server.work;
 
 import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.response.ServerLog;
+import pl.projewski.game.polan.generator.products.ActionNames;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.World;
@@ -21,7 +22,7 @@ public class WorkRenewGather extends AWork {
     Product productToRenewGather;
 
     public WorkRenewGather(ClientContext ctx, Product productToRenewGather) {
-        super(ctx, ServerData.getInstance().getProductDefinition(productToRenewGather.getName()).getGatherRenewTime());
+        super(ctx, ServerData.getInstance().getProductDefinition(productToRenewGather.getName()).getAction(ActionNames.GATHER).getTime());
         this.productToRenewGather = productToRenewGather;
     }
 
@@ -31,7 +32,7 @@ public class WorkRenewGather extends AWork {
 
     @Override
     public boolean doPlannedWork(World world) {
-        productToRenewGather.setGatherLock(false);
+        productToRenewGather.setLocked(false);
         context.sendToClient(ServerLog.info(world.getWorldTime(), "Renew gather on " + productToRenewGather.getName()));
         // Logger.getLogger(this.getClass()).info("[" + world.getWorldTime() + "] Renew gather");
         return true;

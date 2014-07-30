@@ -16,11 +16,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
 import pl.projewski.game.polan.data.util.GSonUtil;
-import pl.projewski.game.polan.server.data.definition.GatherDefinition;
 import pl.projewski.game.polan.server.data.PolanServerConfiguration;
 import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.ProductType;
 import pl.projewski.game.polan.server.data.ServerData;
+import pl.projewski.game.polan.server.data.definition.ActionDefinition;
 import pl.projewski.game.polan.server.data.definition.BiomeDefinition;
 import pl.projewski.game.polan.server.data.definition.BiomeElementDefinition;
 
@@ -60,32 +60,35 @@ public class ServerDataGenerator {
             pd = new ProductDefinition(ProductNames.CLAY_FIELD, ProductType.FIELD);
             gson.toJson(pd, writer);
             /* Trees */
-            pd = new ProductDefinition(ProductNames.OAK_TREE, ProductType.FIELD
+            pd = new ProductDefinition(ProductNames.OAK_TREE, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.GATHER, 22, ProductNames.OAK_STICK),
+                    new ActionDefinition(ActionNames.RENEW, 70)
             );
-            pd.setGather(new GatherDefinition(22, 70, ProductNames.OAK_STICK));
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.PINE_TREE, ProductType.FIELD
+            pd = new ProductDefinition(ProductNames.PINE_TREE, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.GATHER, 20, ProductNames.PINE_STICK),
+                    new ActionDefinition(ActionNames.RENEW, 65)
             );
-            pd.setGather(new GatherDefinition(20, 65, ProductNames.PINE_STICK));
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.BIRCH_TREE, ProductType.FIELD);
-            pd.setGather(new GatherDefinition(18, 60, ProductNames.BIRCH_STICK));
+            pd = new ProductDefinition(ProductNames.BIRCH_TREE, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.GATHER, 18, ProductNames.BIRCH_STICK),
+                    new ActionDefinition(ActionNames.RENEW, 60)
+            );
             gson.toJson(pd, writer);
             /*
              Plants
              Calamus - Tatarak
              Clover - Koniczyna
              */
-            pd = new ProductDefinition(ProductNames.CALAMUS_FIELD, ProductType.FIELD
-            );
+            pd = new ProductDefinition(ProductNames.CALAMUS_FIELD, ProductType.FIELD);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.GRASS_FIELD, ProductType.FIELD
-            );
-            pd.setGather(new GatherDefinition(8, 20, ProductNames.GRASS));
+            pd = new ProductDefinition(ProductNames.GRASS_FIELD, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.GATHER, 8, ProductNames.GRASS),
+                    new ActionDefinition(ActionNames.RENEW, 20));
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.CLOVER_FIELD, ProductType.FIELD
-            );
-            pd.setGather(new GatherDefinition(10, 30, ProductNames.CLOVER));
+            pd = new ProductDefinition(ProductNames.CLOVER_FIELD, ProductType.FIELD,
+                    new ActionDefinition(ActionNames.GATHER, 10, ProductNames.CLOVER),
+                    new ActionDefinition(ActionNames.RENEW, 30));
             gson.toJson(pd, writer);
             /*
              Some resources

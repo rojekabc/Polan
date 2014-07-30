@@ -17,12 +17,15 @@ import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.response.CommandResponseStatus;
 import pl.projewski.game.polan.data.response.TimeResponse;
+import pl.projewski.game.polan.generator.products.ActionNames;
 import pl.projewski.game.polan.server.ICommandAction;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.factor.WorldManager;
+import pl.projewski.game.polan.server.work.AWorkerWork;
+import pl.projewski.game.polan.server.work.IWork;
 import pl.projewski.game.polan.server.work.WorkGather;
 
 /**
@@ -33,6 +36,11 @@ import pl.projewski.game.polan.server.work.WorkGather;
 public abstract class ACreatureProductAction implements ICommandAction {
 
     private static final Log log = LogFactory.getLog(ACreatureProductAction.class);
+    private String actionName;
+
+    public ACreatureProductAction(String actionName) {
+        this.actionName = actionName;
+    }
 
     @Override
     public CommandResponse runCommand(ClientContext ctx, List<String> props) {
@@ -89,13 +97,13 @@ public abstract class ACreatureProductAction implements ICommandAction {
             }
         }
 
-        Product productToGather = findProductToActOn(world, location, null, productFilter);
-        if (productToGather == null) {
+        Product productToActOn = findProductToActOn(actionName, world, location, null, productFilter);
+        if (productToActOn == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_WORK_POSSIBLE);
         }
-        final ProductDefinition productDefinition = ServerData.getInstance().getProductDefinition(productToGather.getName());
-        WorldManager.addWork(world, new WorkGather(ctx, creature, productToGather, howManyTimes, productFilter));
-        return new TimeResponse(productDefinition.getGatherTime());
+        final ProductDefinition productDefinition = ServerData.getInstance().getProductDefinition(productToActOn.getName());
+        WorldManager.addWork(world, createWork(ctx, creature, productToActOn, howManyTimes, productFilter));
+        return new TimeResponse(productDefinition.getAction(actionName).getTime());
     }
 
     /**
@@ -105,9 +113,22 @@ public abstract class ACreatureProductAction implements ICommandAction {
      * @param productFilter
      * @return
      */
-    public abstract boolean checkProductToActOn(Product product);
+    public static boolean checkProductToActOn(String actionName, Product product) {
+        final ProductDefinition productDefinition = ServerData.getInstance().getProductDefinition(product.getName());
+        if (productDefinition == null) {
+            log.warn("Cannot find product definition [" + product.getName() + "]");
+            return false;
+        }
+        if (!productDefinition.isActionAble(actionName)) {
+            return false;
+        }
+        if (product.isLocked()) {
+            return false;
+        }
+        return true;
+    }
 
-    public boolean checkFilter(Product product, String productFilter) {
+    public static boolean checkFilter(Product product, String productFilter) {
         try {
             if ((productFilter != null) && (!product.getName().matches(productFilter))) {
                 return false;
@@ -128,7 +149,7 @@ public abstract class ACreatureProductAction implements ICommandAction {
      * @param productFilter
      * @return
      */
-    public Product findProductToActOn(final World world, final Location location, Product lastGatheredProduct, String productFilter) {
+    public static Product findProductToActOn(String actionName, final World world, final Location location, Product lastGatheredProduct, String productFilter) {
         Product result = null;
         List<Long> elements = location.getElements();
 
@@ -146,7 +167,7 @@ public abstract class ACreatureProductAction implements ICommandAction {
             Long id = iterator.next();
             Product product = world.getProduct(id);
 
-            if (checkFilter(product, productFilter) && checkProductToActOn(product)) {
+            if (checkFilter(product, productFilter) && checkProductToActOn(actionName, product)) {
                 return product;
             }
 
@@ -160,7 +181,7 @@ public abstract class ACreatureProductAction implements ICommandAction {
                     break;
                 }
                 Product product = world.getProduct(id);
-                if (checkFilter(product, productFilter) && checkProductToActOn(product)) {
+                if (checkFilter(product, productFilter) && checkProductToActOn(actionName, product)) {
                     return product;
                 }
             }
@@ -168,5 +189,7 @@ public abstract class ACreatureProductAction implements ICommandAction {
 
         return result;
     }
+
+    public abstract IWork createWork(ClientContext ctx, Creature creature, Product productToActOn, int howManyTimes, String productFilter);
 
 }

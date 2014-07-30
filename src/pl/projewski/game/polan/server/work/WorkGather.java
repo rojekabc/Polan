@@ -10,6 +10,8 @@ import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.response.ServerLog;
+import pl.projewski.game.polan.generator.products.ActionNames;
+import pl.projewski.game.polan.server.cmdactions.ACreatureProductAction;
 import pl.projewski.game.polan.server.cmdactions.GatherAction;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.definition.ProductDefinition;
@@ -33,7 +35,7 @@ public class WorkGather extends AWorkerWork {
     String filter;
 
     public WorkGather(ClientContext ctx, Creature worker, Product gatherOnProduct, int numberToGather, String filter) {
-        super(ctx, ServerData.getInstance().getProductDefinition(gatherOnProduct.getName()).getGatherTime(), worker);
+        super(ctx, ServerData.getInstance().getProductDefinition(gatherOnProduct.getName()).getAction(ActionNames.GATHER).getTime(), worker);
         this.gatherOnProduct = gatherOnProduct;
         this.counter = numberToGather;
         this.filter = filter;
@@ -41,7 +43,7 @@ public class WorkGather extends AWorkerWork {
 
     @Override
     public void initWork() {
-        gatherOnProduct.setGatherLock(true);
+        gatherOnProduct.setLocked(true);
         getWorker().setWorkName(WorkNames.GATHERING);
     }
 
@@ -54,12 +56,14 @@ public class WorkGather extends AWorkerWork {
         if (gatherOnProduct != null) {
             // append gathered resource to location
             ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());
-            ProductDefinition[] gatherResources = productDef.getGatherResources();
+            ProductDefinition[] gatherResources = productDef.getAction(ActionNames.GATHER).getProduceResources();
             for (ProductDefinition gatherResouurce : gatherResources) {
                 location.addResource(WorldManager.generateProcudt(world, gatherResouurce));
             }
             // start renew process
-            WorldManager.addWork(world, new WorkRenewGather(context, gatherOnProduct));
+            if (productDef.isActionAble(ActionNames.GATHER)) {
+                WorldManager.addWork(world, new WorkRenewGather(context, gatherOnProduct));
+            }
             if (context == null) {
                 Logger.getLogger(this.getClass()).warning("Context is null");
                 return false;
@@ -72,12 +76,12 @@ public class WorkGather extends AWorkerWork {
 
         if (counter != 0) {
             // try find something to do
-            gatherOnProduct = GatherAction.findProductToGatherOn(world, location, gatherOnProduct, filter);
+            gatherOnProduct = ACreatureProductAction.findProductToActOn(ActionNames.GATHER, world, location, gatherOnProduct, filter);
             if (gatherOnProduct != null) {
                 // find something new - let's work
                 ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());
                 initWork();
-                this.ticks = productDef.getGatherTime();
+                this.ticks = productDef.getAction(ActionNames.GATHER).getTime();
             } else {
                 // try to find on next tick
                 this.ticks = 1;
