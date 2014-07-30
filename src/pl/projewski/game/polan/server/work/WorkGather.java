@@ -30,11 +30,13 @@ public class WorkGather extends AWorkerWork {
     // counter == 0 - no more things to gather
     // counter < 0 - neverending work (until break by another work)
     int counter;
+    String filter;
 
-    public WorkGather(ClientContext ctx, Creature worker, Product gatherOnProduct, int numberToGather) {
+    public WorkGather(ClientContext ctx, Creature worker, Product gatherOnProduct, int numberToGather, String filter) {
         super(ctx, ServerData.getInstance().getProductDefinition(gatherOnProduct.getName()).getGatherTime(), worker);
         this.gatherOnProduct = gatherOnProduct;
         this.counter = numberToGather;
+        this.filter = filter;
     }
 
     @Override
@@ -70,7 +72,7 @@ public class WorkGather extends AWorkerWork {
 
         if (counter != 0) {
             // try find something to do
-            gatherOnProduct = GatherAction.findProductToGatherOn(world, location, gatherOnProduct);
+            gatherOnProduct = GatherAction.findProductToGatherOn(world, location, gatherOnProduct, filter);
             if (gatherOnProduct != null) {
                 // find something new - let's work
                 ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());

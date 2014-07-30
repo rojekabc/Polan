@@ -5,6 +5,7 @@
  */
 package pl.projewski.game.polan.server.cmdactions;
 
+import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,12 +60,11 @@ public class GatherAction implements ICommandAction {
         if (location == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
         }
-        Product productToGather = findProductToGatherOn(world, location, null);
-        if (productToGather == null) {
-            return new CommandResponse(CommandResponseStatus.ERROR_NO_WORK_POSSIBLE);
-        }
+
         int howManyTimes = 1;
+        String productFilter = null;
         if (props != null && !props.isEmpty()) {
+            // get how many times
             String arg = props.get(0);
             try {
                 howManyTimes = Integer.parseInt(arg);
@@ -77,37 +77,77 @@ public class GatherAction implements ICommandAction {
                     howManyTimes = -1;
                 }
             }
+            // get filter on names
+            for (int i = 1; i < props.size(); i++) {
+                if (productFilter != null) {
+                    productFilter += " ";
+                }
+                productFilter += props.get(i);
+            }
+        }
+
+        Product productToGather = findProductToGatherOn(world, location, null, productFilter);
+        if (productToGather == null) {
+            return new CommandResponse(CommandResponseStatus.ERROR_NO_WORK_POSSIBLE);
         }
         final ProductDefinition productDefinition = ServerData.getInstance().getProductDefinition(productToGather.getName());
-        WorldManager.addWork(world, new WorkGather(ctx, creature, productToGather, howManyTimes));
+        WorldManager.addWork(world, new WorkGather(ctx, creature, productToGather, howManyTimes, productFilter));
         return new TimeResponse(productDefinition.getGatherTime());
     }
 
-    public static Product findProductToGatherOn(final World world, final Location location, Product lastGatheredProduct) {
+    private static boolean checkProductToGatherOn(Product product) {
+
+        final ProductDefinition productDefinition = ServerData.getInstance().getProductDefinition(product.getName());
+        if (productDefinition == null) {
+            log.warn("Cannot find product definition [" + product.getName() + "]");
+            return false;
+        }
+        if (productDefinition.isGatherable()) {
+            if (product.isGatherLock()) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public static Product findProductToGatherOn(final World world, final Location location, Product lastGatheredProduct, String productFilter) {
         Product result = null;
         List<Long> elements = location.getElements();
 
-        for (Long productId : elements) {
-            if (lastGatheredProduct != null) {
-                if (lastGatheredProduct.getId() == productId) {
-                    lastGatheredProduct = null;
+        // find begin from last one
+        Iterator<Long> iterator = elements.iterator();
+        if (lastGatheredProduct != null) {
+            while (iterator.hasNext()) {
+                if (lastGatheredProduct.getId() == iterator.next()) {
+                    break;
                 }
-                continue;
-            }
-            Product product = world.getProduct(productId);
-            final ProductDefinition productDefinition = ServerData.getInstance().getProductDefinition(product.getName());
-            if (productDefinition == null) {
-                log.warn("Cannot find product definition [" + product.getName() + "]");
-                break;
-            }
-            if (productDefinition.isGatherable()) {
-                if (product.isGatherLock()) {
-                    continue;
-                }
-                result = product;
-                break;
             }
         }
+        // find from last one to end
+        while (iterator.hasNext()) {
+            Long id = iterator.next();
+            Product product = world.getProduct(id);
+            if (checkProductToGatherOn(product)) {
+                return product;
+            }
+
+        }
+        // find from begin to last one
+        if (lastGatheredProduct != null) {
+            iterator = elements.iterator();
+            while (iterator.hasNext()) {
+                Long id = iterator.next();
+                if (lastGatheredProduct.getId() == id) {
+                    break;
+                }
+                Product product = world.getProduct(id);
+                if (checkProductToGatherOn(product)) {
+                    return product;
+                }
+            }
+        }
+
         return result;
     }
 
