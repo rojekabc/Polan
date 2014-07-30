@@ -7,6 +7,7 @@ package pl.projewski.game.polan.server.cmdactions;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import pl.projewski.game.polan.data.Creature;
@@ -82,6 +83,9 @@ public class GatherAction implements ICommandAction {
                 if (productFilter != null) {
                     productFilter += " ";
                 }
+                if (productFilter == null) {
+                    productFilter = "";
+                }
                 productFilter += props.get(i);
             }
         }
@@ -95,7 +99,7 @@ public class GatherAction implements ICommandAction {
         return new TimeResponse(productDefinition.getGatherTime());
     }
 
-    private static boolean checkProductToGatherOn(Product product) {
+    private static boolean checkProductToGatherOn(Product product, String productFilter) {
 
         final ProductDefinition productDefinition = ServerData.getInstance().getProductDefinition(product.getName());
         if (productDefinition == null) {
@@ -104,6 +108,14 @@ public class GatherAction implements ICommandAction {
         }
         if (productDefinition.isGatherable()) {
             if (product.isGatherLock()) {
+                return false;
+            }
+            try {
+                if ((productFilter != null) && (!product.getName().matches(productFilter))) {
+                    return false;
+                }
+            } catch (PatternSyntaxException ex) {
+                log.info("Wrong regex pattern");
                 return false;
             }
             return true;
@@ -128,7 +140,7 @@ public class GatherAction implements ICommandAction {
         while (iterator.hasNext()) {
             Long id = iterator.next();
             Product product = world.getProduct(id);
-            if (checkProductToGatherOn(product)) {
+            if (checkProductToGatherOn(product, productFilter)) {
                 return product;
             }
 
@@ -142,7 +154,7 @@ public class GatherAction implements ICommandAction {
                     break;
                 }
                 Product product = world.getProduct(id);
-                if (checkProductToGatherOn(product)) {
+                if (checkProductToGatherOn(product, productFilter)) {
                     return product;
                 }
             }
