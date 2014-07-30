@@ -6,6 +6,7 @@
 package pl.projewski.game.polan.server.work;
 
 import com.sun.istack.internal.logging.Logger;
+import java.util.Random;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
@@ -16,6 +17,7 @@ import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
+import pl.projewski.game.polan.server.data.definition.ActionOutResourceDefinition;
 import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.factor.WorldManager;
 
@@ -49,9 +51,12 @@ public class WorkPick extends AWorkerWork {
         if (pickOnProduct != null) {
             // append gathered resource to location
             ProductDefinition productDef = ServerData.getInstance().getProductDefinition(pickOnProduct.getName());
-            ProductDefinition[] resources = productDef.getAction(ActionNames.PICK).getProduceResources();
-            for (ProductDefinition resource : resources) {
-                location.addResource(WorldManager.generateProcudt(world, resource));
+            ActionOutResourceDefinition[] resources = productDef.getAction(ActionNames.PICK).getProduceResources();
+            Random random = new Random();
+            for (ActionOutResourceDefinition resource : resources) {
+                if (random.nextInt(100) < resource.getPrecentage()) {
+                    location.addResource(WorldManager.generateProcudt(world, ServerData.getInstance().getProductDefinition(resource.getProductName())));
+                }
             }
             pickOnProduct.setLocked(false);
             if (context == null) {

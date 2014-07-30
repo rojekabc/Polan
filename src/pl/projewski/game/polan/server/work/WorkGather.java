@@ -6,6 +6,7 @@
 package pl.projewski.game.polan.server.work;
 
 import com.sun.istack.internal.logging.Logger;
+import java.util.Random;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
@@ -18,6 +19,7 @@ import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
+import pl.projewski.game.polan.server.data.definition.ActionOutResourceDefinition;
 import pl.projewski.game.polan.server.factor.WorldManager;
 
 /**
@@ -56,9 +58,12 @@ public class WorkGather extends AWorkerWork {
         if (gatherOnProduct != null) {
             // append gathered resource to location
             ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());
-            ProductDefinition[] gatherResources = productDef.getAction(ActionNames.GATHER).getProduceResources();
-            for (ProductDefinition gatherResouurce : gatherResources) {
-                location.addResource(WorldManager.generateProcudt(world, gatherResouurce));
+            ActionOutResourceDefinition[] gatherResources = productDef.getAction(ActionNames.GATHER).getProduceResources();
+            Random random = new Random();
+            for (ActionOutResourceDefinition resource : gatherResources) {
+                if (random.nextInt(100) < resource.getPrecentage()) {
+                    location.addResource(WorldManager.generateProcudt(world, ServerData.getInstance().getProductDefinition(resource.getProductName())));
+                }
             }
             // start renew process
             if (productDef.isActionAble(ActionNames.RENEW)) {

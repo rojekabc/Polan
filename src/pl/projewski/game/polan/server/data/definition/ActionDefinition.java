@@ -15,23 +15,19 @@ import pl.projewski.game.polan.server.data.ServerData;
 public class ActionDefinition {
 
     String name;
-    String[] resources;
+    ActionOutResourceDefinition[] resources;
     int time;
     int renewTime;
 
-    public ActionDefinition(String name, int actionTime, String... produceResources) {
+    public ActionDefinition(String name, int actionTime, ActionOutResourceDefinition... produceResources) {
         this.name = name;
         this.resources = produceResources;
         this.time = actionTime;
         this.renewTime = renewTime;
     }
 
-    public ProductDefinition[] getProduceResources() {
-        ProductDefinition[] result = new ProductDefinition[resources.length];
-        for (int i = 0; i < resources.length; i++) {
-            result[i] = ServerData.getInstance().getProductDefinition(resources[i]);
-        }
-        return result;
+    public ActionOutResourceDefinition[] getProduceResources() {
+        return resources;
     }
 
     public int getTime() {

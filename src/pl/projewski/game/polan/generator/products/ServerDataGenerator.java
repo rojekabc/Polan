@@ -21,6 +21,7 @@ import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.ProductType;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.definition.ActionDefinition;
+import pl.projewski.game.polan.server.data.definition.ActionOutResourceDefinition;
 import pl.projewski.game.polan.server.data.definition.BiomeDefinition;
 import pl.projewski.game.polan.server.data.definition.BiomeElementDefinition;
 
@@ -46,38 +47,40 @@ public class ServerDataGenerator {
             pd = new ProductDefinition(ProductNames.SAND_FIELD, ProductType.FIELD);
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.SANDSTONE_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 80, ProductNames.SANDSTONE));
+                    new ActionDefinition(ActionNames.PICK, 80, new ActionOutResourceDefinition(ProductNames.SANDSTONE, 100)));
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.MUD_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 30, ProductNames.MUD));
+                    new ActionDefinition(ActionNames.PICK, 30, new ActionOutResourceDefinition(ProductNames.MUD, 100)));
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.STONE_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 150, ProductNames.STONE));
+                    new ActionDefinition(ActionNames.PICK, 150, new ActionOutResourceDefinition(ProductNames.STONE, 100)));
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.GRANIT_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 250, ProductNames.SANDSTONE));
+                    new ActionDefinition(ActionNames.PICK, 250, new ActionOutResourceDefinition(ProductNames.SANDSTONE, 100)));
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.GROUND_FIELD, ProductType.FIELD);
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.GRAVEL_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 40, ProductNames.GRAVEL));
+                    new ActionDefinition(ActionNames.PICK, 40,
+                            new ActionOutResourceDefinition(ProductNames.GRAVEL, 100),
+                            new ActionOutResourceDefinition(ProductNames.FLINT, 30)));
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.CLAY_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 40, ProductNames.CLAY));
+                    new ActionDefinition(ActionNames.PICK, 40, new ActionOutResourceDefinition(ProductNames.CLAY, 100)));
             gson.toJson(pd, writer);
             /* Trees */
             pd = new ProductDefinition(ProductNames.OAK_TREE, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.GATHER, 22, ProductNames.OAK_STICK),
+                    new ActionDefinition(ActionNames.GATHER, 22, new ActionOutResourceDefinition(ProductNames.OAK_STICK, 100)),
                     new ActionDefinition(ActionNames.RENEW, 70)
             );
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.PINE_TREE, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.GATHER, 20, ProductNames.PINE_STICK),
+                    new ActionDefinition(ActionNames.GATHER, 20, new ActionOutResourceDefinition(ProductNames.PINE_STICK, 100)),
                     new ActionDefinition(ActionNames.RENEW, 65)
             );
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.BIRCH_TREE, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.GATHER, 18, ProductNames.BIRCH_STICK),
+                    new ActionDefinition(ActionNames.GATHER, 18, new ActionOutResourceDefinition(ProductNames.BIRCH_STICK, 100)),
                     new ActionDefinition(ActionNames.RENEW, 60)
             );
             gson.toJson(pd, writer);
@@ -89,11 +92,11 @@ public class ServerDataGenerator {
             pd = new ProductDefinition(ProductNames.CALAMUS_FIELD, ProductType.FIELD);
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.GRASS_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.GATHER, 8, ProductNames.GRASS),
+                    new ActionDefinition(ActionNames.GATHER, 8, new ActionOutResourceDefinition(ProductNames.GRASS, 100)),
                     new ActionDefinition(ActionNames.RENEW, 20));
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.CLOVER_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.GATHER, 10, ProductNames.CLOVER),
+                    new ActionDefinition(ActionNames.GATHER, 10, new ActionOutResourceDefinition(ProductNames.CLOVER, 100)),
                     new ActionDefinition(ActionNames.RENEW, 30));
             gson.toJson(pd, writer);
             /*
@@ -155,7 +158,8 @@ public class ServerDataGenerator {
                     new BiomeElementDefinition(ProductNames.GRASS_FIELD, 30),
                     new BiomeElementDefinition(ProductNames.CLOVER_FIELD, 10),
                     new BiomeElementDefinition(ProductNames.WATER_FIELD, 5),
-                    new BiomeElementDefinition(ProductNames.GROUND_FIELD, 10)
+                    new BiomeElementDefinition(ProductNames.GROUND_FIELD, 10),
+                    new BiomeElementDefinition(ProductNames.CLAY_FIELD, 5)
             );
             gson.toJson(bd, writer);
             bd = new BiomeDefinition(BiomeNames.FOREST, 20,
@@ -190,7 +194,8 @@ public class ServerDataGenerator {
                     new BiomeElementDefinition(ProductNames.CALAMUS_FIELD, 20),
                     new BiomeElementDefinition(ProductNames.MUD_FIELD, 30),
                     new BiomeElementDefinition(ProductNames.GROUND_FIELD, 5),
-                    new BiomeElementDefinition(ProductNames.GRASS_FIELD, 5)
+                    new BiomeElementDefinition(ProductNames.GRASS_FIELD, 5),
+                    new BiomeElementDefinition(ProductNames.CLAY_FIELD, 5)
             );
             gson.toJson(bd, writer);
             bd = new BiomeDefinition(BiomeNames.MOUNTAINS, 2,
@@ -210,8 +215,18 @@ public class ServerDataGenerator {
             );
             gson.toJson(bd, writer);
             bd = new BiomeDefinition(BiomeNames.BEACH, 1,
+                    new BiomeElementDefinition(ProductNames.SAND_FIELD, 40),
+                    new BiomeElementDefinition(ProductNames.GRASS_FIELD, 30),
+                    new BiomeElementDefinition(ProductNames.GRAVEL_FIELD, 10),
+                    new BiomeElementDefinition(ProductNames.CLAY_FIELD, 10)
+            );
+            gson.toJson(bd, writer);
+            bd = new BiomeDefinition(BiomeNames.RIVER, 5,
+                    new BiomeElementDefinition(ProductNames.WATER_FIELD, 40),
                     new BiomeElementDefinition(ProductNames.SAND_FIELD, 30),
-                    new BiomeElementDefinition(ProductNames.GRASS_FIELD, 30)
+                    new BiomeElementDefinition(ProductNames.GRASS_FIELD, 10),
+                    new BiomeElementDefinition(ProductNames.GRAVEL_FIELD, 15),
+                    new BiomeElementDefinition(ProductNames.CLAY_FIELD, 15)
             );
             gson.toJson(bd, writer);
             writer.flush();

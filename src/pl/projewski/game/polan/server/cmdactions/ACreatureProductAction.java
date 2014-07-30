@@ -17,16 +17,13 @@ import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.response.CommandResponseStatus;
 import pl.projewski.game.polan.data.response.TimeResponse;
-import pl.projewski.game.polan.generator.products.ActionNames;
 import pl.projewski.game.polan.server.ICommandAction;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.factor.WorldManager;
-import pl.projewski.game.polan.server.work.AWorkerWork;
 import pl.projewski.game.polan.server.work.IWork;
-import pl.projewski.game.polan.server.work.WorkGather;
 
 /**
  *

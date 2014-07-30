@@ -22,4 +22,5 @@ public interface BiomeNames {
     public static final String HILLS = "hills";
     public static final String OCEAN = "ocean";
     public static final String BEACH = "beach";
+    public static final String RIVER = "river";
 }
