@@ -62,7 +62,7 @@ public class WorkGather extends AWorkerWork {
             Random random = new Random();
             for (ActionOutResourceDefinition resource : gatherResources) {
                 if (random.nextInt(100) < resource.getPrecentage()) {
-                    location.addResource(WorldManager.generateProcudt(world, ServerData.getInstance().getProductDefinition(resource.getProductName())));
+                    location.addResource(WorldManager.generateProcudt(world, ServerData.getInstance().getProductDefinition(resource.getName())));
                 }
             }
             // start renew process

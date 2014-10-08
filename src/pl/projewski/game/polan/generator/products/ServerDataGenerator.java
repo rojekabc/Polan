@@ -7,7 +7,6 @@ package pl.projewski.game.polan.generator.products;
 
 import com.google.gson.Gson;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -40,48 +39,69 @@ public class ServerDataGenerator {
 
             ProductDefinition pd = null;
             /* Fields - ground field is just empty ground. Nothing is growing there */
-            pd = new ProductDefinition(ProductNames.WATER_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.WATER_FIELD, ProductType.FIELD, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.ICE_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.ICE_FIELD, ProductType.FIELD, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.SAND_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.SAND_FIELD, ProductType.FIELD, null, null);
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.SANDSTONE_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 80, new ActionOutResourceDefinition(ProductNames.SANDSTONE, 100)));
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.PICK, 80, new ActionOutResourceDefinition(ProductNames.SANDSTONE, 100))
+                    }, null);
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.MUD_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 30, new ActionOutResourceDefinition(ProductNames.MUD, 100)));
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.PICK, 30, new ActionOutResourceDefinition(ProductNames.MUD, 100))
+                    }, null);
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.STONE_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 150, new ActionOutResourceDefinition(ProductNames.STONE, 100)));
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.PICK, 150, new ActionOutResourceDefinition(ProductNames.STONE, 100))
+                    }, null);
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.GRANIT_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 250, new ActionOutResourceDefinition(ProductNames.SANDSTONE, 100)));
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.PICK, 250, new ActionOutResourceDefinition(ProductNames.SANDSTONE, 100))
+                    }, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.GROUND_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.GROUND_FIELD, ProductType.FIELD, null, null);
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.GRAVEL_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 40,
-                            new ActionOutResourceDefinition(ProductNames.GRAVEL, 100),
-                            new ActionOutResourceDefinition(ProductNames.FLINT, 30)));
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.PICK, 40,
+                                new ActionOutResourceDefinition(ProductNames.GRAVEL, 100),
+                                new ActionOutResourceDefinition(ProductNames.FLINT, 30))
+                    }, null);
             gson.toJson(pd, writer);
             pd = new ProductDefinition(ProductNames.CLAY_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.PICK, 40, new ActionOutResourceDefinition(ProductNames.CLAY, 100)));
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.PICK, 40, new ActionOutResourceDefinition(ProductNames.CLAY, 100))
+                    }, null);
             gson.toJson(pd, writer);
             /* Trees */
-            pd = new ProductDefinition(ProductNames.OAK_TREE, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.GATHER, 22, new ActionOutResourceDefinition(ProductNames.OAK_STICK, 100)),
-                    new ActionDefinition(ActionNames.RENEW, 70)
+            pd = new ProductDefinition(ProductNames.OAK_TREE, ProductType.TREE,
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.GATHER, 22, new ActionOutResourceDefinition(ProductNames.OAK_STICK, 100)),
+                        new ActionDefinition(ActionNames.RENEW, 70)
+                    },
+                    new String[]{ProductNames.GROUND_FIELD}
             );
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.PINE_TREE, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.GATHER, 20, new ActionOutResourceDefinition(ProductNames.PINE_STICK, 100)),
-                    new ActionDefinition(ActionNames.RENEW, 65)
+            pd = new ProductDefinition(ProductNames.PINE_TREE, ProductType.TREE,
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.GATHER, 20, new ActionOutResourceDefinition(ProductNames.PINE_STICK, 100)),
+                        new ActionDefinition(ActionNames.RENEW, 65)
+                    },
+                    new String[]{ProductNames.GROUND_FIELD}
             );
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.BIRCH_TREE, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.GATHER, 18, new ActionOutResourceDefinition(ProductNames.BIRCH_STICK, 100)),
-                    new ActionDefinition(ActionNames.RENEW, 60)
+            pd = new ProductDefinition(ProductNames.BIRCH_TREE, ProductType.TREE,
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.GATHER, 18, new ActionOutResourceDefinition(ProductNames.BIRCH_STICK, 100)),
+                        new ActionDefinition(ActionNames.RENEW, 60)
+                    },
+                    new String[]{ProductNames.GROUND_FIELD}
             );
             gson.toJson(pd, writer);
             /*
@@ -89,54 +109,65 @@ public class ServerDataGenerator {
              Calamus - Tatarak
              Clover - Koniczyna
              */
-            pd = new ProductDefinition(ProductNames.CALAMUS_FIELD, ProductType.FIELD);
+            pd = new ProductDefinition(ProductNames.CALAMUS_FIELD, ProductType.PLANT,
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.GATHER, 20, new ActionOutResourceDefinition(ProductNames.CALAMUS, 100)),
+                        new ActionDefinition(ActionNames.RENEW, 50)
+                    },
+                    new String[]{ProductNames.MUD_FIELD});
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.GRASS_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.GATHER, 8, new ActionOutResourceDefinition(ProductNames.GRASS, 100)),
-                    new ActionDefinition(ActionNames.RENEW, 20));
+            pd = new ProductDefinition(ProductNames.GRASS_FIELD, ProductType.PLANT,
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.GATHER, 8, new ActionOutResourceDefinition(ProductNames.GRASS, 100)),
+                        new ActionDefinition(ActionNames.RENEW, 20)
+                    },
+                    new String[]{ProductNames.MUD_FIELD, ProductNames.GROUND_FIELD});
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.CLOVER_FIELD, ProductType.FIELD,
-                    new ActionDefinition(ActionNames.GATHER, 10, new ActionOutResourceDefinition(ProductNames.CLOVER, 100)),
-                    new ActionDefinition(ActionNames.RENEW, 30));
+            pd = new ProductDefinition(ProductNames.CLOVER_FIELD, ProductType.PLANT,
+                    new ActionDefinition[]{
+                        new ActionDefinition(ActionNames.GATHER, 10, new ActionOutResourceDefinition(ProductNames.CLOVER, 100)),
+                        new ActionDefinition(ActionNames.RENEW, 30)
+                    },
+                    new String[]{ProductNames.GROUND_FIELD, ProductNames.MUD_FIELD});
             gson.toJson(pd, writer);
             /*
              Some resources
              */
-            pd = new ProductDefinition(ProductNames.OAK_STICK, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.OAK_STICK, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.PINE_STICK, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.PINE_STICK, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.BIRCH_STICK, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.BIRCH_STICK, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.GRASS, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.GRASS, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.CLOVER, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.CLOVER, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.CALAMUS, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.CALAMUS, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.CLAY, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.CLAY, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.GRAVEL, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.GRAVEL, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.FLINT, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.FLINT, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.SAND, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.SAND, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.MUD, ProductType.RESOURCE);
+            pd = new ProductDefinition(ProductNames.MUD, ProductType.RESOURCE, null, null);
             gson.toJson(pd, writer);
             /*
              Some stones
              */
-            pd = new ProductDefinition(ProductNames.GRANIT, ProductType.STONE);
+            pd = new ProductDefinition(ProductNames.GRANIT, ProductType.STONE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.STONE, ProductType.STONE);
+            pd = new ProductDefinition(ProductNames.STONE, ProductType.STONE, null, null);
             gson.toJson(pd, writer);
-            pd = new ProductDefinition(ProductNames.SANDSTONE, ProductType.STONE);
+            pd = new ProductDefinition(ProductNames.SANDSTONE, ProductType.STONE, null, null);
             gson.toJson(pd, writer);
             /*
              Some fluids
              */
-            pd = new ProductDefinition(ProductNames.WATER, ProductType.FLUID);
+            pd = new ProductDefinition(ProductNames.WATER, ProductType.FLUID, null, null);
             gson.toJson(pd, writer);
             writer.flush();
         } catch (IOException ex) {

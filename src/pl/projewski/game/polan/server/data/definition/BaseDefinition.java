@@ -10,17 +10,16 @@ package pl.projewski.game.polan.server.data.definition;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class ActionOutResourceDefinition extends BaseDefinition {
+public class BaseDefinition {
 
-    private int precentage;
+    private String name;
 
-    public ActionOutResourceDefinition(String productName, int precentage) {
-        super(productName);
-        this.precentage = precentage;
+    public BaseDefinition(String name) {
+        this.name = name;
     }
 
-    public int getPrecentage() {
-        return precentage;
+    public String getName() {
+        return name;
     }
 
 }

@@ -30,6 +30,9 @@ public class RandomElement<T> {
         for (Integer value : values) {
             sum += value.intValue();
         }
+        if (sum == 0) {
+            return null;
+        }
         int random = r.nextInt(sum);
         final Set<Map.Entry<T, Integer>> entrySet = es.entrySet();
         Map.Entry<T, Integer> lastEntry = null;

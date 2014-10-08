@@ -51,11 +51,7 @@ public class PolanGameServer implements Runnable {
         this.isWork = true;
     }
 
-    @Override
-    public void run() {
-        log.info("Server starting ...");
-        CommandManager.getInstance();
-        // load Data
+    public static void loadData() {
         GSonUtil.registerNewCommonClass(World.class);
         Gson gson = GSonUtil.getGSon();
         try {
@@ -92,6 +88,16 @@ public class PolanGameServer implements Runnable {
         } catch (FileNotFoundException ex) {
             log.warn("Problem while loading saved data", ex);
         }
+
+    }
+
+    @Override
+    public void run() {
+        log.info("Server starting ...");
+        CommandManager.getInstance();
+        // load Data
+        PolanGameServer.loadData();
+        // create world auto-tick
         TimerTask worldTickerTask = new TimerTask() {
             @Override
             public void run() {
@@ -105,6 +111,7 @@ public class PolanGameServer implements Runnable {
         Timer timer = new Timer();
         timer.schedule(worldTickerTask, PolanServerConfiguration.FIRST_TICK_AFTER_MILISECONDS, PolanServerConfiguration.TICK_DELAY_MILISECONDS);
         log.info("Server started.");
+        // catch connections
         while (isWork) {
             Socket clientSocket = null;
             try {

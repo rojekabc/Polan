@@ -16,18 +16,26 @@ import pl.projewski.game.polan.server.data.ProductType;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class ProductDefinition {
+public class ProductDefinition extends BaseDefinition {
 
     ProductType type = null;
-    String name = null;
     List<ActionDefinition> actionList = null;
+    List<String> possibleExistsOn = null;
 
-    public ProductDefinition(String name, ProductType productType, ActionDefinition... possibleActionList) {
+    public ProductDefinition(String name, ProductType productType, ActionDefinition[] possibleActionList, String[] possibleExistsOnList) {
+        super(name);
         this.type = productType;
-        this.name = name;
-        actionList = new ArrayList();
-        for (ActionDefinition actionDefinition : possibleActionList) {
-            actionList.add(actionDefinition);
+        if (possibleActionList != null) {
+            actionList = new ArrayList();
+            for (ActionDefinition actionDefinition : possibleActionList) {
+                actionList.add(actionDefinition);
+            }
+        }
+        if (possibleExistsOnList != null) {
+            this.possibleExistsOn = new ArrayList();
+            for (String possibleOn : possibleExistsOnList) {
+                possibleExistsOn.add(possibleOn);
+            }
         }
     }
 
@@ -35,11 +43,10 @@ public class ProductDefinition {
         return type;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public boolean isActionAble(String actionName) {
+        if (actionList == null) {
+            return false;
+        }
         for (ActionDefinition actionDefinition : actionList) {
             if (actionDefinition.getName().equals(actionName)) {
                 return true;
@@ -55,5 +62,9 @@ public class ProductDefinition {
             }
         }
         return null;
+    }
+
+    public List<String> getPossibleExistsOn() {
+        return this.possibleExistsOn;
     }
 }

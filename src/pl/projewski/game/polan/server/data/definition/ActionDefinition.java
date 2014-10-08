@@ -12,15 +12,14 @@ import pl.projewski.game.polan.server.data.ServerData;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class ActionDefinition {
+public class ActionDefinition extends BaseDefinition {
 
-    String name;
     ActionOutResourceDefinition[] resources;
     int time;
     int renewTime;
 
     public ActionDefinition(String name, int actionTime, ActionOutResourceDefinition... produceResources) {
-        this.name = name;
+        super(name);
         this.resources = produceResources;
         this.time = actionTime;
         this.renewTime = renewTime;
@@ -33,9 +32,4 @@ public class ActionDefinition {
     public int getTime() {
         return time;
     }
-
-    public String getName() {
-        return name;
-    }
-
 }

@@ -46,11 +46,27 @@ class LookResponsePresenter extends ResponsePresenter {
             Map<String, Integer> productCounter = new HashMap();
             for (Long productId : elements) {
                 Product product = lookResponse.getProduct(productId);
-                Integer cnt = productCounter.get(product.getName());
-                if (cnt == null) {
-                    productCounter.put(product.getName(), Integer.valueOf(1));
+                String productName = null;
+                List<Long> productElements = product.getElements();
+                if (productElements == null || productElements.isEmpty()) {
+                    productName = product.getName();
                 } else {
-                    productCounter.put(product.getName(), ++cnt);
+                    boolean first = true;
+                    productName = product.getName();
+                    productName += " with ";
+                    for (Long productElementId : productElements) {
+                        if (!first) {
+                            productName += ", ";
+                        }
+                        productName += lookResponse.getProduct(productElementId).getName();
+                        first = false;
+                    }
+                }
+                Integer cnt = productCounter.get(productName);
+                if (cnt == null) {
+                    productCounter.put(productName, Integer.valueOf(1));
+                } else {
+                    productCounter.put(productName, ++cnt);
                 }
             }
             Set<Map.Entry<String, Integer>> elementSet = productCounter.entrySet();

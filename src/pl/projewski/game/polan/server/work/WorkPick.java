@@ -55,7 +55,7 @@ public class WorkPick extends AWorkerWork {
             Random random = new Random();
             for (ActionOutResourceDefinition resource : resources) {
                 if (random.nextInt(100) < resource.getPrecentage()) {
-                    location.addResource(WorldManager.generateProcudt(world, ServerData.getInstance().getProductDefinition(resource.getProductName())));
+                    location.addResource(WorldManager.generateProcudt(world, ServerData.getInstance().getProductDefinition(resource.getName())));
                 }
             }
             pickOnProduct.setLocked(false);

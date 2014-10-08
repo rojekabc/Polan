@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author Piotr Rojewski <piotr4rojewski@google.com>
  */
-public class Location {
+public class Location implements ProductContainer {
 
     // id of generated location for world
     private int id;

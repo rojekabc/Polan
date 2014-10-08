@@ -30,6 +30,7 @@ import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.Role;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.server.data.PolanServerConfiguration;
+import pl.projewski.game.polan.server.data.ProductType;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.World;
@@ -101,7 +102,22 @@ public class WorldManager {
         String type = location.getType();
         RandomElement<ProductDefinition> randomProducts = ServerData.getInstance().getBiomeElements(type);
         while (size > 0) {
-            location.addElement(generateProcudt(world, randomProducts.getRandomElement(random)));
+            final ProductDefinition productDefinition = randomProducts.getRandomElement(random);
+            final Product newElement = generateProcudt(world, productDefinition);
+            if (productDefinition.getType() != ProductType.FIELD) {
+                List<String> possibleExistsOn = productDefinition.getPossibleExistsOn();
+
+                ProductDefinition randomField = ServerData.getInstance().getBiomeFieldForProduct(type, productDefinition).getRandomElement(random);
+                // no field, where I may put element in this type of biome
+                if (randomField == null) {
+                    continue;
+                }
+                final Product field = generateProcudt(world, randomField);
+                field.addElement(newElement);
+                location.addElement(field);
+            } else {
+                location.addElement(newElement);
+            }
             size--;
         }
     }

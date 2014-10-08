@@ -8,6 +8,7 @@ package pl.projewski.game.polan.server.cmdactions;
 import java.util.List;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
+import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.response.CommandResponseStatus;
@@ -59,7 +60,14 @@ public class LookAction implements ICommandAction {
         final List<Long> elements = location.getElements();
         if (elements != null) {
             for (Long id : elements) {
-                lookResponse.addProduct(world.getProduct(id));
+                Product product = world.getProduct(id);
+                lookResponse.addProduct(product);
+                List<Long> productElements = product.getElements();
+                if (productElements != null) {
+                    for (Long productElementId : productElements) {
+                        lookResponse.addProduct(world.getProduct(productElementId));
+                    }
+                }
             }
         }
         final List<Long> resources = location.getResources();

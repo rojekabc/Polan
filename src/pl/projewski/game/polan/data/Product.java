@@ -5,8 +5,10 @@
  */
 package pl.projewski.game.polan.data;
 
+import java.util.ArrayList;
 import pl.projewski.game.polan.server.data.ProductType;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,10 +16,11 @@ import java.util.Map;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class Product {
+public class Product implements ProductContainer {
 
     Map<ProductProperty, String> properties = new HashMap();
     private long id;
+    List<Long> elementList;
 
     public Product(long id) {
         this.id = id;
@@ -49,5 +52,16 @@ public class Product {
 
     public long getId() {
         return id;
+    }
+
+    public void addElement(Product p) {
+        if (elementList == null) {
+            elementList = new ArrayList();
+        }
+        elementList.add(Long.valueOf(p.getId()));
+    }
+
+    public List<Long> getElements() {
+        return elementList;
     }
 }

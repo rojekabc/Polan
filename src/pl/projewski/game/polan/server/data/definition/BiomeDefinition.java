@@ -14,14 +14,13 @@ import java.util.Map;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class BiomeDefinition {
+public class BiomeDefinition extends BaseDefinition {
 
-    private String name;
     private int randomWeight;
     private List<BiomeElementDefinition> biomeElementRandomWeight;
 
     public BiomeDefinition(String name, int randomWeight, BiomeElementDefinition... elements) {
-        this.name = name;
+        super(name);
         this.randomWeight = randomWeight;
         if (elements != null && elements.length > 0) {
             this.biomeElementRandomWeight = new ArrayList();
@@ -29,10 +28,6 @@ public class BiomeDefinition {
                 this.biomeElementRandomWeight.add(biomeElementDefinition);
             }
         }
-    }
-
-    public String getName() {
-        return name;
     }
 
     public int getWeight() {

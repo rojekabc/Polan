@@ -5,6 +5,7 @@
  */
 package pl.projewski.game.polan.server.cmdactions;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
@@ -13,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
+import pl.projewski.game.polan.data.ProductContainer;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.response.CommandResponseStatus;
@@ -137,6 +139,20 @@ public abstract class ACreatureProductAction implements ICommandAction {
         return true;
     }
 
+    private static List<Product> listProductsInContainerFullDeep(final World world, final ProductContainer container) {
+        List<Product> result = new ArrayList();
+        List<Long> locationElements = container.getElements();
+        if (locationElements == null) {
+            return result;
+        }
+        for (Long elementId : locationElements) {
+            Product product = world.getProduct(elementId);
+            result.add(product);
+            result.addAll(listProductsInContainerFullDeep(world, product));
+        }
+        return result;
+    }
+
     /**
      * Find next product, on which we can do some action.
      *
@@ -148,21 +164,20 @@ public abstract class ACreatureProductAction implements ICommandAction {
      */
     public static Product findProductToActOn(String actionName, final World world, final Location location, Product lastGatheredProduct, String productFilter) {
         Product result = null;
-        List<Long> elements = location.getElements();
+        List<Product> elements = listProductsInContainerFullDeep(world, location);
 
         // find begin from last one
-        Iterator<Long> iterator = elements.iterator();
+        Iterator<Product> iterator = elements.iterator();
         if (lastGatheredProduct != null) {
             while (iterator.hasNext()) {
-                if (lastGatheredProduct.getId() == iterator.next()) {
+                if (lastGatheredProduct.getId() == iterator.next().getId()) {
                     break;
                 }
             }
         }
         // find from last one to end
         while (iterator.hasNext()) {
-            Long id = iterator.next();
-            Product product = world.getProduct(id);
+            Product product = iterator.next();
 
             if (checkFilter(product, productFilter) && checkProductToActOn(actionName, product)) {
                 return product;
@@ -173,11 +188,10 @@ public abstract class ACreatureProductAction implements ICommandAction {
         if (lastGatheredProduct != null) {
             iterator = elements.iterator();
             while (iterator.hasNext()) {
-                Long id = iterator.next();
-                if (lastGatheredProduct.getId() == id) {
+                Product product = iterator.next();
+                if (lastGatheredProduct.getId() == product.getId()) {
                     break;
                 }
-                Product product = world.getProduct(id);
                 if (checkFilter(product, productFilter) && checkProductToActOn(actionName, product)) {
                     return product;
                 }

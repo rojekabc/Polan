@@ -116,6 +116,32 @@ public class ServerData {
         return null;
     }
 
+    public RandomElement<ProductDefinition> getBiomeFieldForProduct(String biomeName, ProductDefinition productDefinition) {
+        RandomElement<ProductDefinition> randomProducts = new RandomElement();
+        for (BiomeDefinition biome : biomeDefinition) {
+            if (biome.getName().equals(biomeName)) {
+                List<BiomeElementDefinition> biomeElements = biome.getBiomeElements();
+                List<String> possibleExistsOn = productDefinition.getPossibleExistsOn();
+                if (possibleExistsOn == null) {
+                    log.warn("Warn: Empty 'exists On' list for product definition; " + "Biome: " + biomeName + "; ProductDefinition: " + productDefinition.getName());
+                }
+                for (BiomeElementDefinition biomeElementDefinition : biomeElements) {
+                    if (possibleExistsOn.contains(biomeElementDefinition.getName())) {
+                        ProductDefinition pd = getProductDefinition(biomeElementDefinition.getName());
+                        if (pd == null) {
+                            log.warn("Cannot find product [" + biomeElementDefinition.getName() + "]");
+                            continue;
+                        }
+                        randomProducts.addRandomElement(pd, biomeElementDefinition.getWeight());
+                    }
+                }
+                break;
+            }
+        }
+
+        return randomProducts;
+    }
+
     public RandomElement<ProductDefinition> getBiomeElements(BiomeDefinition biome) {
         RandomElement<ProductDefinition> randomProducts = new RandomElement();
         List<BiomeElementDefinition> biomeElements = biome.getBiomeElements();

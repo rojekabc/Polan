@@ -10,18 +10,13 @@ package pl.projewski.game.polan.server.data.definition;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public class BiomeElementDefinition {
+public class BiomeElementDefinition extends BaseDefinition {
 
-    private String name;
     private int weight;
 
     public BiomeElementDefinition(String name, int weight) {
-        this.name = name;
+        super(name);
         this.weight = weight;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public int getWeight() {
