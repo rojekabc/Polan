@@ -14,7 +14,6 @@ import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.factor.UserManagerFactory;
 import pl.projewski.game.polan.server.factor.WorldManager;
-import pl.projewski.game.polan.server.work.IWork;
 
 /**
  *

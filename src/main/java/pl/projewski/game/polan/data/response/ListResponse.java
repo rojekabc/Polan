@@ -4,7 +4,6 @@
  */
 package pl.projewski.game.polan.data.response;
 
-import pl.projewski.game.polan.data.response.CommandResponse;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
