@@ -5,15 +5,14 @@
  */
 package pl.projewski.game.polan.server.work;
 
-import com.sun.istack.internal.logging.Logger;
 import java.util.Random;
+import org.apache.commons.logging.LogFactory;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.response.ServerLog;
 import pl.projewski.game.polan.generator.products.ActionNames;
 import pl.projewski.game.polan.server.cmdactions.ACreatureProductAction;
-import pl.projewski.game.polan.server.cmdactions.GatherAction;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.ServerData;
@@ -70,7 +69,7 @@ public class WorkGather extends AWorkerWork {
                 WorldManager.addWork(world, new WorkRenewGather(context, gatherOnProduct));
             }
             if (context == null) {
-                Logger.getLogger(this.getClass()).warning("Context is null");
+                LogFactory.getLog(this.getClass()).warn("Context is null");
                 return false;
             }
             context.sendToClient(ServerLog.info(world.getWorldTime(), "Gather on " + gatherOnProduct.getName() + " [" + gatherOnProduct.getId() + "]"));

@@ -5,8 +5,8 @@
  */
 package pl.projewski.game.polan.server.work;
 
-import com.sun.istack.internal.logging.Logger;
 import java.util.Random;
+import org.apache.commons.logging.LogFactory;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
@@ -60,7 +60,7 @@ public class WorkPick extends AWorkerWork {
             }
             pickOnProduct.setLocked(false);
             if (context == null) {
-                Logger.getLogger(this.getClass()).warning("Context is null");
+                LogFactory.getLog(this.getClass()).warn("Context is null");
                 return false;
             }
             context.sendToClient(ServerLog.info(world.getWorldTime(), "Pick on " + pickOnProduct.getName() + " [" + pickOnProduct.getId() + "]"));
