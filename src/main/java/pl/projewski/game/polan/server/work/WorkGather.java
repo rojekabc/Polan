@@ -5,6 +5,7 @@
  */
 package pl.projewski.game.polan.server.work;
 
+import java.util.List;
 import java.util.Random;
 import org.apache.commons.logging.LogFactory;
 import pl.projewski.game.polan.data.Creature;
@@ -14,11 +15,11 @@ import pl.projewski.game.polan.data.response.ServerLog;
 import pl.projewski.game.polan.generator.products.ActionNames;
 import pl.projewski.game.polan.server.cmdactions.ACreatureProductAction;
 import pl.projewski.game.polan.server.data.ClientContext;
-import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.data.definition.OutputResourceDefinition;
+import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.factor.WorldManager;
 
 /**
@@ -43,7 +44,7 @@ public class WorkGather extends AWorkerWork {
     }
 
     @Override
-    public void initWork() {
+    public void initWork(World world) {
         gatherOnProduct.setLocked(true);
         getWorker().setWorkName(WorkNames.GATHERING);
     }
@@ -57,7 +58,7 @@ public class WorkGather extends AWorkerWork {
         if (gatherOnProduct != null) {
             // append gathered resource to location
             ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());
-            OutputResourceDefinition[] gatherResources = productDef.getAction(ActionNames.GATHER).getProduceResources();
+            List<OutputResourceDefinition> gatherResources = productDef.getAction(ActionNames.GATHER).getProduceResources();
             Random random = new Random();
             for (OutputResourceDefinition resource : gatherResources) {
                 if (random.nextInt(100) < resource.getPrecentage()) {
@@ -84,7 +85,7 @@ public class WorkGather extends AWorkerWork {
             if (gatherOnProduct != null) {
                 // find something new - let's work
                 ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());
-                initWork();
+                initWork(world);
                 this.ticks = productDef.getAction(ActionNames.GATHER).getTime();
             } else {
                 // try to find on next tick

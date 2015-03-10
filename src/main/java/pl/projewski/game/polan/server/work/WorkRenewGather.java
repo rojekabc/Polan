@@ -27,7 +27,7 @@ public class WorkRenewGather extends AWork {
     }
 
     @Override
-    public void initWork() {
+    public void initWork(World world) {
     }
 
     @Override

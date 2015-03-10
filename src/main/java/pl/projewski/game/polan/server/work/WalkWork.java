@@ -46,7 +46,7 @@ public class WalkWork extends AWorkerWork {
     }
 
     @Override
-    public void initWork() {
+    public void initWork(World world) {
         if (destination.isKnownByUser()) {
             getWorker().setWorkName(WorkNames.WALK);
         } else {

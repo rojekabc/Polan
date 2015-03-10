@@ -5,10 +5,8 @@
 package pl.projewski.game.polan.data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -95,14 +93,14 @@ public class Location implements ProductContainer {
         if (elements == null) {
             elements = new ArrayList();
         }
-        elements.add(Long.valueOf(element.getId()));
+        elements.add(element.getId());
     }
 
     public void removeElement(Product element) {
         if (elements == null) {
             return;
         }
-        elements.remove(element);
+        elements.remove(element.getId());
         if (elements.isEmpty()) {
             elements = null;
         }
@@ -116,11 +114,25 @@ public class Location implements ProductContainer {
         if (resources == null) {
             resources = new ArrayList();
         }
-        resources.add(Long.valueOf(resource.getId()));
+        resources.add(resource.getId());
     }
 
     public List<Long> getResources() {
         return resources;
+    }
+
+    public void removeResource(Product resource) {
+        removeResource(resource.getId());
+    }
+
+    public void removeResource(Long resourceId) {
+        if (resources == null) {
+            return;
+        }
+        resources.remove(resourceId);
+        if (resources.isEmpty()) {
+            resources = null;
+        }
     }
 
 }

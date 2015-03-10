@@ -8,6 +8,7 @@ package pl.projewski.game.polan.server.work;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.WorkNames;
+import pl.projewski.game.polan.server.data.World;
 
 /**
  *
@@ -28,8 +29,8 @@ public abstract class AWorkerWork extends AWork {
     }
 
     @Override
-    public void breakWork() {
-        super.breakWork();
+    public void breakWork(World world) {
+        super.breakWork(world);
         getWorker().setWorkName(WorkNames.NONE);
     }
 

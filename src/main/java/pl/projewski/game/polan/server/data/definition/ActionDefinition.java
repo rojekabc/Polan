@@ -5,7 +5,7 @@
  */
 package pl.projewski.game.polan.server.data.definition;
 
-import pl.projewski.game.polan.server.data.ServerData;
+import java.util.List;
 
 /**
  *
@@ -14,22 +14,30 @@ import pl.projewski.game.polan.server.data.ServerData;
  */
 public class ActionDefinition extends BaseDefinition {
 
-    OutputResourceDefinition[] resources;
-    int time;
-    int renewTime;
+    List<OutputResourceDefinition> outputResources;
+    List<InputResourceDefinition> inputResources;
 
-    public ActionDefinition(String name, int actionTime, OutputResourceDefinition... produceResources) {
+    int time;
+
+    public ActionDefinition(String name, int actionTime,
+            List<InputResourceDefinition> inputResources,
+            List<OutputResourceDefinition> outputResources) {
         super(name);
-        this.resources = produceResources;
+        this.outputResources = outputResources;
+        this.inputResources = inputResources;
         this.time = actionTime;
-        this.renewTime = renewTime;
     }
 
-    public OutputResourceDefinition[] getProduceResources() {
-        return resources;
+    public List<OutputResourceDefinition> getProduceResources() {
+        return outputResources;
     }
 
     public int getTime() {
         return time;
     }
+
+    public List<InputResourceDefinition> getInputResources() {
+        return inputResources;
+    }
+
 }

@@ -4,10 +4,8 @@
  */
 package pl.projewski.game.polan.server.data;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
@@ -129,6 +127,12 @@ public class World {
             return null;
         }
         return locations.values();
+    }
+
+    public void removeProduct(Long productId) {
+        if (this.products != null) {
+            this.products.remove(productId);
+        }
     }
 
 }

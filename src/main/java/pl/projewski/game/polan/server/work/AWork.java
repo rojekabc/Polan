@@ -6,6 +6,7 @@
 package pl.projewski.game.polan.server.work;
 
 import pl.projewski.game.polan.server.data.ClientContext;
+import pl.projewski.game.polan.server.data.World;
 
 /**
  *
@@ -29,7 +30,7 @@ public abstract class AWork implements IWork {
     }
 
     @Override
-    public void breakWork() {
+    public void breakWork(World world) {
     }
 
 }

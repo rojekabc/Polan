@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
@@ -53,52 +54,54 @@ public class ServerDataGenerator {
                     new ProductDefinition(ProductNames.SAND_FIELD, ProductType.FIELD, null, null),
                     new ProductDefinition(ProductNames.SANDSTONE_FIELD, ProductType.FIELD,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.PICK, 80, new OutputResourceDefinition(ProductNames.SANDSTONE, 100))
+                                new ActionDefinition(
+                                        ActionNames.PICK, 80, null,
+                                        Arrays.asList(new OutputResourceDefinition(ProductNames.SANDSTONE, 100)))
                             }, null),
                     new ProductDefinition(ProductNames.MUD_FIELD, ProductType.FIELD,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.PICK, 30, new OutputResourceDefinition(ProductNames.MUD, 100))
+                                new ActionDefinition(ActionNames.PICK, 30, null, Arrays.asList(new OutputResourceDefinition(ProductNames.MUD, 100)))
                             }, null),
                     new ProductDefinition(ProductNames.STONE_FIELD, ProductType.FIELD,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.PICK, 150, new OutputResourceDefinition(ProductNames.STONE, 100))
+                                new ActionDefinition(ActionNames.PICK, 150, null, Arrays.asList(new OutputResourceDefinition(ProductNames.STONE, 100)))
                             }, null),
                     new ProductDefinition(ProductNames.GRANIT_FIELD, ProductType.FIELD,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.PICK, 250, new OutputResourceDefinition(ProductNames.SANDSTONE, 100))
+                                new ActionDefinition(ActionNames.PICK, 250, null, Arrays.asList(new OutputResourceDefinition(ProductNames.SANDSTONE, 100)))
                             }, null),
                     new ProductDefinition(ProductNames.GROUND_FIELD, ProductType.FIELD, null, null),
                     new ProductDefinition(ProductNames.GRAVEL_FIELD, ProductType.FIELD,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.PICK, 40,
-                                        new OutputResourceDefinition(ProductNames.GRAVEL, 100),
-                                        new OutputResourceDefinition(ProductNames.FLINT, 30))
+                                new ActionDefinition(ActionNames.PICK, 40, null, Arrays.asList(
+                                                new OutputResourceDefinition(ProductNames.GRAVEL, 100),
+                                                new OutputResourceDefinition(ProductNames.FLINT, 30)))
                             }, null),
                     new ProductDefinition(ProductNames.CLAY_FIELD, ProductType.FIELD,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.PICK, 40, new OutputResourceDefinition(ProductNames.CLAY, 100))
+                                new ActionDefinition(ActionNames.PICK, 40, null, Arrays.asList(new OutputResourceDefinition(ProductNames.CLAY, 100)))
                             }, null)
             );
             /* Trees */
             add(
                     new ProductDefinition(ProductNames.OAK_TREE, ProductType.TREE,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.GATHER, 22, new OutputResourceDefinition(ProductNames.OAK_STICK, 100)),
-                                new ActionDefinition(ActionNames.RENEW, 70)
+                                new ActionDefinition(ActionNames.GATHER, 22, null, Arrays.asList(new OutputResourceDefinition(ProductNames.OAK_STICK, 100))),
+                                new ActionDefinition(ActionNames.RENEW, 70, null, null)
                             },
                             new String[]{ProductNames.GROUND_FIELD}
                     ),
                     new ProductDefinition(ProductNames.PINE_TREE, ProductType.TREE,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.GATHER, 20, new OutputResourceDefinition(ProductNames.PINE_STICK, 100)),
-                                new ActionDefinition(ActionNames.RENEW, 65)
+                                new ActionDefinition(ActionNames.GATHER, 20, null, Arrays.asList(new OutputResourceDefinition(ProductNames.PINE_STICK, 100))),
+                                new ActionDefinition(ActionNames.RENEW, 65, null, null)
                             },
                             new String[]{ProductNames.GROUND_FIELD}
                     ),
                     new ProductDefinition(ProductNames.BIRCH_TREE, ProductType.TREE,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.GATHER, 18, new OutputResourceDefinition(ProductNames.BIRCH_STICK, 100)),
-                                new ActionDefinition(ActionNames.RENEW, 60)
+                                new ActionDefinition(ActionNames.GATHER, 18, null, Arrays.asList(new OutputResourceDefinition(ProductNames.BIRCH_STICK, 100))),
+                                new ActionDefinition(ActionNames.RENEW, 60, null, null)
                             },
                             new String[]{ProductNames.GROUND_FIELD}
                     )
@@ -111,20 +114,20 @@ public class ServerDataGenerator {
             add(
                     new ProductDefinition(ProductNames.CALAMUS_FIELD, ProductType.PLANT,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.GATHER, 20, new OutputResourceDefinition(ProductNames.CALAMUS, 100)),
-                                new ActionDefinition(ActionNames.RENEW, 50)
+                                new ActionDefinition(ActionNames.GATHER, 20, null, Arrays.asList(new OutputResourceDefinition(ProductNames.CALAMUS, 100))),
+                                new ActionDefinition(ActionNames.RENEW, 50, null, null)
                             },
                             new String[]{ProductNames.MUD_FIELD}),
                     new ProductDefinition(ProductNames.GRASS_FIELD, ProductType.PLANT,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.GATHER, 8, new OutputResourceDefinition(ProductNames.GRASS, 100)),
-                                new ActionDefinition(ActionNames.RENEW, 20)
+                                new ActionDefinition(ActionNames.GATHER, 8, null, Arrays.asList(new OutputResourceDefinition(ProductNames.GRASS, 100))),
+                                new ActionDefinition(ActionNames.RENEW, 20, null, null)
                             },
                             new String[]{ProductNames.MUD_FIELD, ProductNames.GROUND_FIELD}),
                     new ProductDefinition(ProductNames.CLOVER_FIELD, ProductType.PLANT,
                             new ActionDefinition[]{
-                                new ActionDefinition(ActionNames.GATHER, 10, new OutputResourceDefinition(ProductNames.CLOVER, 100)),
-                                new ActionDefinition(ActionNames.RENEW, 30)
+                                new ActionDefinition(ActionNames.GATHER, 10, null, Arrays.asList(new OutputResourceDefinition(ProductNames.CLOVER, 100))),
+                                new ActionDefinition(ActionNames.RENEW, 30, null, null)
                             },
                             new String[]{ProductNames.GROUND_FIELD, ProductNames.MUD_FIELD})
             );

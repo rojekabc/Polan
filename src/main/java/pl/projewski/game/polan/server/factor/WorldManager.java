@@ -32,8 +32,8 @@ import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.server.data.PolanServerConfiguration;
 import pl.projewski.game.polan.server.data.ProductType;
 import pl.projewski.game.polan.server.data.ServerData;
-import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.World;
+import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.util.RandomElement;
 import pl.projewski.game.polan.server.work.AWorkerWork;
 import pl.projewski.game.polan.server.work.IWork;
@@ -75,9 +75,10 @@ public class WorldManager {
     }
 
     /**
-     * Find connection between to locations. In return is a result with all locations between location A and location B. Algorithm: should start from searching
-     * always from startlocation to location A and to locaton B as a seperate lists. Algorithm stops until find these two locations or cannot find any
-     * connection. After find it should check that lists are from the same root and remove as posible as can the same elements.
+     * Find connection between to locations. In return is a result with all locations between location A and location B.
+     * Algorithm: should start from searching always from startlocation to location A and to locaton B as a seperate
+     * lists. Algorithm stops until find these two locations or cannot find any connection. After find it should check
+     * that lists are from the same root and remove as posible as can the same elements.
      *
      * @param locationIdA
      * @param locationIdB
@@ -219,8 +220,8 @@ public class WorldManager {
     private static Map<String, WorldWorkQueue> worldQueues = new HashMap();
 
     /**
-     * Add new work to queue for world. If work want use some creature it's checked, that creature is free. If it's working on another work - he'll be free and
-     * assign to new work.
+     * Add new work to queue for world. If work want use some creature it's checked, that creature is free. If it's
+     * working on another work - he'll be free and assign to new work.
      *
      * @param world
      * @param work
@@ -235,16 +236,16 @@ public class WorldManager {
         if (work instanceof AWorkerWork) {
             IWork currentWork = queue.findWorkOfCreature(((AWorkerWork) work).getWorker());
             if (currentWork != null) {
-                breakWork(queue, currentWork);
+                breakWork(world, queue, currentWork);
             }
         }
         // append new work to queue
         queue.addWork(work);
-        work.initWork();
+        work.initWork(world);
     }
 
-    private static void breakWork(final WorldWorkQueue queue, final IWork work) {
-        work.breakWork();
+    private static void breakWork(final World world, final WorldWorkQueue queue, final IWork work) {
+        work.breakWork(world);
         queue.removeWork(work);
     }
 

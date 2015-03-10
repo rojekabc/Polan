@@ -6,7 +6,6 @@
 package pl.projewski.game.polan.server.data.definition;
 
 import java.util.Arrays;
-import java.util.List;
 import pl.projewski.game.polan.generator.products.ActionNames;
 
 /**
@@ -15,13 +14,8 @@ import pl.projewski.game.polan.generator.products.ActionNames;
  */
 public class CraftDefinition extends ActionDefinition {
 
-    List<InputResourceDefinition> inputResourcesList;
-
     public CraftDefinition(int actionTime, OutputResourceDefinition produceResource, InputResourceDefinition... inputResources) {
-        super(ActionNames.CRAFT, actionTime, produceResource);
-        if (inputResources != null && inputResources.length > 0) {
-            inputResourcesList = Arrays.asList(inputResources);
-        }
+        super(ActionNames.CRAFT, actionTime, Arrays.asList(inputResources), Arrays.asList(produceResource));
     }
 
 }

@@ -17,6 +17,7 @@ public interface IWork {
     /**
      * Called when planned work is to do.
      *
+     * @param world world on which work will be done
      * @return true if work has nothing more to do. If there's something more return false - it'll be still at call.
      */
     public boolean doPlannedWork(World world);
@@ -29,13 +30,15 @@ public interface IWork {
     public boolean decreaseTick();
 
     /**
-     * Initialize settings for a work to do. It it's called when work is added to pool. It doesn't do any work. In mostly cases it should be used to reserve
-     * resources need to do planned work.
+     * Initialize settings for a work to do. It it's called when work is added to pool. It doesn't do any work. In
+     * mostly cases it should be used to reserve resources need to do planned work.
+     *
+     * @param world world on which work will be done
      */
-    public void initWork();
+    public void initWork(World world);
 
     /**
      * Break work before finish.
      */
-    public void breakWork();
+    public void breakWork(World world);
 }

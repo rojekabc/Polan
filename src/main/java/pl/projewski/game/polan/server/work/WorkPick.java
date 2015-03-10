@@ -5,6 +5,7 @@
  */
 package pl.projewski.game.polan.server.work;
 
+import java.util.List;
 import java.util.Random;
 import org.apache.commons.logging.LogFactory;
 import pl.projewski.game.polan.data.Creature;
@@ -51,7 +52,7 @@ public class WorkPick extends AWorkerWork {
         if (pickOnProduct != null) {
             // append gathered resource to location
             ProductDefinition productDef = ServerData.getInstance().getProductDefinition(pickOnProduct.getName());
-            OutputResourceDefinition[] resources = productDef.getAction(ActionNames.PICK).getProduceResources();
+            List<OutputResourceDefinition> resources = productDef.getAction(ActionNames.PICK).getProduceResources();
             Random random = new Random();
             for (OutputResourceDefinition resource : resources) {
                 if (random.nextInt(100) < resource.getPrecentage()) {
@@ -75,7 +76,7 @@ public class WorkPick extends AWorkerWork {
             if (pickOnProduct != null) {
                 // find something new - let's work
                 ProductDefinition productDef = ServerData.getInstance().getProductDefinition(pickOnProduct.getName());
-                initWork();
+                initWork(world);
                 this.ticks = productDef.getAction(ActionNames.PICK).getTime();
             } else {
                 // try to find on next tick
@@ -91,7 +92,7 @@ public class WorkPick extends AWorkerWork {
     }
 
     @Override
-    public void initWork() {
+    public void initWork(World world) {
         pickOnProduct.setLocked(true);
         getWorker().setWorkName(WorkNames.PICKING);
     }
