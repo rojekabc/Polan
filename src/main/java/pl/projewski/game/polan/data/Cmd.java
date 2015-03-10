@@ -24,7 +24,8 @@ public enum Cmd {
     LISTLOCATIONS(LocationsResponse.class), SAVE(CommandResponse.class), USEWORLD(CommandResponse.class),
     TICK(CommandResponse.class),
     LOOK(LookResponse.class), SELECT(CommandResponse.class),
-    GATHER(TimeResponse.class), WALK(TimeResponse.class), PICK(TimeResponse.class);
+    GATHER(TimeResponse.class), WALK(TimeResponse.class), PICK(TimeResponse.class),
+    CRAFT(TimeResponse.class);
     private Class responseClass;
 
     Cmd(Class c) {

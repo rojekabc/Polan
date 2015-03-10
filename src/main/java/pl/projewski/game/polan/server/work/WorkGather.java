@@ -18,7 +18,7 @@ import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
-import pl.projewski.game.polan.server.data.definition.ActionOutResourceDefinition;
+import pl.projewski.game.polan.server.data.definition.OutputResourceDefinition;
 import pl.projewski.game.polan.server.factor.WorldManager;
 
 /**
@@ -57,9 +57,9 @@ public class WorkGather extends AWorkerWork {
         if (gatherOnProduct != null) {
             // append gathered resource to location
             ProductDefinition productDef = ServerData.getInstance().getProductDefinition(gatherOnProduct.getName());
-            ActionOutResourceDefinition[] gatherResources = productDef.getAction(ActionNames.GATHER).getProduceResources();
+            OutputResourceDefinition[] gatherResources = productDef.getAction(ActionNames.GATHER).getProduceResources();
             Random random = new Random();
-            for (ActionOutResourceDefinition resource : gatherResources) {
+            for (OutputResourceDefinition resource : gatherResources) {
                 if (random.nextInt(100) < resource.getPrecentage()) {
                     location.addResource(WorldManager.generateProcudt(world, ServerData.getInstance().getProductDefinition(resource.getName())));
                 }

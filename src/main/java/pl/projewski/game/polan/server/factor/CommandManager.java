@@ -4,10 +4,6 @@
  */
 package pl.projewski.game.polan.server.factor;
 
-import pl.projewski.game.polan.server.cmdactions.GatherAction;
-import pl.projewski.game.polan.server.cmdactions.WalkAction;
-import pl.projewski.game.polan.server.cmdactions.UseWorldAction;
-import pl.projewski.game.polan.server.cmdactions.SaveAction;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,14 +12,16 @@ import java.util.logging.Logger;
 import pl.projewski.game.polan.data.Cmd;
 import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.CreatureType;
-import pl.projewski.game.polan.data.response.CommandResponse;
-import pl.projewski.game.polan.data.response.CommandResponseStatus;
 import pl.projewski.game.polan.data.NamedCommand;
 import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.UserPrivilages;
+import pl.projewski.game.polan.data.response.CommandResponse;
+import pl.projewski.game.polan.data.response.CommandResponseStatus;
 import pl.projewski.game.polan.server.ICommandAction;
+import pl.projewski.game.polan.server.cmdactions.CraftAction;
 import pl.projewski.game.polan.server.cmdactions.CreateTownAction;
 import pl.projewski.game.polan.server.cmdactions.CreateWorldAction;
+import pl.projewski.game.polan.server.cmdactions.GatherAction;
 import pl.projewski.game.polan.server.cmdactions.HelpAction;
 import pl.projewski.game.polan.server.cmdactions.ListLocationsAction;
 import pl.projewski.game.polan.server.cmdactions.ListUsersAction;
@@ -32,8 +30,11 @@ import pl.projewski.game.polan.server.cmdactions.LoginAction;
 import pl.projewski.game.polan.server.cmdactions.LookAction;
 import pl.projewski.game.polan.server.cmdactions.PickAction;
 import pl.projewski.game.polan.server.cmdactions.QuitAction;
+import pl.projewski.game.polan.server.cmdactions.SaveAction;
 import pl.projewski.game.polan.server.cmdactions.SelectAction;
 import pl.projewski.game.polan.server.cmdactions.TickAction;
+import pl.projewski.game.polan.server.cmdactions.UseWorldAction;
+import pl.projewski.game.polan.server.cmdactions.WalkAction;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.World;
 
@@ -103,6 +104,9 @@ public class CommandManager {
                         break;
                     case PICK:
                         result.put(Cmd.PICK, new PickAction());
+                        break;
+                    case CRAFT:
+                        result.put(Cmd.CRAFT, new CraftAction());
                         break;
                 }
             }

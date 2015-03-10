@@ -24,6 +24,7 @@ public enum CreatureType {
                 result.add(Cmd.GATHER);
                 result.add(Cmd.WALK);
                 result.add(Cmd.PICK);
+                result.add(Cmd.CRAFT);
                 break;
             default:
                 break;

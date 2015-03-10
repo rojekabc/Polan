@@ -15,11 +15,9 @@ import pl.projewski.game.polan.data.Creature;
 import pl.projewski.game.polan.data.Location;
 import pl.projewski.game.polan.data.Product;
 import pl.projewski.game.polan.data.ProductContainer;
-import pl.projewski.game.polan.data.User;
 import pl.projewski.game.polan.data.response.CommandResponse;
 import pl.projewski.game.polan.data.response.CommandResponseStatus;
 import pl.projewski.game.polan.data.response.TimeResponse;
-import pl.projewski.game.polan.server.ICommandAction;
 import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.ServerData;
 import pl.projewski.game.polan.server.data.World;
@@ -32,70 +30,17 @@ import pl.projewski.game.polan.server.work.IWork;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public abstract class ACreatureProductAction implements ICommandAction {
+public abstract class ACreatureProductAction extends  ACreatureAction {
 
     private static final Log log = LogFactory.getLog(ACreatureProductAction.class);
-    private String actionName;
+    // private String actionName;
 
     public ACreatureProductAction(String actionName) {
-        this.actionName = actionName;
+        super(actionName);
     }
 
     @Override
-    public CommandResponse runCommand(ClientContext ctx, List<String> props) {
-        final User user = ctx.getUser();
-        if (user == null) {
-            return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_USER);
-        }
-        String worldName = user.getWorldName();
-        World world = WorldManager.getWorld(worldName);
-        if (world == null) {
-            return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_WORLD);
-        }
-        if (user.getSelectedCreature() == User.NO_CREATURE) {
-            return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_CREATURE);
-        }
-        Creature creature = world.getCreature(user.getSelectedCreature());
-        if (creature == null) {
-            return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_CREATURE);
-        }
-        if (!creature.getUserName().equals(user.getName())) {
-            return new CommandResponse(CommandResponseStatus.ERROR_NO_RIGHTS);
-        }
-        int locationId = creature.getLocationId();
-        Location location = world.getLocation(locationId);
-        if (location == null) {
-            return new CommandResponse(CommandResponseStatus.ERROR_UNKNOWN_LOCATION);
-        }
-
-        int howManyTimes = 1;
-        String productFilter = null;
-        if (props != null && !props.isEmpty()) {
-            // get how many times
-            String arg = props.get(0);
-            try {
-                howManyTimes = Integer.parseInt(arg);
-                if (howManyTimes <= 0) {
-                    howManyTimes = 1;
-                }
-            } catch (NumberFormatException e) {
-                if (arg.equals("*")) {
-                    // do neverending work of gathering all you can find
-                    howManyTimes = -1;
-                }
-            }
-            // get filter on names
-            for (int i = 1; i < props.size(); i++) {
-                if (productFilter != null) {
-                    productFilter += " ";
-                }
-                if (productFilter == null) {
-                    productFilter = "";
-                }
-                productFilter += props.get(i);
-            }
-        }
-
+    public CommandResponse runCommand() {
         Product productToActOn = findProductToActOn(actionName, world, location, null, productFilter);
         if (productToActOn == null) {
             return new CommandResponse(CommandResponseStatus.ERROR_NO_WORK_POSSIBLE);

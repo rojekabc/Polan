@@ -15,4 +15,5 @@ public interface ActionNames {
     public static final String GATHER = "gather";
     public static final String PICK = "pick";
     public static final String RENEW = "renew";
+    public static final String CRAFT = "craft";
 }

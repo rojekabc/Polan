@@ -14,18 +14,18 @@ import pl.projewski.game.polan.server.data.ServerData;
  */
 public class ActionDefinition extends BaseDefinition {
 
-    ActionOutResourceDefinition[] resources;
+    OutputResourceDefinition[] resources;
     int time;
     int renewTime;
 
-    public ActionDefinition(String name, int actionTime, ActionOutResourceDefinition... produceResources) {
+    public ActionDefinition(String name, int actionTime, OutputResourceDefinition... produceResources) {
         super(name);
         this.resources = produceResources;
         this.time = actionTime;
         this.renewTime = renewTime;
     }
 
-    public ActionOutResourceDefinition[] getProduceResources() {
+    public OutputResourceDefinition[] getProduceResources() {
         return resources;
     }
 

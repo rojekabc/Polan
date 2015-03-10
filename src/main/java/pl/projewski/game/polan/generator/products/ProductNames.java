@@ -43,5 +43,6 @@ public interface ProductNames {
     public static final String SANDSTONE = "sandstone";
     public static final String WATER = "water";
     public static final String MUD = "mud";
+    public static final String GRASS_TWINE = "grass twine";
 
 }

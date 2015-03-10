@@ -17,5 +17,6 @@ public class WorkNames {
     public static final String WALK = "walking";
     public static final String EXPLORE = "exploring";
     public static final String PICKING = "picking";
+    public static final String CRAFTING = "crafting";
 
 }
