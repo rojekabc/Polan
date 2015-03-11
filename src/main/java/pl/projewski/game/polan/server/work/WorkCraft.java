@@ -19,9 +19,9 @@ import pl.projewski.game.polan.server.data.ClientContext;
 import pl.projewski.game.polan.server.data.WorkNames;
 import pl.projewski.game.polan.server.data.World;
 import pl.projewski.game.polan.server.data.definition.ActionDefinition;
-import pl.projewski.game.polan.server.data.definition.InputResourceDefinition;
 import pl.projewski.game.polan.server.data.definition.ProductDefinition;
 import pl.projewski.game.polan.server.factor.WorldManager;
+import pl.projewski.game.polan.server.util.ResourceUtil;
 
 /**
  *
@@ -33,7 +33,7 @@ public class WorkCraft extends AWorkerWork {
 
     ProductDefinition productDefinition;
     ActionDefinition craftDefinition;
-    List<Long> reservedResources = new ArrayList();
+    List<Product> reservedResources = new ArrayList();
 
     public WorkCraft(ClientContext ctx, Creature worker, ProductDefinition productDef, ActionDefinition action) {
         super(ctx, productDef.getAction(ActionNames.CRAFT).getTime(), worker);
@@ -43,9 +43,15 @@ public class WorkCraft extends AWorkerWork {
 
     public boolean doPlannedWork(World world) {
         Location location = world.getLocation(getWorker().getLocationId());
+        if (reservedResources == null) {
+            context.sendToClient(ServerLog.info(world.getWorldTime(),
+                    MessageFormat.format("Not enough resources to craft product {0}] at location [{1}]",
+                            productDefinition.getName(), location.getId())));
+            return true;
+        }
         // remove reserved products
-        for (Long reservedResource : reservedResources) {
-            world.removeProduct(reservedResource);
+        for (Product reservedResource : reservedResources) {
+            world.removeProduct(reservedResource.getId());
             location.removeResource(reservedResource);
         }
         // generate crafted product
@@ -66,34 +72,10 @@ public class WorkCraft extends AWorkerWork {
         getWorker().setWorkName(WorkNames.CRAFTING);
         // lock resources for work
         Location location = world.getLocation(getWorker().getLocationId());
-        List<InputResourceDefinition> inputResourcesList = new ArrayList(craftDefinition.getInputResources());
-        List<String> inputResourceNames = new ArrayList();
-        for (InputResourceDefinition inputResource : inputResourcesList) {
-            int ammount = inputResource.getAmmount();
-            String productName = inputResource.getProductName();
-            while (ammount-- > 0) {
-                inputResourceNames.add(productName);
-            }
-        }
-        List<Long> resources = location.getResources();
-        for (Long resourceId : resources) {
-            Product product = world.getProduct(resourceId);
-            if (product.isLocked()) {
-                continue;
-            }
-            for (String inputResource : inputResourceNames) {
-                if (inputResource.equals(product.getName())) {
-                    inputResourceNames.remove(inputResource);
-                    product.setLocked(true);
-                    reservedResources.add(resourceId);
-                    break;
-                }
-            }
-            if (inputResourceNames.isEmpty()) {
-                break;
-            }
-        }
-        if (inputResourceNames.isEmpty() == false) {
+
+        reservedResources = ResourceUtil.findResourcesOnLocation(world, location, craftDefinition.getInputResources(), true);
+
+        if (reservedResources == null) {
             LOG.error("Cannot start work. There're no resources. It shouldn't happend !");
         }
     }
@@ -102,9 +84,8 @@ public class WorkCraft extends AWorkerWork {
     public void breakWork(World world) {
         super.breakWork(world);
         // free reserved resources (unlock)
-        for (Long reservedResource : reservedResources) {
-            Product product = world.getProduct(reservedResource);
-            product.setLocked(false);
+        for (Product reservedResource : reservedResources) {
+            reservedResource.setLocked(false);
         }
     }
 

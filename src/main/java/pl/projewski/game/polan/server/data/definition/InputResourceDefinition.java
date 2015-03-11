@@ -9,22 +9,13 @@ package pl.projewski.game.polan.server.data.definition;
  *
  * @author piotrek
  */
-public class InputResourceDefinition {
+public class InputResourceDefinition extends BaseDefinition {
 
-    private String productName;
     private int ammount;
-    
+
     public InputResourceDefinition(String productName, int ammount) {
-        this.productName = productName;
+        super(productName);
         this.ammount = ammount;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
     }
 
     public int getAmmount() {
@@ -34,5 +25,5 @@ public class InputResourceDefinition {
     public void setAmmount(int ammount) {
         this.ammount = ammount;
     }
-    
+
 }
