@@ -30,7 +30,7 @@ import pl.projewski.game.polan.server.work.IWork;
  * @version $Revision$
  * @author rojewski.piotr
  */
-public abstract class ACreatureProductAction extends  ACreatureAction {
+public abstract class ACreatureProductAction extends ACreatureAction {
 
     private static final Log log = LogFactory.getLog(ACreatureProductAction.class);
     // private String actionName;
@@ -124,7 +124,7 @@ public abstract class ACreatureProductAction extends  ACreatureAction {
         while (iterator.hasNext()) {
             Product product = iterator.next();
 
-            if (checkFilter(product, productFilter) && checkProductToActOn(actionName, product)) {
+            if (checkFilter(product, ".*" + productFilter + ".*") && checkProductToActOn(actionName, product)) {
                 return product;
             }
 
